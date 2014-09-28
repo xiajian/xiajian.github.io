@@ -1,36 +1,45 @@
 ---
 layout: page
-title: Hello World!
-tagline: Supporting tagline
+title: 邪王正眼的夏
 ---
+
+## 简介
+----
 {% include JB/setup %}
 
-Read [Jekyll Quick Start](http://jekyllbootstrap.com/usage/jekyll-quick-start.html)
+这里是邪王正眼的夏(读作:jia wang jing yan的sunmmer)的魔法基地-- 黑色魔境之电子海湾。
 
-Complete usage and documentation available at: [Jekyll Bootstrap](http://jekyllbootstrap.com)
+黑色魔图谐阵：三次天元破幻之星空立体魔法咒符
 
-## Update Author Attributes
+<div class="site-avatar">
+  <img src="assets/images/face.jpg">
+</div> 
+<br/>
 
-In `_config.yml` remember to specify your own data:
-    
-    title : My Blog =)
-    
-    author :
-      name : Name Lastname
-      email : blah@email.test
-      github : username
-      twitter : username
+> 备注：若见此符，如见其人
 
-The theme should reference these variables whenever needed.
-    
-## Sample Posts
 
-This blog contains sample posts which help stage pages and blog data.
-When you don't need the samples anymore just delete the `_posts/core-samples` folder.
+## 详细介绍
+----
 
-    $ rm -rf _posts/core-samples
+本电子海湾利用高阶魔法[Jekyll Bootstrap](http://jekyllbootstrap.com)锻造七七四十九周天完成。
 
-Here's a sample "posts list".
+以下，言贵正传:
+
+文档和使用可以参考[Jekyll](http://jekyllrb.com/)以及[Jekyll Bootstrap](http://jekyllbootstrap.com)。
+
+具体操作而言，Jekyll要会配置_config.yml，要会启动服务器等。Jekyll Bootstrap可能需要一点Bootstrap的知识。
+
+最重要的一步是，先将样式从Github上clone下来，然后捋起袖子开始狠狠的干。
+
+## 后记
+----
+
+起初，不太熟悉的时候使用[Jekyll Now](https://github.com/barryclark/jekyll-now)搭建自己的Github电子海湾。
+
+随着，自己的写的魔法扎记的增多，都显示在一页，实在是不太好。就尝试了一下[Jekyll Bootstrap](http://jekyllbootstrap.com)，有些不太满意的地方，比如字体的颜色和大小，修改并询问他人废去了不少魔力。终于，在魔法快要枯竭时，完成了。
+
+[Jekyll Bootstrap](http://jekyllbootstrap.com)优点很多，比如，下面的这个循环：
 
 <ul class="posts">
   {% for post in site.posts %}
@@ -38,9 +47,4 @@ Here's a sample "posts list".
   {% endfor %}
 </ul>
 
-## To-Do
-
-This theme is still unfinished. If you'd like to be added as a contributor, [please fork](http://github.com/plusjade/jekyll-bootstrap)!
-We need to clean up the themes, make theme usage guides with theme-specific markup examples.
-
-
+突然，想到，如果之前的博客的index页面中，只显示标题就就可以缓解条目过多的问题。好不容易走到这一步，还是继续走下去吧！！

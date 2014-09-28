@@ -10,7 +10,9 @@ highlighter: pygments
 #
 
 title : 邪王真眼的夏
-tagline: Site Tagline
+description: 夏天的夏，健康的健
+avatar: /assets/images/face.jpg
+tagline: 
 author : 
   name : jian xia
   email : jhqy2011@gmail.com
@@ -43,6 +45,15 @@ footer-links:
   stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
 
 port: 8000
+
+# Exclude these files from your production _site
+exclude:
+    - Gemfile
+    - Gemfile.lock
+    - LICENSE
+    - README.md
+    - Rakefile
+
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
 JB :

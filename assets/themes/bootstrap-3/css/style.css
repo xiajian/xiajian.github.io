@@ -19,14 +19,32 @@ h1, h2, h3, h4 {
 }
 #footer {
   background-color: #fdcd60;
+  padding: 10px 0 50px 0;
+  text-align: center;
 }
 
 .container {
     width: 1000px;
 }
 
+/* 头像的样式*/
+.site-avatar {
+    float: center;
+    height: 160px;
+    margin-right: 0px;
+    width: 160px;
+}
+
+.site-avatar img {
+    border-radius: 5px;
+}
+
+/* 控制图像的宽度 */
+img {
+    max-width: 100%;
+}
 body {
-  font-size: 16<px;
+  font-size: 16px;
 }
 
 /* posts index */

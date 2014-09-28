@@ -78,3 +78,5 @@ $(".view_all_arts").click(function(){
 
 最后，上面的这些就是介绍的Markdown的样式语法，感觉不太全，但是够常用了。
 
+# 参考文献
+1. [Mastering Markdown](https://guides.github.com/features/mastering-markdown/)
