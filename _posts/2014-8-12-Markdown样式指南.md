@@ -17,9 +17,9 @@ title: Markdown样式指南
 我用JekyllNow搭建博客[邪王真眼的夏](http://xiajian.github.io)。大屁股的超链接<http://xiajian.github.io>
 
 位于/images目录下的图片，这里里献给了Github的404了。
-![github 404](../images/404.jpg)
+![github 404](/assets/images/404.jpg)
 当然，你可以这样写图片的连接
-![an image alt text]({{ site.baseurl }}/images/jekyll-logo.png "你造吗，这是图片的标题")
+![an image alt text]({{ site.baseurl }}/assets/images/jekyll-logo.png "你造吗，这是图片的标题")
 
 喜欢子弹头的列表不，可以告诉你的小伙伴，哥有三种子弹头的列表的写法：*,-,+
 
