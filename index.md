@@ -7,7 +7,7 @@ title: 邪王真眼的夏
 ----
 {% include JB/setup %}
 
-这里是邪王正眼的夏(读作:jia wang jing yan的sunmmer)的魔法基地-- 暗黑魔境之电子海湾。
+这里是邪王正眼的夏(读作:jia wang jing yan的sunmmer)的魔法基地-- 暗黑魔境之电子海湾，召唤方式: <http://xiajian.github.io>。
 
 暗焰魔图谐阵：三次天元破幻之星空立体魔法咒符
 
@@ -16,7 +16,7 @@ title: 邪王真眼的夏
 </div> 
 <br/>
 
-> 备注：若见此符，如见其人，所谓
+> 备注：若见此咒，如见其人，如临其境，所谓人图一体。
 
 
 ## 详细介绍
@@ -30,7 +30,7 @@ title: 邪王真眼的夏
 
 具体操作而言，Jekyll要会配置_config.yml，要会启动服务器等。Jekyll Bootstrap可能需要一点Bootstrap的知识。
 
-最重要的一步是，先将样式从Github上clone下来，然后捋起袖子开始狠狠的干。
+最重要的一步是，先将代码从Github上clone下来，然后捋起袖子开始狠狠的干。
 
 ## 后记
 ----
@@ -50,3 +50,5 @@ title: 邪王真眼的夏
 突然，想到，如果之前的博客的index页面中，只显示标题就就可以缓解条目过多的问题。好不容易走到这一步，还是继续走下去吧！！
 
 Markdown的文件中，是可以直接使用HTML+css进行控制的，静态HTML的动态效果可以通过bootstrap的js提供。
+
+尝试了一下，手机访问<http://xiajian.github.io>，发现不能自适应，果然是直接给定宽度的问题，自己又想不到好的解决方案。
