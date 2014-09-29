@@ -23,10 +23,6 @@ h1, h2, h3, h4 {
   text-align: center;
 }
 
-.container {
-    width: 1000px;
-}
-
 /* 头像的样式*/
 .site-avatar {
     float: center;
