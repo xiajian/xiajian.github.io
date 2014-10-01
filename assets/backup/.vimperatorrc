@@ -1,0 +1,7 @@
+"vimoperator的配置
+nnoremap l <C-n>
+nnoremap h <C-p>
+"jk 加快上下翻页的速度
+nnoremap  j  5j
+nnoremap  k  5k
+"set hintkeys=asdfgqwert
