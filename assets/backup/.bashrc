@@ -117,8 +117,6 @@ export PATH="$PATH:$HOME/.rvm/bin:$HOME/software/zed:$HOME/software/sublime" # A
 # set ssh alias ssh
 alias s239='ssh xiajian@192.168.1.239'
 alias s99='ssh root@192.168.1.99'
-alias sweb='ssh lodestone@114.80.67.240'
-alias scalc='ssh lodestone@114.80.67.207'
 function sd235() { ssh root@192.168.0.235 "shutdown -h now" ; }
 # set shutdown commandline ailas
 alias shutdown='sudo shutdown -h now '

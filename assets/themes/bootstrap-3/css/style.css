@@ -31,13 +31,10 @@ h1, h2, h3, h4 {
     width: 160px;
 }
 
-.site-avatar img {
-    border-radius: 10px;
-}
-
 /* 控制图像的宽度 */
 img {
     max-width: 100%;
+    border-radius: 10px;
 }
 
 body {
