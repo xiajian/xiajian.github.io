@@ -46,7 +46,7 @@ title: 邪王真眼的夏
 
 随着，自己的写的魔法扎记的增多，都显示在一页，实在是不太好。就尝试了一下[Jekyll Bootstrap](http://jekyllbootstrap.com)，有些不太满意的地方，比如字体的颜色和大小，修改并询问他人废去了不少魔力。终于，在魔力快要枯竭时，完成了。
 
-[Jekyll Bootstrap](http://jekyllbootstrap.com)优点很多，比如，使用了Bootstrap; 功能更加的强大等等。
+[Jekyll Bootstrap](http://jekyllbootstrap.com)优点很多，比如，使用了Bootstrap; 功能更加的强大，支持自动的分页等等。
 
 突然，想到，如果之前的博客的index页面中，只显示标题就就可以缓解条目过多的问题。好不容易走到这一步，还是继续走下去吧！！
 
