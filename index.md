@@ -3,9 +3,17 @@ layout: page
 title: 邪王真眼的夏
 ---
 
+## 魔法手记
+----
+
+<ul class="posts">
+  {% for post in site.posts %}
+    <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
+
 ## 简介
 ----
-{% include JB/setup %}
 
 这里是邪王正眼的夏(读作:jia wang jing yan的sunmmer)的魔法基地-- 暗黑魔境之电子海湾，召唤方式: <http://xiajian.github.io>。
 
@@ -17,15 +25,6 @@ title: 邪王真眼的夏
 <br/>
 
 > 备注：若见此咒，如见其人，如临其境，所谓人图一体。
-
-## 魔法手记
-----
-
-<ul class="posts">
-  {% for post in site.posts %}
-    <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
-  {% endfor %}
-</ul>
 
 ## 详细介绍
 ----
