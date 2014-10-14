@@ -27,8 +27,8 @@ h1, h2, h3, h4 {
 .site-avatar {
     float: center;
     height: 160px;
-    margin-right: 0px;
     width: 160px;
+    margin: 0 20px;
 }
 
 /* 控制图像的宽度 */
@@ -58,7 +58,9 @@ hr {
 .post > .more {
   margin: 10px 0;
   text-align: left; }
-
+.pic {
+  margin: 0 auto;
+}
 /* post-full*/
 .post-full .date {
   margin-bottom: 20px;

@@ -45,17 +45,12 @@ sed -i 's/<t/%t/' **/index.html.haml ; sed -i 's/>=/=/' **/index.html.haml
 
 nav文件的替换
 
-sed -i 's/<u/%u/' **/_nav.html.haml ; sed -i 's/<l/%l/' **/_nav.html.haml ; sed -i 's/<i/%i/' **/_nav.html.haml ; sed -i 's/<span>/%span /' **/_nav.html.haml ; sed -i 's/= ' active/#{' active/' **/_nav.html.haml
-
-sed -i "s/= " active/#{' active/" **/_nav.html.haml
-
-sed -i "s/' \"/'}\"/" **/_nav.html.haml
-
-sed -i "s/^ cpanel/- cpanel/" **/*.haml
-
-sed -i "s/<\/i> %span/%span/" **/_nav.html.haml
-
-sed -i "s/<\/.*//" **/*.haml
+    sed -i 's/<u/%u/' **/_nav.html.haml ; sed -i 's/<l/%l/' **/_nav.html.haml ; sed -i 's/<i/%i/' **/_nav.html.haml ; sed -i 's/<span>/%span /' **/_nav.html.haml ; sed -i 's/= ' active/#{' active/' **/_nav.html.haml
+    sed -i "s/= " active/#{' active/" **/_nav.html.haml
+    sed -i "s/' \"/'}\"/" **/_nav.html.haml
+    sed -i "s/^ cpanel/- cpanel/" **/*.haml
+    sed -i "s/<\/i> %span/%span/" **/_nav.html.haml
+    sed -i "s/<\/.*//" **/*.haml
 
 想要删除空白行，尝试命令:
 
@@ -76,7 +71,6 @@ syntax error, unexpected ')' 往往是因为缩进不合理，不能解析。
 缩进不合理就会报错。
 
 vim中删除空行： g/^ *$/,d
-
 
 由于需要批量的执行这些ex命令，所以想知道是否存在批量执行这些命令的方式。结果，找到了`ex-mode`的这个方法，可以不用每次输入:, 进入该模式的方法的命令为`gQ`。
 
