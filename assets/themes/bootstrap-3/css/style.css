@@ -59,7 +59,7 @@ hr {
   margin: 10px 0;
   text-align: left; }
 .pic {
-  margin: 0 auto;
+  text-align: center;
 }
 /* post-full*/
 .post-full .date {
