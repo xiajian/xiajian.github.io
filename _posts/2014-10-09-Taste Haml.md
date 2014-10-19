@@ -52,6 +52,30 @@ nav文件的替换
     sed -i "s/<\/i> %span/%span/" **/_nav.html.haml
     sed -i "s/<\/.*//" **/*.haml
 
+      g/<%/s///g
+      g/%>/s///g
+      g/<t/s//%t/g
+      g/\t/s//  /g
+      g/<\/t[h|d]>/s///g
+      g/>=/s//=/g
+      g/<\/.*/s///g
+      g/">/s//")/g
+      g/>$/s///g
+      ## 针对常见的_nav中建立的替换命令
+      g/<u/s//%u/g
+      g/<l/s//%l/g
+      g/<i/s//%i/g
+      g/">/s//")/g
+      g/<span>/s//%span /g
+      g/= ' active/s//#{' active/g
+      g/' "/s//'}"/g
+      g/i /s//i(/g
+      g/<\/i> /s//\r/g
+      g/^ *$/,d
+      g/<div\ class="/s//\./g
+      g/")$/s///g
+
+
 想要删除空白行，尝试命令:
 
 sed -i "s/^ *$//" **/*.haml
