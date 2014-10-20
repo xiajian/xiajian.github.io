@@ -33,9 +33,87 @@ API Taster拥有如下的这些特性可选:
 
 挂载API Taster，然后，就可以在应用程序中访问API Taster。例如：
 
+    Rails.application.routes.draw do
+      mount ApiTaster::Engine => "/api_taster" if Rails.env.development?
+    end
+这里其实就是在路由中添加了一条规则`mount ApiTaster::Engine => "/api_taster" if Rails.env.development?`。
 
-> 遇到问题，运行服务器后，相应的js不能获取并下载，问了前辈后说，是Gem包冲突了, 或者是其他的什么原因。尝试不成功之后，我就想替换显存的实现。
+然后在`lib/api_tasters/routes.rb`中，在每个常规的路由定义代码块中，为每个API终端定义参数。具体的代码示例如下: 
+
+    if Rails.env.development?
+      ApiTaster.routes do
+        desc 'Get a __list__ of users'
+        get '/users'
+    
+        post '/users', {
+          :user => {
+            :name => 'Fred'
+          }
+        }
+    
+        get '/users/:id', {
+          :id => 1
+        }
+    
+        put '/users/:id', {
+          :id => 1, :user => {
+            :name => 'Awesome'
+          }
+        }
+    
+        delete '/users/:id', {
+          :id => 1
+        }
+      end
+    end
+可以通过创建`config/initializers/api_taster.rb`，其中包含如下内容，从而修改默认的`lib/api_tasters/routes.rb`。
+
+> ApiTaster.route_path = Rails.root.to_s + "/app/api_tasters" # just an example
+
+### 在测试工厂之间分享参数
+
+如果使用诸如[FactoryGirl](https://github.com/thoughtbot/factory_girl)这样的测试工厂，这可能需要测试工厂共享参数。例如，在FactoryGirl中使用`attributes_for(:name_of_factory)`方法。
+
+### Custom Headers
+
+如果存在需要作为API终端的潜在假设(比如权限token)，可能需要在`APITaster.routes`调用之前，设置`APITaster.global_headers`： 
+
+    ApiTaster.global_headers = {
+      'Authorization' => 'Token token=teGpfbVitpnUwm7qStf9'
+    }
+    
+    ApiTaster.routes do
+      # your route definitions
+    end
+
+###  注释API终点 
+
+在每个路由之前，可以通过使用`desc`添加一些注释。注释中支持Markdown语法。
+
+    desc 'Get a __list__ of users'
+    get '/users'
+
+### API终点中的源数据
+
+对于每个路由定义，可以使用可选的地方参数(hash数组)作为元数据：
+
+    get '/users', {}, { :meta => 'data' }
+
+对于处理任意数据的路由，元数据选项的定义非常有用。例如，可以执行期望的相应，从而使得测试用例集能够测试到这些路由。
+
+元数据对于某个路由的定义存储在`ApiTaster::Route.metadata`文件中，请通过阅读源代码来找出如何为特定的路由获取元数据。
+
+### Missing Route Definitions Detection
+
+API Taster为那些遗失的路由定义，提供了警告页。
+
+### 过时的/未匹配的路由定义
+
+APIs evolve - especially during the development stage. To keep ApiTaster.routes in sync with your route definitions, API Taster provides a warning page that shows you the definitions that are obsolete/mismatched therefore you could correct or remove them.
+
+APIs会演化，尤其是在开发状态时。保持ApiTaster.routes和路由定义同步，API Taster提供了显示过时和未匹配的警告页，从而方便纠正或移除。
+
+> 遇到问题，运行Rails server后，相应的js不能获取并下载，问了前辈后说，是Gem包冲突了, 或者是其他的什么原因。尝试不成功之后，我就想替换现存的实现。后来的某一天(10月20), 换了台机器，启动了一下，结果依然，但是注意到了DalliError 以及11211端口信息不可得这样的一些信息，然后，去查看了一下Dalli的项目主页，发现其前置条件是安装memcached，安装memcached后，就正常了。
 
 最近，进入了滞涩期，所以，需要一些新的学习方法。比如，看一些开源的项目。
-
 
