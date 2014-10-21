@@ -90,3 +90,34 @@ to_h: 转换为hash, to_ary
 **Refinements**
 
 问题：将补丁限制在一个文件中。 refine的关键字。
+
+## Rails打造日百万PV的网站架构
+
+应用场景：
+* 功能类似Blog以及留言板
+* 用户浏览为主且内容一致
+* 存在一定交互(投票，留言和私信)
+* SEO
+
+简单的数据计算，200ms & 100RPS，
+
+Nginx -- 20个Rails进程(memcached) -- mysql  一台服务器解决问题
+
+观察网站使用的具体的信息，页面的静态内容(页面缓存)和动态内容(Ajax请求处理)的分别加载，
+
+* 最快响应最希望看到的东西
+* 子请求不进行模板的渲染
+* 子请求可以进行缓存
+* 子请求和HTTP API放在一起实现
+
+1000 rps的需求带来的挑战：
+
+* 多台Rails服务器与缓存: caches_page的问题(文件系统，不能共存，内容多查找慢), 将缓存替换为memcache
+  -  SuperCache： 使用的Rails.cache
+* 缓存的横向扩展： nginx和多台memcache的问题，membase to rescue/couchbase
+  - membase的特点: 1.完全兼容memcached协议 2.横向扩展性强 3.**任意节点读取全部数据** 4.GUI操作简便 5.高可用，自动故障转移
+* Dog pile Effect(狗桩请求)： Lock机制-分布式锁
+
+NewRelic的第三方监控服务。
+
+## 
