@@ -14,7 +14,7 @@ ssh用来做授权:
 2. gitosis(python)/gitolite(perl)(内部权限系统)
 3. patched sshd, twister
 
-HTTP做授权：
+HTTP做授权：  
 v 2.7 smart HTTP protocol
 
 repo access:  
@@ -47,7 +47,7 @@ Middle-scale Application: 前端比较重的程序，大量的css和js。
 * Build(Strategy): r.js, sprockets等，将所有的东西和在一起
 * UX(Speed & LiveReload & ) 
 
-Javascript没有命名空间和模块这种玩意，全局的命令空间。
+Javascript在语言的层面，没有命名空间和模块这种玩意，全局的命令空间，然后各路大神各种方法模拟命名空间。
 
 Crossroad选择： 
 * chef or puppet
@@ -119,5 +119,7 @@ Nginx -- 20个Rails进程(memcached) -- mysql  一台服务器解决问题
 * Dog pile Effect(狗桩请求)： Lock机制-分布式锁
 
 NewRelic的第三方监控服务。
+
+> 后记： 提高速度，最重要的就是缓存，关于缓存的数据库，接触了如下的这样一些：memcached和redis，似乎，这两者都存在相应的集群，memcached的集群是membase，redis就不太清楚了。
 
 ## 
