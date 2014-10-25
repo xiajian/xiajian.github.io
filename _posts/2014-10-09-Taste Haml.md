@@ -3,6 +3,8 @@ layout: post
 title: Taste Haml
 ---
 
+备注： 文章中的内容需要进一步修改和整理，最后，才能成文。
+
 人活着怎么能够没有爱，erb就是没有爱的标签语言。而Haml，满满的都是爱。
 
 Haml的官方网站: <http://haml.info/>  ; github代码库： <https://github.com/haml/haml>
