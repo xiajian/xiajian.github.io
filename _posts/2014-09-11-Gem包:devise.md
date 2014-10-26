@@ -354,46 +354,46 @@ If the customization at the views level is not enough, you can customize each co
 
 1. 创建定制的视图，比如 `Admins::SessionsController`:
 
-    {% highlight ruby %}
-    class Admins::SessionsController <  Devise::SessionsController
-    end 
-    {% endhighlight %}
+{% highlight ruby %}
+class Admins::SessionsController <  Devise::SessionsController
+end 
+{% endhighlight %}
 
-    Note that in the above example, the controller needs to be created in the `app/controllers/admins/` directory.
-    
-    注意，上述例子中，控制器需要在`app/controllers/admins/`目录中创建:
+Note that in the above example, the controller needs to be created in the `app/controllers/admins/` directory.
+
+注意，上述例子中，控制器需要在`app/controllers/admins/`目录中创建:
 
 2. 告述路由使用该控制器，例如:
 
-    {% highlight ruby %}
-    devise_for :admins, controllers: { sessions: "admins/sessions" }
-    {% endhighlight %}
+{% highlight ruby %}
+devise_for :admins, controllers: { sessions: "admins/sessions" }
+{% endhighlight %}
 
 3. 从`devise/sessions`将视图拷贝到`admins/sessions`中。由于控制器改变了，所以并不使用位于`devise/sessions`的默认视图: 
 
 4. 最后，更改或扩展需要的控制器动作。可以完全覆盖控制器的动作:
 
-    {% highlight ruby %}
-    class Admins::SessionsController < Devise::SessionsController
-      def create
-        # custom sign-in code
-      end
+{% highlight ruby %}
+class Admins::SessionsController < Devise::SessionsController
+  def create
+    # custom sign-in code
+  end
+end
+{% endhighlight %}
+或者简单的添加的新的行为:
+{% highlight ruby %}
+class Admins::SessionsController < Devise::SessionsController
+  def create
+    super do |resource|
+      BackgroundWorker.trigger(resource)
     end
-    {% endhighlight %}
-   或者简单的添加的新的行为:
-    {% highlight ruby %}
-    class Admins::SessionsController < Devise::SessionsController
-      def create
-        super do |resource|
-          BackgroundWorker.trigger(resource)
-        end
-      end
-    end
-    {% endhighlight %}
+  end
+end
+{% endhighlight %}
 
-    This is useful for triggering background jobs or logging events during certain actions.
-    
-    在某些动作中触发后台任务或者登录事件非常有用。
+This is useful for triggering background jobs or logging events during certain actions.
+
+在某些动作中触发后台任务或者登录事件非常有用。
 
 Remember that Devise uses flash messages to let users know if sign in was successful or failed. Devise expects your application to call `flash[:notice]` and `flash[:alert]` as appropriate. Do not print the entire flash hash, print only specific keys. In some circumstances, Devise adds a `:timedout` key to the flash hash, which is not meant for display. Remove this key from the hash if you intend to print the entire hash.
 
@@ -524,10 +524,10 @@ There are two things that are important to keep in mind:
 
 - 如果测试Devise的内部控制器或者继承自Devise的控制器，需要告诉Devise在请求之前，设置Devise使用何种映射。由于Devise通过路由获取信息，而功能测试不经过路由，所以需要显式通知。例如，如果测试user scope，操作如下:
 
-    {% highlight ruby %}
-    @request.env["devise.mapping"] = Devise.mappings[:user]
-    get :new
-    {% endhighlight %}
+{% highlight ruby %}
+@request.env["devise.mapping"] = Devise.mappings[:user]
+get :new
+{% endhighlight %}
 
 ### 授权(Omniauth)
 

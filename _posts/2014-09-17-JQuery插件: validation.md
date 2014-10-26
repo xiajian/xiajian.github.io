@@ -27,36 +27,36 @@ Right, there are a lot of non-jQuery-based solutions (which you'd avoid since yo
 
 确实存在很多jQuery的以及非jQuery的解决方案。特别是其中最老的一个jQuery插件。
 
-
 Not convinced? Have a look at this example:
-
-    <form class="cmxform" id="commentForm" method="get" action="">
-      <fieldset>
-        <legend>Please provide your name, email address (won't be published) and a comment</legend>
-        <p>
-          <label for="cname">Name (required, at least 2 characters)</label>
-          <input id="cname" name="name" minlength="2" type="text" required/>
-        </p>
-        <p>
-          <label for="cemail">E-Mail (required)</label>
-          <input id="cemail" type="email" name="email" required/>
-        </p>
-        <p>
-          <label for="curl">URL (optional)</label>
-          <input id="curl" type="url" name="url"/>
-        </p>
-        <p>
-          <label for="ccomment">Your comment (required)</label>
-          <textarea id="ccomment" name="comment" required></textarea>
-        </p>
-        <p>
-          <input class="submit" type="submit" value="Submit"/>
-        </p>
-      </fieldset>
-    </form>
-    <script>
-    $("#commentForm").validate();
-    </script>
+```html
+<form class="cmxform" id="commentForm" method="get" action="">
+  <fieldset>
+    <legend>Please provide your name, email address (won't be published) and a comment</legend>
+    <p>
+      <label for="cname">Name (required, at least 2 characters)</label>
+      <input id="cname" name="name" minlength="2" type="text" required/>
+    </p>
+    <p>
+      <label for="cemail">E-Mail (required)</label>
+      <input id="cemail" type="email" name="email" required/>
+    </p>
+    <p>
+      <label for="curl">URL (optional)</label>
+      <input id="curl" type="url" name="url"/>
+    </p>
+    <p>
+      <label for="ccomment">Your comment (required)</label>
+      <textarea id="ccomment" name="comment" required></textarea>
+    </p>
+    <p>
+      <input class="submit" type="submit" value="Submit"/>
+    </p>
+  </fieldset>
+</form>
+<script>
+$("#commentForm").validate();
+</script>
+```
 
 Isn't that nice and easy?
 
@@ -65,14 +65,16 @@ A single line of jQuery to select the form and apply the validation plugin, plus
 Of course that isn't the only way to specify rules. You also don't have to rely on those default messages, but they come in handy when starting to setup validation for a form.
 A few things to look out for when playing around with the demo
 
-    After trying to submit an invalid form, the first invalid element is focused, allowing the user to correct the field. If another invalid field – that wasn't the first one – was focused before submit, that field is focused instead, allowing the user to start at the bottom if he or she prefers.
-    Before a field is marked as invalid, the validation is lazy: Before submitting the form for the first time, the user can tab through fields without getting annoying messages – they won't get bugged before having the chance to actually enter a correct value
-    Once a field is marked invalid, it is eagerly validated: As soon as the user has entered the necessary value, the error message is removed
-    If the user enters something in a non-marked field, and tabs/clicks away from it (blur the field), it is validated – obviously the user had the intention to enter something, but failed to enter the correct value
+After trying to submit an invalid form, the first invalid element is focused, allowing the user to correct the field. If another invalid field – that wasn't the first one – was focused before submit, that field is focused instead, allowing the user to start at the bottom if he or she prefers.
+
+Before a field is marked as invalid, the validation is lazy: Before submitting the form for the first time, the user can tab through fields without getting annoying messages – they won't get bugged before having the chance to actually enter a correct value
+
+Once a field is marked invalid, it is eagerly validated: As soon as the user has entered the necessary value, the error message is removed
+If the user enters something in a non-marked field, and tabs/clicks away from it (blur the field), it is validated – obviously the user had the intention to enter something, but failed to enter the correct value
 
 That behaviour can be irritating when clicking through demos of the validation plugin – it is designed for an unobtrusive user experience, annoying the user as little as possible with unnecessary error messages. So when you try out other demos, try to react like one of your users would, and see if the behaviour is better then. If not, please let me know about any ideas you may have for improvements!
 
-API Documentation
+## API Documentation
 
 You're probably looking for [Options for the validate() method](http://jqueryvalidation.org/validate)
 
@@ -100,6 +102,7 @@ This library also extends jQuery with three custom selectors:
     :blank – Selects all elements with a blank value.
     :filled – Selects all elements with a filled value.
     :unchecked – Selects all elements that are unchecked.
+
 Validator
 
 The validate method returns a Validator object that has a few public methods that you can use to trigger validation programmatically or change the contents of the form. The validator object has more methods, but only those documented here are intended for usage.
@@ -159,7 +162,7 @@ When you have a name attribute like `user[name]`, make sure to put the name in q
 Too much recursion
 
 Another common problem occurs with this code:
-
+```javascript
 $("#myform").validate({
   gv"_csubmitHandler: function(form) {
     // some other code
@@ -168,16 +171,17 @@ $("#myform").validate({
     $(form).submit();
   }
 });
-
+```
 his results in a too-much-recursion error: $(form).submit() triggers another round of validation, resulting in another call to submitHandler, and voila, recursion. Replace that with form.submit(), which triggers the native submit event instead and not the validation.
 
 So the correct code looks slightly different:
-
+```javascript
 $("#myform").validate({
   submitHandler: function(form) {
     form.submit();
   }
 });
+```
 
 ## Demos
 

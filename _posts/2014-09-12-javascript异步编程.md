@@ -7,11 +7,12 @@ JavaScript是多媒体、多任务、多内核网络世中的单线程的语言�
 事件，多线程，复杂的事件集。单线程设计，setTimeout，回调，清晰，可维护性的异步代码。
 
 多线程的语言，没有概念？
-
+```javascript
 for (var i = 1; i <= 3; i++) {  
   setTimeout(function(){ console.log(i); }, 0);
 };
 # => 输出为 4 4 4
+```
 原因: 
 
 - var i的变量的生命周期延伸到了内部函数中

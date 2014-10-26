@@ -21,7 +21,7 @@ XMLHttpRequest对象是用来下载资源的API。 object is an API for fetching
 The name XMLHttpRequest is historical and has no bearing on its functionality.
 
 Some simple code to do something with data from an XML document fetched over the network:
-
+```javascript
 function processData(data) {
   // taking care of data
 }
@@ -44,18 +44,21 @@ var client = new XMLHttpRequest();
 client.onreadystatechange = handler;
 client.open("GET", "unicorn.xml");
 client.send();
+```
 
 If you just want to log a message to the server:
-
+```javascript
 function log(message) {
   var client = new XMLHttpRequest();
   client.open("POST", "/log");
   client.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
   client.send(message);
 }
+```
 
 Or if you want to check the status of a document on the server:
 
+```javascript
 function fetchStatus(address) {
   var client = new XMLHttpRequest();
   client.onreadystatechange = function() {
@@ -66,6 +69,7 @@ function fetchStatus(address) {
   client.open("HEAD", address);
   client.send();
 }
+```
 
 1.1 Specification history
 
@@ -92,6 +96,7 @@ The term user credentials for the purposes of this specification means cookies, 
 
 ## 4 Interface XMLHttpRequest
 
+```javascript
 [NoInterfaceObject,
  Exposed=(Window,Worker)]
 interface XMLHttpRequestEventTarget : EventTarget {
@@ -154,6 +159,7 @@ interface XMLHttpRequest : XMLHttpRequestEventTarget {
   readonly attribute USVString responseText;
   [Exposed=Window] readonly attribute Document? responseXML;
 };
+```
 
 Each XMLHttpRequest object has a unique, associated XMLHttpRequestUpload object.
 
@@ -166,11 +172,9 @@ client = new XMLHttpRequest()
 
 The XMLHttpRequest() constructor must run these steps:
 
-    Let xhr be a new XMLHttpRequest object.
-
-    Set xhr's settings object to the relevant settings object for the global object of xhr's interface object.
-
-    Return xhr. 
+- Let xhr be a new XMLHttpRequest object.
+- Set xhr's settings object to the relevant settings object for the global object of xhr's interface object.
+- Return xhr. 
 
 4.2 Garbage collection
 
@@ -330,6 +334,7 @@ The setRequestHeader(name, value) method must run these steps:
 
 Some simple code demonstrating what happens when setting the same header twice:
 
+```javascript
 // The following script:
 var client = new XMLHttpRequest();
 client.open('GET', 'demo.cgi');
@@ -339,6 +344,7 @@ client.send();
 
 // …results in the following header being sent:
 X-Test: one, two
+```
 
 4.5.3 The timeout attribute
 
@@ -357,6 +363,7 @@ Setting the timeout attribute must run these steps:
     Set its value to the new value. 
 
 This implies that the timeout attribute can be set while fetching is in progress. If that occurs it will still be measured relative to the start of fetching.
+
 4.5.4 The withCredentials attribute
 
 client . withCredentials
@@ -380,6 +387,7 @@ Setting the withCredentials attribute must run these steps:
     Set the withCredentials attribute's value to the given value. 
 
 The withCredentials attribute has no effect when fetching same-origin resources.
+
 4.5.5 The upload attribute
 
 client . upload
@@ -389,6 +397,7 @@ client . upload
 The upload attribute must return the associated XMLHttpRequestUpload object.
 
 As indicated earlier, each XMLHttpRequest object has an associated XMLHttpRequestUpload object.
+
 4.5.6 The send() method
 
 client . send([body = null])

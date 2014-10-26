@@ -26,25 +26,26 @@ jQuery使用CSS selector在DOM树选择其合适的元素，$('xxx').colorbox()�
 Colorbox接受键值对的对象的设置，并可以被复制给任意HTML元素。
 
 例子: 
+```javascript
+// 样例:
+// Image links displayed as a group
+$('a.gallery').colorbox({rel:'gal'});
 
-    // 样例:
-    // Image links displayed as a group
-    $('a.gallery').colorbox({rel:'gal'});
+// Ajax
+$('a#login').colorbox();
 
-    // Ajax
-    $('a#login').colorbox();
+// Called directly, without assignment to an element:
+$.colorbox({href:"thankyou.html"});
 
-    // Called directly, without assignment to an element:
-    $.colorbox({href:"thankyou.html"});
+// Called directly with HTML
+$.colorbox({html:"<h1>Welcome</h1>"});
 
-    // Called directly with HTML
-    $.colorbox({html:"<h1>Welcome</h1>"});
-
-    // Colorbox can accept a function in place of a static value:
-    $("a.gallery").colorbox({rel: 'gal', title: function(){
-      var url = $(this).attr('href');
-      return '<a href="' + url + '" target="_blank">Open In New Window</a>';
-    }});
+// Colorbox can accept a function in place of a static value:
+$("a.gallery").colorbox({rel: 'gal', title: function(){
+  var url = $(this).attr('href');
+  return '<a href="' + url + '" target="_blank">Open In New Window</a>';
+}});
+```
 
 ## 设置
 ----

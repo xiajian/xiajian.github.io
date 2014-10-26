@@ -62,10 +62,10 @@ clueTip中包含很多的特性,列出如下:
 
 The contents of the clueTip can come from one of these sources:
 
-    a separate file, via AHAH / AJAX
-    an element on the same page, typically hidden
-    the title attribute, parsed by a user-defined delimiter (if the "splitTitle" option is set). The text before the first delimiter becomes the clueTip title, and the rest of the text parts are placed in <div class="split-body"></div> elements and appended to the clueTip body
-    the return value of a function referenced in the first argument of .cluetip().
+-  a separate file, via AHAH / AJAX
+-  an element on the same page, typically hidden
+-  the title attribute, parsed by a user-defined delimiter (if the "splitTitle" option is set). The text before the first delimiter becomes the clueTip title, and the rest of the text parts are placed in <div class="split-body"></div> elements and appended to the clueTip body
+-  the return value of a function referenced in the first argument of .cluetip().
 
 ### Smart Positioning
 The clueTip Plugin has 4 positioning modes, which you can change via the "positionBy" option.
@@ -92,26 +92,26 @@ The clueTip Plugin has 4 positioning modes, which you can change via the "positi
 
 ### Flexible Behavior
 
-    The clueTip takes advantage of Brian Cherne's hoverIntent plugin if it's available. (Just include it in a <script> tag if you want the clueTip to use it.)
-    It can be activated on hover or on click.
-    It can fade in, slide down, etc.
-    It can close when the invoking element is moused out or when the tooltip is moused out or when the user clicks a "close" link.
-    It can cache the results of ajax requests—or not.
-    It can be turned off
+-  The clueTip takes advantage of Brian Cherne's hoverIntent plugin if it's available. (Just include it in a `<script>` tag if you want the clueTip to use it.)
+-  It can be activated on hover or on click.
+-  It can fade in, slide down, etc.
+-  It can close when the invoking element is moused out or when the tooltip is moused out or when the user clicks a "close" link.
+-  It can cache the results of ajax requests—or not.
+-  It can be turned off
 
 ### Variety of Styles
 
 The clueTip Plugin comes with three themes: default, jTip, and rounded corners. Additional themes can be created by following the naming patterns in the stylesheet, jquery.cluetip.css. To apply one of the alternative themes, just indicate it in the cluetipClass option as 'jtip' or 'rounded'.
 
 The "loading" image comes from this rule in the stylesheet:
-
+```css
 #cluetip-waitimage {
       width: 43px;
       height: 11px;
       position: absolute;
       background-image: url(wait.gif);
     }
-
+```
 It can be turned off with the following option: waitImage: false
 
 Other options that affect the visual appearance include hoverClass, arrows, dropShadow, and dropShadowSteps. Please see API / Options for more information.
@@ -120,7 +120,7 @@ Other options that affect the visual appearance include hoverClass, arrows, drop
 ----
 
 The clueTip Plugin API provides two methods, with many options. It also provides a custom event for closing the tooltip programmatically
-
+```javascript
 $.cluetip.setup(options)
     Global defaults for clueTips. Will apply to all calls to the clueTip plugin.
     {
@@ -132,7 +132,6 @@ $.cluetip.setup(options)
 .cluetip(options)
     Displays a highly customizable tooltip via ajax (default) or local content or the title attribute of the invoking element 
 
-{% highlight javascript %}
 $.fn.cluetip.defaults = {  // default options; override as needed
     multiple:         false,    // Allow a new tooltip to be created for each .cluetip() call
     width:            275,      // The width of the clueTip
@@ -236,10 +235,12 @@ $('body').bind('touchstart', function(event) {
 });
 
 $('some-already-initialized-link').trigger('showCluetip')
-{% endhighlight %}
+```
 
 工作中的使用样例：
-  	$(".float_user_card").card_float({
+
+```javascript
+$(".float_user_card").card_float({
 		card_floatClass: "user_card_float",
 		width:340,
 		leftOffset: 4,
@@ -249,7 +250,8 @@ $('some-already-initialized-link').trigger('showCluetip')
 		closeText:'',
 		waitImage:false,
 		arrows:false
-	});
+});
+```
   具有一定的借鉴意义。
 
 Triggers the cluetip to be shown for a particular element on which .cluetip() has already been called.
@@ -264,20 +266,19 @@ Triggers the cluetip to be shown for a particular element on which .cluetip() ha
     cluetipClass: this is also used for a "directional" class on the same div, depending on where the clueTip is in relation to the invoking element. The class appears in the form of 'cluetip-' + direction + cluetipClass. this allows you to create your own clueTip theme in a separate CSS file or use one of the three pre-packaged themes: default, jtip, or rounded.
     arrows: UPDATE: this option displays a div containing an arrow background image. Arrow images are set using the background-image property in the CSS. The direction of the arrow changes depending on which side of the invoking element the clueTip appears. The arrows option sets the background-position of the cluetip div so that the arrow will accurately point to the invoking element, regardless of where it appears in relation to it.
 
-Frequently Asked Questions
+## Frequently Asked Questions
+----
 
-How is clueTip licensed?
+* How is clueTip licensed?
 
-    The clueTip plugin is licensed the same way as the jQuery core file: under the MIT license. The top of the jquery.cluetip.js file has this notice:
-
-    Licensed under the MIT license:
-    * http://www.opensource.org/licenses/mit-license.php
+The clueTip plugin is licensed the same way as the jQuery core file: under the MIT license. The top of the jquery.cluetip.js file has this notice:Licensed under the MIT [license](http://www.opensource.org/licenses/mit-license.php)
 What versions of jQuery is the clueTip Plugin compatible with?
     As of clueTip version 1.06, the plugin is compatible with version 1.3.2 or later. Previous clueTip versions are compatible with jQuery 1.2.6, though 1.3.2 or later is recommended.
 Does the clueTip Plugin have any dependencies on other plugins?
     No. However, optional plugins that can be used in conjunction with the clueTip plugin include hoverIntent and bgIframe.
-How do I get clueTip to work on elements that have been inserted via ajax after the page loads?
-    You can call the .cluetip() method on those elements from within the ajax method's callback function. For example:
+* How do I get clueTip to work on elements that have been inserted via ajax after the page loads?
+
+You can call the .cluetip() method on those elements from within the ajax method's callback function. For example:  
 {% highlight javascript %}
 $.get('/path/to/file', function(html) {
   var newHtml = $(html);
@@ -285,43 +286,49 @@ $.get('/path/to/file', function(html) {
   newHtml.find('a').cluetip();
 });
 {% endhighlight %}
-How do I get clueTip to show ajaxed content that has changed on the server?
-    There are a number of options available for working with dynamic content. By default, the ajaxCache function is set to true. This reduces the number of http requests made to the server. However, it doesn't account for possible changes to the ajaxed data. If the contents of a particular clueTip will be updated on the server between invocations, you may want to set ajaxCache: false. 
-How do I programmatically close (hide) a clueTip?
+
+* How do I get clueTip to show ajaxed content that has changed on the server?
+
+There are a number of options available for working with dynamic content. By default, the ajaxCache function is set to true. This reduces the number of http requests made to the server. However, it doesn't account for possible changes to the ajaxed data. If the contents of a particular clueTip will be updated on the server between invocations, you may want to set ajaxCache: false. 
+
+* How do I programmatically close (hide) a clueTip?
+
     If you want to trigger a clueTip to close, based on some other interaction, you can use the following code: $(document).trigger('hideCluetip'); 
 Why don't the styles that I've applied to my local content carry over once they're inside a clueTip?
     When using an element on the same page to populate the clueTip's content, the plugin clones that element. Because of potential problems caused by duplicate IDs within a page, the plugin also, by default, adds a suffix to the ID of the cloned element. If you have tied styles to the original ID, they won't be carried over. You can either give the localIdSuffix an empty string ( '' ) for its value or add the ID to your stylesheet rule.
 Why don't form elements within a clueTip update when I tell them to?
     If you attempt to update an element based on its ID,
-How do I add a delay before showing or closing the clueTip?
+
+* How do I add a delay before showing or closing the clueTip?
+
     While the clueTip plugin itself doesn't have a mechanism for delaying responses, it can take advantage of the optional hoverIntent plugin. To delay the showing of a clueTip, use the interval property of the hoverIntent option; to delay its hiding, use the timeout property. Both properties are measured in milliseconds. For example, the following sets both the show and the hide delays to 750 milliseconds (3/4 second):
-
-    $('a').cluetip({
-      hoverIntent: {
-        sensitivity:  1,
-        interval:     750,
-        timeout:      750
-      }
-    });
-
+```javascript
+$('a').cluetip({
+  hoverIntent: {
+    sensitivity:  1,
+    interval:     750,
+    timeout:      750
+  }
+});
+```
     See hoverIntent plugin's documentation for details.
 
-Why are the clueTips hidden behind my Flash elements?
+* Why are the clueTips hidden behind my Flash elements?
 
     This is a common problem when trying to layer a DOM element over a Flash object. To avoid it, you need to set <param name="wmode" value="transparent" /> inside the <object></object> tags and/or wmode="transparent" as an attribute of the <embed /> tag. For example, your HTML might look like this:
+```html
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+  codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab"
+  width="500" height="300">
+  <param name="movie" value="test.swf" />
+  <param name="quality" value="high" />
+  <param name="wmode" value="transparent" />
 
-    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-      codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab"
-      width="500" height="300">
-      <param name="movie" value="test.swf" />
-      <param name="quality" value="high" />
-      <param name="wmode" value="transparent" />
-
-      <embed src="test.swf" quality="high" wmode="transparent"
-        pluginspage="http://www.macromedia.com/go/getflashplayer"
-        type="application/x-shockwave-flash" width="500" height="300" />
-    </object>
-
+  <embed src="test.swf" quality="high" wmode="transparent"
+    pluginspage="http://www.macromedia.com/go/getflashplayer"
+    type="application/x-shockwave-flash" width="500" height="300" />
+</object>
+```
 ## 后记
 ----
 
