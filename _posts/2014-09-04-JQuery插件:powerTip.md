@@ -73,6 +73,7 @@ cluetip中接受的html中不能执行外部的javascript函数,就不能满足�
 ```javascript
 $('.tooltips').powerTip(options);
 ```
+
 其中, `option`是一个拥有很多选项的可以覆盖的对象(所有都定义在下面).
 Where `options` is an object with the various settings you want to override (all defined below).
 
@@ -96,39 +97,47 @@ Generally, if your tooltips are just plain text then you probably want to set yo
 The simplest method, as well as the only one that will continue to work for users who have JavaScript disabled in their browsers.
 
 最简单,并且这是唯一的用户禁止了JS之后依然起作用的方法.
+
 ```html
 <a href="/some/link" title="This will be the tooltip text.">Some Link</a>
 ```
+
 **data-powertip**
 
 Basically the same as setting the title attribute, but using an HTML5 data attribute. You can set this in the markup or with JavaScript at any time. It only accepts a simple string, but that string can contain markup. This will also accept a function that returns a string.
 
 和标题属性一样的基础, 但是使用了HTML5的数据属性. 数据属性只接受简单的字符串, 但是字符串可以包含标签, 也可接受返回为字符串的函数。
+
 ```html
 $('#element').data('powertip', 'This will be the <b>tooltip text</b>.');
 ```
 or
+
 ```html
 $('#element').data('powertip', function() {
 	return 'This will be the <b>tooltip text</b>.';
 });
 ```
+
 or
+
 ```html
 <a href="/some/link" data-powertip="This will be the &lt;b&gt;tooltip text&lt;/b&gt;.">Some Link</a>
 ```
+
 **data-powertipjq**
 
 This is a data interface that will accept a jQuery object. You can create a jQuery object containing complex markup (and even events) and attach it to the element via jQuery’s .data() method at any time. This will also accept a function that returns a jQuery object.
 
 这是接受jQuery对象的数据接口。可创建包含复杂的标签(甚至事件)jQuery对象，并通过jQuery的.data()属性将其附加到元素上。这里同样也会接受返回jQuery对象的函数。
 
+```javascript
 var tooltip = $('<div>This will be the tooltip text. It even has an onclick event!</div>');
 tooltip.on('click', function() { /* ... */ });
-```javascript
 $('#element').data('powertipjq', tooltip);
 ```
 or
+
 ```javascript
 $('#element').data('powertipjq', function() {
 	var tooltip = $('<div>This will be the tooltip text. It even has an onclick event!</div>');
@@ -142,6 +151,7 @@ $('#element').data('powertipjq', function() {
 You can specify the ID of an element in the DOM to pull the content from. PowerTip will replicate the markup of that element in the tooltip without modifying or destroying the original.
 
 可以指定DOM元素的ID,并从其中拉内容。powerTip将会复制元素中的标签而不修改或销毁原先的。
+
 ```html
 <div id="myToolTip">
 	<p><b>Some Title</b></p>
@@ -158,6 +168,7 @@ $('#element').data('powertiptarget', 'myToolTip');
 The tooltip behavior is determined by a series of options that you can override. You can pass the options as an object directly to the plugin as an argument when you call it. For example:
 
 提示的行为由一系列的选项决定，并且可以任意的覆盖。可以将选项作为一个对象传递给插件。例如：
+
 ```javascript
 $('.tips').powerTip({
 	option1: 'value',
@@ -165,17 +176,21 @@ $('.tips').powerTip({
 	option3: 'value'
 });
 ```
+
 The settings will only apply to those tooltips matched in the selector. This means that you can have different sets of tooltips on the same page with different options. For example:
 
 这些设置仅仅被应用到匹配的选择器中。这意味着，可以在同一个页面中使用不同的提示的设置。例如：
+
 ```javascript
 $('.tips').powerTip(/** options for regular tooltips **/);
 
 $('.specialTips').powerTip(/** options for special tooltips **/);
 ```
+
 You can change the default options for all tooltips by setting their values in the $.fn.powerTip.defaults object before you call powerTip(). For example:
 
 可通过设置$.fn.powerTip.defaults对象的值，从而改变提示的默认的选项值。例如：
+
 ```javascript
 // change the default tooltip placement to south
 $.fn.powerTip.defaults.placement = 's';
@@ -222,6 +237,7 @@ PowerTip包含了基本的css样式，但其也提供了方法来完全控制css
 ### CSS requirements
 
 The bare minimum that PowerTip requires to work is that the #powerTip element be given absolute positioning and set to not display. For example:
+
 ```javascript
 #powerTip {
 	position: absolute;
@@ -234,6 +250,7 @@ The bare minimum that PowerTip requires to work is that the #powerTip element be
 **High z-index**
 
 You will want your tooltips to display over all other elements on your web page. This is done by setting the z-index value to a number greater than the z-index of any other elements on the page. It’s probably a good idea to just set the z-index for the tooltip element to the maximum integer value (2147483647). For example:
+
 ```javascript
 #powerTip {
 	z-index: 2147483647;
@@ -251,12 +268,15 @@ It is important to note that if you increase the size of the tooltip arrows and 
 **Fixed width**
 
 It is recommend, but not required, that tooltips have a static width. PowerTip is designed to work with elastic tooltips, but it can look odd if you have huge tooltips so it is probably best for you to set a width on the tooltip element or (if you have short tooltip text) disable text wrapping. For example:
+
 ```css
 #powerTip {
 	width: 300px;
 }
 ```
+
 or
+
 ```css
 #powerTip {
 	white-space: nowrap;
@@ -282,6 +302,7 @@ You can also pass the API method names as strings to the powerTip() function. Fo
 可将API方法名作为字符串传递给powerTip函数。例如， $('#element').powerTip('show') 将会导致匹配元素上显示tooltip。
 
 样例:
+
 ```javascript
 // run powertip on submit button
 $('#submit').powerTip();
@@ -354,6 +375,7 @@ Smart placement is a feature that will attempt to keep non-mouse-follow tooltips
 It does this by detecting that a tooltip would appear outside of the view port, then trying a series of other placement options until it finds one that isn’t going to be outside of the view port. You can define the placement fall backs and priorities yourself by overriding them in the $.fn.powerTip.smartPlacementLists object.
 
 These are the default smart placement priority lists:
+
 ```javascript
 $.fn.powerTip.smartPlacementLists = {
 	n: ['n', 'ne', 'nw', 's'],
@@ -370,9 +392,11 @@ $.fn.powerTip.smartPlacementLists = {
 	'se-alt': ['se-alt', 's', 'sw-alt', 'ne-alt', 'n', 'nw-alt', 'e', 'w']
 };
 ```
+
 As you can see, each placement option has an array of placement options that it can fall back on. The first item in the array is the highest priority placement, the last is the lowest priority. The last item in the array is also the default. If none of the placement options can be fully displayed within the view port then the last item in the array is the placement used to show the tooltip.
 
 You can override these default placement priority lists before you call powerTip() and define your own smart placement fall back order. Like so:
+
 ```javascript
 // define custom smart placement order
 $.fn.powerTip.smartPlacementLists.n = ['n', 's', 'e', 'w'];
@@ -394,13 +418,17 @@ This is actually quite easy, you just tell PowerTip not to hook the default mous
 Disable the event hooking
 
 To disable the events that are normally attached when you run powerTip() just set the manual option to true.
+
 ```
 $('.tooltips').powerTip({ manual: true });
 ```
+
 Now PowerTip has hooked itself to the .tooltips elements, but it will not open tooltips for those elements automatically. You have to manually open the tooltips using the API.
-Building your own event handlers
+
+## Building your own event handlers
 
 Here is an example of a click-to-open tooltip to show you how it’s done:
+
 ```javascript
 // run PowerTip - but disable the default event hooks
 $('.tooltips').powerTip({ manual: true });
