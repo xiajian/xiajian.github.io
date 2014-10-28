@@ -246,3 +246,20 @@ table tbody tr:hover {
 	display: none;
 	text-align: center
 }
+
+/* 回到开始样式控制 */
+#scrollUp {
+    background-color: #777;
+    border: medium none;
+    bottom: 100px;
+    color: #eee;
+    font-size: 40px;
+    height: 46px;
+    line-height: 1;
+    opacity: 0.8;
+    overflow: hidden;
+    right: 20px;
+    text-align: center;
+    text-decoration: none;
+    width: 46px;
+}
