@@ -21,6 +21,7 @@ XMLHttpRequest对象是用来下载资源的API。 object is an API for fetching
 The name XMLHttpRequest is historical and has no bearing on its functionality.
 
 Some simple code to do something with data from an XML document fetched over the network:
+
 ```javascript
 function processData(data) {
   // taking care of data
@@ -47,6 +48,7 @@ client.send();
 ```
 
 If you just want to log a message to the server:
+
 ```javascript
 function log(message) {
   var client = new XMLHttpRequest();
@@ -71,7 +73,7 @@ function fetchStatus(address) {
 }
 ```
 
-1.1 Specification history
+### 1.1 Specification history
 
 The XMLHttpRequest object was initially defined as part of the WHATWG's HTML effort. (Based on Microsoft's implementation many years prior.) It moved to the W3C in 2006. Extensions (e.g. progress events and cross-origin requests) to XMLHttpRequest were developed in a separate draft (XMLHttpRequest Level 2) until end of 2011, at which point the two drafts were merged and XMLHttpRequest became a single entity again from a standards perspective. End of 2012 it moved back to the WHATWG. 
 
@@ -163,7 +165,7 @@ interface XMLHttpRequest : XMLHttpRequestEventTarget {
 
 Each XMLHttpRequest object has a unique, associated XMLHttpRequestUpload object.
 
-4.1 Constructors
+### 4.1 Constructors
 
 The XMLHttpRequest object has an associated settings object.
 
@@ -176,12 +178,13 @@ The XMLHttpRequest() constructor must run these steps:
 - Set xhr's settings object to the relevant settings object for the global object of xhr's interface object.
 - Return xhr. 
 
-4.2 Garbage collection
+### 4.2 Garbage collection
 
 An XMLHttpRequest object must not be garbage collected if its state is OPENED and the send() flag is set, its state is HEADERS_RECEIVED, or its state is LOADING and it has one or more event listeners registered whose type is one of readystatechange, progress, abort, error, load, timeout, and loadend.
 
 If an XMLHttpRequest object is garbage collected while its connection is still open, the user agent must terminate the request.
-4.3 Event handlers
+
+### 4.3 Event handlers
 
 The following are the event handlers (and their corresponding event handler event types) that must be supported on objects implementing an interface that inherits from XMLHttpRequestEventTarget as attributes:
 event handler 	event handler event type
@@ -196,7 +199,8 @@ onloadend 	loadend
 The following is the event handler (and its corresponding event handler event type) that must be supported as attribute solely by the XMLHttpRequest object:
 event handler 	event handler event type
 onreadystatechange 	readystatechange
-4.4 States
+
+### 4.4 States
 
 client . readyState
 
@@ -223,7 +227,8 @@ DONE (numeric value 4)
 Initially the XMLHttpRequest object must be in the UNSENT state.
 
 The send() flag indicates that the send() method has been invoked. It is initially unset and is used during the OPENED state.
-4.5 Request
+
+### 4.5 Request
 
 Each XMLHttpRequest object has the following request-associated concepts: request method, request URL, author request headers, request body, synchronous flag, upload complete flag, and upload events flag.
 
@@ -234,7 +239,8 @@ The request body is initially null.
 The synchronous flag, upload complete flag, and upload events flag are initially unset.
 
 To terminate the request, terminate the fetch algorithm operated by the XMLHttpRequest object with reason fatal.
-4.5.1 The open() method
+
+#### 4.5.1 The open() method
 
 client . open(method, url [, async = true [, username = null [, password = null]]])
 
@@ -306,7 +312,7 @@ The open(method, url, async, username, password) method must run these steps:
 
         Fire an event named readystatechange. 
 
-4.5.2 The setRequestHeader() method
+#### 4.5.2 The setRequestHeader() method
 
 client . setRequestHeader(name, value)
 
@@ -346,7 +352,7 @@ client.send();
 X-Test: one, two
 ```
 
-4.5.3 The timeout attribute
+#### 4.5.3 The timeout attribute
 
 client . timeout
 
@@ -364,7 +370,7 @@ Setting the timeout attribute must run these steps:
 
 This implies that the timeout attribute can be set while fetching is in progress. If that occurs it will still be measured relative to the start of fetching.
 
-4.5.4 The withCredentials attribute
+#### 4.5.4 The withCredentials attribute
 
 client . withCredentials
 
@@ -388,7 +394,7 @@ Setting the withCredentials attribute must run these steps:
 
 The withCredentials attribute has no effect when fetching same-origin resources.
 
-4.5.5 The upload attribute
+#### 4.5.5 The upload attribute
 
 client . upload
 
@@ -398,7 +404,7 @@ The upload attribute must return the associated XMLHttpRequestUpload object.
 
 As indicated earlier, each XMLHttpRequest object has an associated XMLHttpRequestUpload object.
 
-4.5.6 The send() method
+#### 4.5.6 The send() method
 
 client . send([body = null])
 
@@ -639,7 +645,7 @@ The abort() method must run these steps:
 
     No readystatechange event is dispatched. 
 
-4.6 Response
+### 4.6 Response
 
 An XMLHttpRequest has an associated response. Unless stated otherwise it is a network error.
 4.6.1 The responseURL attribute
@@ -665,6 +671,7 @@ The Fetch Standard filters response's header list. [FETCH]
 
 For the following script:
 
+```javascript
 var client = new XMLHttpRequest();
 client.open("GET", "unicorns-are-teh-awesome.txt", true);
 client.send();
@@ -673,6 +680,7 @@ client.onreadystatechange = function() {
     print(client.getResponseHeader("Content-Type"));
   }
 }
+```
 
 The print() function will get to process something like:
 
@@ -998,6 +1006,7 @@ The value pairs to iterate over are the entries with the key being the name and 
 
 ## 6 Interface ProgressEvent
 
+```javascript
 [Constructor(DOMString type, optional ProgressEventInit eventInitDict),
  Exposed=(Window,Worker)]
 interface ProgressEvent : Event {
@@ -1011,12 +1020,13 @@ dictionary ProgressEventInit : EventInit {
   unsigned long long loaded = 0;
   unsigned long long total = 0;
 }
+```
 
 Events using the ProgressEvent interface indicate some kind of progression.
 
 The lengthComputable, loaded, and total attributes must return the value they were initialized to.
 
-6.1 Firing events using the ProgressEvent interface
+### 6.1 Firing events using the ProgressEvent interface
 
 To fire an progress event named e given transmitted and length, fire an event named e with an event using the ProgressEvent interface that also meets these conditions:
 
@@ -1024,7 +1034,7 @@ To fire an progress event named e given transmitted and length, fire an event na
 
     If length is not 0, set the lengthComputable attribute value to true and the total attribute value to length. 
 
-6.2 Suggested names for events using the ProgressEvent interface
+### 6.2 Suggested names for events using the ProgressEvent interface
 
 This section is non-normative.
 
@@ -1042,14 +1052,15 @@ The error, abort, timeout, and load event types are mutually exclusive.
 
 Throughout the web platform the error, abort, timeout and load event types have their bubbles and cancelable attributes initialized to false, so it is suggested that for consistency all events using the ProgressEvent interface do the same.
 
-6.3 Security Considerations
+### 6.3 Security Considerations
 
 For cross-origin requests some kind of opt-in, e.g. the CORS protocol defined in the Fetch Standard, has to be used before events using the ProgressEvent interface are dispatched as information (e.g. size) would be revealed that cannot be obtained otherwise. [FETCH]
 
-6.4 Example
+### 6.4 Example
 
 In this example XMLHttpRequest, combined with concepts defined in the sections before, and the HTML progress element are used together to display the process of fetching a resource.
 
+```html
 <!DOCTYPE html>
 <title>Waiting for Magical Unicorns</title>
 <progress id=p></progress>
@@ -1068,6 +1079,7 @@ In this example XMLHttpRequest, combined with concepts defined in the sections b
   }
   client.send()
 </script>
+```
 
 Fully working code would of course be more elaborate and deal with more scenarios, such as network errors or the end user terminating the request.
 
