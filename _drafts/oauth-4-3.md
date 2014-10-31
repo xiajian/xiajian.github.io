@@ -86,4 +86,32 @@ grant_type=password&username=johndoe&password=A3ddj3w
 
 若 Access Token Request 合法且有经过授权，则核发 Access Token，同时可以核发 Refresh Token （非必备）。如果 Client 认证失败，或 Request 不合法，则依照 Section 5.2 的规定回复错误。
 
-详细核发 Access To
+详细核发 Access Token 的细节写在系列文第 5 篇。
+范例
+
+发给 Access Token：
+
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+  "access_token":"2YotnFZFEjr1zCsicMWpAA",
+  "token_type":"example",
+  "expires_in":3600,
+  "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+  "example_parameter":"example_value"
+}
+
+安全性问题 (Section 10.7)
+帐号密码外泄
+
+Resource Owner Password Credentials Grant Type 通常是用在老旧 Client ，或是迁移旧的认证机制到 OAuth。虽然这种流程降低了在 Client 里面储存帐号密码所引来的风险，但是没有消除把帐号密码给 Client 看的必要性。（编按：第一步还是需要 Resonrce Owner 提供帐号密码）
+
+这个流程的风险比起其他流程还要高，因为它保留了使用密码的 anti-pattern，而这个却是 OAuth spec 致力避免的。Client 可能会滥用密码，或是密码会不经意地泄漏给坏人（例如 Log 或是其他 Client 保存的记录）。
+Resource Owner 无法控制授权权限与存取范围
+
+此外，因为 Resource Owner 没办法控制授权的流程（Resource Owner 只参与到输入帐号密码），Client 可以取得比 Resource Owner 期望的权限 (scopes) 还要更多的权限。Authorization Server 在透过这种流程合法 Access Token 的时候应该要慎重考虑 scope 和时效的问题。
+
+Authorization Server 和 Client 应该要尽量不使用这种流程，改用其他流程

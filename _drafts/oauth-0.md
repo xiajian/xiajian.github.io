@@ -3,6 +3,12 @@ layout: post
 title: OAuth 2.0教程: Grape API 整合 Doorkeeper 
 ---
 
+## 缘起
+
+偶然的在Ruby china找到这么好的介绍OAuth的文章，原文是繁体的，特地找了个繁转简的工具转换了一下。
+
+## 正文
+
 最近我要实作使用 OAuth 2 认证的 API ，我先是看了 Spec (RFC 6740 、 RFC 6750），然后研究了既有的 Rails solution ，但因为 API 是用 Grape 盖的，又 Doorkeeper / Rack::OAuth2 / Grape 内建的 OAuth 2 认证全都无法直接拿来用，所以只好自己实现 API 认证这部份。
 
 我把实现的过程写成了教程：<http://blog.yorkxin.org/posts/2013/10/10/oauth2-tutorial-grape-api-doorkeeper>
