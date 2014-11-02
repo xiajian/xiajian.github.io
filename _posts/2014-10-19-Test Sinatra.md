@@ -818,7 +818,7 @@ end
 
 ### Streaming Responses
 
-Sometimes you want to start sending out data while still generating parts of the response body. In extreme examples, you want to keep sending data until the client closes the connection. You can use the stream helper to avoid creating your own wrapper:
+有时候，想要在开始发送数据时依然生成一些响应体。考虑一个极端的例子，在客户端关闭连接之前，一直发送数据。可以使用流辅助方法来避免自己创建包装方法。
 
 ```ruby
 get '/' do
@@ -832,11 +832,11 @@ get '/' do
 end
 ```
 
-This allows you to implement streaming APIs, Server Sent Events, and can be used as the basis for WebSockets. It can also be used to increase throughput if some but not all content depends on a slow resource.
+可以使用stream方法实现流式API，服务器发送事件以及用作WebSocket的基础。该方法同样也可用来提高速度，如果只有部分内容依赖缓慢的资源。
 
-Note that the streaming behavior, especially the number of concurrent requests, highly depends on the web server used to serve the application. Some servers, like WEBRick, might not even support streaming at all. If the server does not support streaming, the body will be sent all at once after the block passed to stream finishes executing. Streaming does not work at all with Shotgun.
+**注意**:流式行为，特别是并发请求的数据，高度依赖用来提供应用的web服务器。有些服务器，比如WEBRick，根本不支持流。如果服务器不支持流，当传递给流的块结束执行时，响应体将会被立即返回。流并不是包治百病的万金油。
 
-If the optional parameter is set to keep_open, it will not call close on the stream object, allowing you to close it at any later point in the execution flow. This only works on evented servers, like Thin and Rainbows. Other servers will still close the stream:
+如果可选的参数设置为`keep_open`, 不会自动对流对象调用close方法，而是允许在随后的执行流中手动关闭。这近对那些时间驱动的服务器(Thin，Rainbows)起作用，其他服务器依然会关闭流。
 
 ```ruby
 # long polling
@@ -871,7 +871,7 @@ end
 
 ### Logging
 
-In the request scope, the logger helper exposes a Logger instance:
+在请求范围域中，logger辅助方法揭示了Logger实例:
 
 ```ruby
 get '/' do
@@ -880,9 +880,9 @@ get '/' do
 end
 ```
 
-This logger will automatically take your Rack handler’s logging settings into account. If logging is disabled, this method will return a dummy object, so you do not have to worry about it in your routes and filters.
+logger将自动的考虑Rack处理器的设置。如果日志被关闭，该方法将返回一个虚拟的对象，所以，不需要在路由和过滤器中担心它。
 
-Note that logging is only enabled for Sinatra::Application by default, so if you inherit from Sinatra::Base, you probably want to enable it yourself:
+注意，日志仅在`Sinatra::Application`中是默认启动的，如果，从`Sinatra::Base`中继承，则需要手动的启动日志：
 
 ```ruby
 class MyApp < Sinatra::Base
@@ -896,7 +896,7 @@ To avoid any logging middleware to be set up, set the logging setting to nil. Ho
 
 ### 媒体(MIME)类型
 
-使用 send_file 或者静态文件的时候，Sinatra可能不能识别你的媒体类型。 使用 mime_type 通过文件扩展名来注册它们：
+使用 `send_file` 或者静态文件的时候，Sinatra可能不能识别你的媒体类型。 使用 mime_type 通过文件扩展名来注册它们：
 
     mime_type :foo, 'text/foo'
 
@@ -913,7 +913,7 @@ end
 
 为了生成URL，你需要使用 url 辅助方法， 例如，在Haml中:
 
-%a{:href => url('/foo')} foo
+    %a{:href => url('/foo')} foo
 
 如果使用反向代理和Rack路由，生成URL的时候会考虑这些因素。
 
@@ -923,17 +923,19 @@ end
 
 你可以通过 redirect 辅助方法触发浏览器重定向:
 
+```ruby
 get '/foo' do
   redirect to('/bar')
 end
-
+```
 其他参数的用法，与 halt相同:
 
-redirect to('/bar'), 303
-redirect 'http://google.com', 'wrong place, buddy'
+     redirect to('/bar'), 303
+     redirect 'http://google.com', 'wrong place, buddy'
 
 用 redirect back可以把用户重定向到原始页面:
 
+```ruby
 get '/foo' do
   "<a href='/bar'>do something</a>"
 end
@@ -942,6 +944,7 @@ get '/bar' do
   do_something
   redirect back
 end
+```
 
 如果想传递参数给redirect，可以用query string:
 
@@ -949,6 +952,7 @@ redirect to('/bar?sum=42')
 
 或者用session:
 
+```ruby
 enable :sessions
 
 get '/foo' do
@@ -959,6 +963,7 @@ end
 get '/bar' do
   session[:secret]
 end
+```
 
 ### 缓存控制
 
@@ -966,11 +971,12 @@ end
 
 你可以这样设定 Cache-Control 消息头:
 
+```ruby
 get '/' do
   cache_control :public
   "cache it!"
 end
-
+```
 核心提示: 在前置过滤器中设定缓存.
 
 before do
