@@ -948,7 +948,7 @@ end
 
 如果想传递参数给redirect，可以用query string:
 
-redirect to('/bar?sum=42')
+    redirect to('/bar?sum=42')
 
 或者用session:
 
@@ -967,7 +967,7 @@ end
 
 ### 缓存控制
 
-要使用HTTP缓存，必须正确地设定消息头。
+要使用HTTP缓存，必须正确地设定消息头，幂等的HTTP动作可缓存。
 
 你可以这样设定 Cache-Control 消息头:
 
@@ -977,33 +977,39 @@ get '/' do
   "cache it!"
 end
 ```
-核心提示: 在前置过滤器中设定缓存.
+**核心提示**: 在前置过滤器中设定缓存.
 
+```ruby
 before do
   cache_control :public, :must_revalidate, :max_age => 60
 end
+```
 
 如果你正在用 expires 辅助方法设定对应的消息头 Cache-Control 会自动设定：
 
+```
 before do
   expires 500, :public, :must_revalidate
 end
+```
 
 为了合适地使用缓存，你应该考虑使用 etag 和 last_modified方法。 推荐在执行繁重任务*之前*使用这些helpers，这样一来， 如果客户端在缓存中已经有相关内容，就会立即得到显示。
 
+```ruby
 get '/article/:id' do
   @article = Article.find params[:id]
   last_modified @article.updated_at
   etag @article.sha1
   erb :article
 end
-
+```
 使用 weak ETag 也是有可能的:
 
-etag @article.sha1, :weak
+    etag @article.sha1, :weak
 
 这些辅助方法并不会为你做任何缓存，而是将必要的信息传送给你的缓存 如果你在寻找缓存的快速解决方案，试试 rack-cache:
 
+```ruby
 require "rack/cache"
 require "sinatra"
 
@@ -1014,31 +1020,29 @@ get '/' do
   sleep 5
   "hello"
 end
+```
 
 ### 发送文件
 
 为了发送文件，你可以使用 send_file 辅助方法:
 
+```ruby
 get '/' do
   send_file 'foo.png'
 end
+```
 
 也可以带一些选项:
 
-send_file 'foo.png', :type => :jpg
+    send_file 'foo.png', :type => :jpg
 
 可用的选项有:
 
-filename
-    响应中的文件名，默认是真实文件的名字。
-last_modified
-    Last-Modified 消息头的值，默认是文件的mtime（修改时间）。
-type
-    使用的内容类型，如果没有会从文件扩展名猜测。
-disposition
-    用于 Content-Disposition，可能的包括： nil (默认), :attachment 和 :inline 
-length
-    Content-Length 的值，默认是文件的大小。
+- filename ： 响应中的文件名，默认是真实文件的名字  
+- last_modified ： Last-Modified 消息头的值，默认是文件的mtime（修改时间）。
+- type ： 使用的内容类型，如果没有会从文件扩展名猜测。
+- disposition ： 用于 Content-Disposition，可能的包括： nil (默认), :attachment 和 :inline 
+- length ： Content-Length 的值，默认是文件的大小。
 
 如果Rack处理器支持的话，Ruby进程也能使用除streaming以外的方法。 如果你使用这个辅助方法， Sinatra会自动处理range请求。
 
@@ -1065,7 +1069,7 @@ get '/foo' do
   request.referrer          # 客户端的referrer 或者 '/'
   request.user_agent        # user agent (被 :agent 条件使用)
   request.cookies           # 浏览器 cookies 哈希
-  request.xhr?              # 这是否是ajax请求？
+  request.xhr?              # 这是否是ajax请求？ajax请求不需要返回
   request.url               # "http://example.com/example/foo"
   request.path              # "/example/foo"
   request.ip                # 客户端IP地址
@@ -1097,28 +1101,35 @@ end
 
 你可以使用 attachment 辅助方法来告诉浏览器响应 应当被写入磁盘而不是在浏览器中显示。
 
+```ruby
 get '/' do
   attachment
   "store it!"
 end
+```
 
 你也可以传递一个文件名:
 
+```ruby
 get '/' do
   attachment "info.txt"
   "store it!"
 end
+```
 
 ### 查找模板文件
 
 find_template 辅助方法被用于在渲染时查找模板文件:
 
+```ruby
 find_template settings.views, 'foo', Tilt[:haml] do |file|
   puts "could be #{file}"
 end
+```
 
 这并不是很有用。但是在你需要重载这个方法 来实现你自己的查找机制的时候有用。 比如，如果你想支持多于一个视图目录:
 
+```ruby
 set :views, ['views', 'templates']
 
 helpers do
@@ -1126,9 +1137,11 @@ helpers do
     Array(views).each { |v| super(v, name, engine, &block) }
   end
 end
+```
 
 另一个例子是为不同的引擎使用不同的目录:
 
+```ruby
 set :views, :sass => 'views/sass', :haml => 'templates', :default => 'views'
 
 helpers do
@@ -1138,6 +1151,7 @@ helpers do
     super(folder, name, engine, &block)
   end
 end
+```
 
 你可以很容易地包装成一个扩展然后与他人分享！
 
@@ -1167,18 +1181,23 @@ end
 ```
 只当环境 (RACK_ENV environment 变量) 被设定为 :production的时候运行：
 
+```ruby
 configure :production do
   ...
 end
+```
 
 当环境被设定为 :production 或者 :test的时候运行：
 
+```ruby
 configure :production, :test do
   ...
 end
+```
 
 你可以使用 settings 获得这些配置:
 
+```ruby
 configure do
   set :foo, 'bar'
 end
@@ -1188,104 +1207,81 @@ get '/' do
   settings.foo  # => 'bar'
   ...
 end
+```
 
-可选的设置
+### 可选的设置
 
-absolute_redirects
-
-    如果被禁用，Sinatra会允许使用相对路径重定向， 但是，Sinatra就不再遵守 RFC 2616标准 (HTTP 1.1), 该标准只允许绝对路径重定向。
-
-    如果你的应用运行在一个未恰当设置的反向代理之后， 你需要启用这个选项。注意 url 辅助方法 仍然会生成绝对 URL，除非你传入 false 作为第二参数。
-
-    默认禁用。
-add_charsets
-
-    设定 content_type 辅助方法会 自动加上字符集信息的多媒体类型。
-
-    你应该添加而不是覆盖这个选项: settings.add_charsets << "application/foobar"
-app_file
-    主应用文件，用来检测项目的根路径， views和public文件夹和内联模板。 
-bind
-    绑定的IP 地址 (默认: 0.0.0.0)。 仅对于内置的服务器有用。 
-default_encoding
-    默认编码 (默认为 "utf-8")。 
-dump_errors
-    在log中显示错误。 
-environment
-    当前环境，默认是 ENV['RACK_ENV']， 或者 "development" 如果不可用。 
-logging
-    使用logger 
-lock
-
-    对每一个请求放置一个锁， 只使用进程并发处理请求。
-
-    如果你的应用不是线程安全则需启动。 默认禁用。
-method_override
-    使用 _method 魔法以允许在旧的浏览器中在 表单中使用 put/delete 方法 
-port
-    监听的端口号。只对内置服务器有用。 
-prefixed_redirects
-    是否添加 request.script_name 到 重定向请求，如果没有设定绝对路径。那样的话 redirect '/foo' 会和 redirect to('/foo')起相同作用。默认禁用。 
-public_folder
-    public文件夹的位置。 
-reload_templates
-    是否每个请求都重新载入模板。 在development mode和 Ruby 1.8.6 中被企业（用来 消除一个Ruby内存泄漏的bug）。 
-root
-    项目的根目录。 
-raise_errors
-    抛出异常（应用会停下）。 
-run
-    如果启用，Sinatra会开启web服务器。 如果使用rackup或其他方式则不要启用。 
-running
-    内置的服务器在运行吗？ 不要修改这个设置！ 
-server
-    服务器，或用于内置服务器的列表。 默认是 [‘thin’, ‘mongrel’, ‘webrick’], 顺序表明了 优先级。 
-sessions
-    开启基于cookie的sesson。 
-show_exceptions
-    在浏览器中显示一个stack trace。 
-static
-    Sinatra是否处理静态文件。 当服务器能够处理则禁用。 禁用会增强性能。 默认开启。 
-views
-    views 文件夹。 
+- absolute_redirects： 如果被禁用，Sinatra会允许使用相对路径重定向， 但是，Sinatra就不再遵守 RFC 2616标准 (HTTP 1.1), 该标准只允许绝对路径重定向。 如果你的应用运行在一个未恰当设置的反向代理之后， 你需要启用这个选项。注意 url 辅助方法 仍然会生成绝对 URL，除非你传入 false 作为第二参数。默认禁用。
+- `add_charsets`： 设定 `content_type` 辅助方法会 自动加上字符集信息的多媒体类型。应该添加而不是覆盖这个选项: `settings.add_charsets << "application/foobar"`
+- app_file： 主应用文件，用来检测项目的根路径， views和public文件夹和内联模板。 
+- bind ： 绑定的IP 地址 (默认: 0.0.0.0)。 仅对于内置的服务器有用。 
+- default_encoding： 默认编码 (默认为 "utf-8")。 
+- dump_errors： 在log中显示错误。 
+- environment： 当前环境，默认是 ENV['RACK_ENV']， 或者 "development" 如果不可用。 
+- logging： 使用logger 
+- lock：对每一个请求放置一个锁， 只使用进程并发处理请求。如果你的应用不是线程安全则需启动。 默认禁用。
+- `method_override`： 使用 _method 魔法以允许在旧的浏览器中在 表单中使用 put/delete 方法 
+- port： 监听的端口号。只对内置服务器有用。 
+- `prefixed_redirects`： 是否添加 request.script_name 到 重定向请求，如果没有设定绝对路径。那样的话 redirect '/foo' 会和 redirect to('/foo')起相同作用。默认禁用。 
+- public_folder： public文件夹的位置。 
+- reload_templates： 是否每个请求都重新载入模板。 在development mode和 Ruby 1.8.6 中被企业（用来 消除一个Ruby内存泄漏的bug）。 
+- root： 项目的根目录。 
+- raise_errors：抛出异常（应用会停下）。 
+- run： 如果启用，Sinatra会开启web服务器。 如果使用rackup或其他方式则不要启用。 
+- running：内置的服务器在运行吗？ 不要修改这个设置！ 
+- server：服务器，或用于内置服务器的列表。 默认是 [‘thin’, ‘mongrel’, ‘webrick’], 顺序表明了 优先级。 
+- sessions： 开启基于cookie的sesson。 
+- show_exceptions：在浏览器中显示一个stack trace。 
+- static Sinatra是否处理静态文件。 当服务器能够处理则禁用。 禁用会增强性能。 默认开启。 
+- views views 文件夹。 
 
 ## 7.  错误处理
 
 错误处理在与路由和前置过滤器相同的上下文中运行， 这意味着你可以使用许多好东西，比如 haml, erb, halt，等等。
-未找到
+
+### 未找到
 
 当一个 Sinatra::NotFound 错误被抛出的时候， 或者响应状态码是404，not_found 处理器会被调用：
 
+```ruby
 not_found do
   'This is nowhere to be found'
 end
+```
 
-错误
+### 错误
 
 error 处理器，在任何路由代码块或者过滤器抛出异常的时候会被调用。 异常对象可以通过sinatra.error Rack 变量获得：
 
+```ruby
 error do
   'Sorry there was a nasty error - ' + env['sinatra.error'].name
 end
+```
 
 自定义错误：
 
+```ruby
 error MyCustomError do
   'So what happened was...' + env['sinatra.error'].message
 end
+```
 
 那么，当这个发生的时候：
 
+```ruby
 get '/' do
   raise MyCustomError, 'something bad'
 end
+```
 
 你会得到：
 
-So what happened was... something bad
+    So what happened was... something bad
 
 另一种替代方法是，为一个状态码安装错误处理器：
 
+```ruby
 error 403 do
   'Access forbidden'
 end
@@ -1293,12 +1289,15 @@ end
 get '/secret' do
   403
 end
+```
 
 或者一个范围：
 
+```ruby
 error 400..510 do
   'Boom'
 end
+```
 
 在运行在development环境下时，Sinatra会安装特殊的 not_found 和 error 处理器。
 
@@ -1308,6 +1307,7 @@ Sinatra 依靠 Rack, 一个面向Ruby web框架的最小标准接口。 Rack的�
 
 Sinatra 让建立Rack中间件管道异常简单， 通过顶层的 use 方法：
 
+```ruby
 require 'sinatra'
 require 'my_custom_middleware'
 
@@ -1317,12 +1317,15 @@ use MyCustomMiddleware
 get '/hello' do
   'Hello World'
 end
+```
 
 use 的语义和在 Rack::Builder DSL(在rack文件中最频繁使用)中定义的完全一样。例如，use 方法接受 多个/可变 参数，包括代码块：
 
+```ruby
 use Rack::Auth::Basic do |username, password|
   username == 'admin' && password == 'secret'
 end
+```
 
 Rack中分布有多样的标准中间件，针对日志， 调试，URL路由，认证和session处理。 Sinatra会自动使用这里面的大部分组件， 所以你一般不需要显示地 use 他们。
 
@@ -1380,9 +1383,9 @@ end
 
 Sinatra::Base子类可用的方法实际上就是通过顶层 DSL 可用的方法。 大部分顶层应用可以通过两个改变转换成Sinatra::Base组件：
 
-    你的文件应当引入 sinatra/base 而不是 sinatra; 否则，所有的Sinatra的 DSL 方法将会被引进到 主命名空间。
+你的文件应当引入 sinatra/base 而不是 sinatra; 否则，所有的Sinatra的 DSL 方法将会被引进到 主命名空间。
 
-    把你的应用的路由，错误处理，过滤器和选项放在 一个Sinatra::Base的子类中。
+把你的应用的路由，错误处理，过滤器和选项放在 一个Sinatra::Base的子类中。
 
 +Sinatra::Base+ 是一张白纸。大部分的选项默认是禁用的， 包含内置的服务器。参见 选项和配置 查看可用选项的具体细节和他们的行为。
 
@@ -1390,23 +1393,22 @@ Sinatra::Base子类可用的方法实际上就是通过顶层 DSL 可用的方�
 
 与通常的认识相反，传统的方式没有任何错误。 如果它适合你的应用，你不需要转换到模块化的应用。
 
-和模块化方式相比只有两个缺点:
+和模块化方式相比，传统的方法只有两个缺点:
 
-    你对每个Ruby进程只能定义一个Sinatra应用，如果你需要更多， 切换到模块化方式。
-
-    传统方式使用代理方法污染了 Object 。如果你打算 把你的应用封装进一个 library/gem，转换到模块化方式。
+- 你对每个Ruby进程只能定义一个Sinatra应用，如果你需要更多， 切换到模块化方式。
+- 传统方式使用代理方法污染了 Object 。如果你打算 把你的应用封装进一个 library/gem，转换到模块化方式。
 
 没有任何原因阻止你混合模块化和传统方式。
 
 如果从一种转换到另一种，你需要注意settings中的 一些微小的不同:
 
-Setting             Classic                 Modular
-
-app_file            file loading sinatra    nil
-run                 $0 == app_file          false
-logging             true                    false
-method_override     true                    false
-inline_templates    true                    false
+Setting           |  Classic               |  Modular
+----------------- | ---------------------- | --------------------
+app_file          |  file loading sinatra  |  nil
+run               |  $0 == app_file        |  false
+logging           |  true                  |  false
+method_override   |  true                  |  false
+inline_templates  |  true                  |  false
 
 ### 运行一个模块化应用
 
@@ -1430,9 +1432,11 @@ end
 
 或者使用一个 config.ru，允许你使用任何Rack处理器:
 
+```
 # config.ru
 require './my_app'
 run MyApp
+```
 
 运行:
 
@@ -1442,27 +1446,29 @@ rackup -p 4567
 
 编写你的应用:
 
+```ruby
 # app.rb
 require 'sinatra'
 
 get '/' do
   'Hello world!'
 end
+```
 
 加入相应的 config.ru:
 
+```ruby
 require './app'
 run Sinatra::Application
+```
 
 什么时候用 config.ru?
 
 以下情况你可能需要使用 config.ru:
 
-    你要使用不同的 Rack 处理器部署 (Passenger, Unicorn, Heroku, …).
-
-    你想使用一个或者多个 Sinatra::Base的子类.
-
-    你只想把Sinatra当作中间件使用，而不是端点。
+- 你要使用不同的 Rack 处理器部署 (Passenger, Unicorn, Heroku, …).
+- 你想使用一个或者多个 Sinatra::Base的子类.
+- 你只想把Sinatra当作中间件使用，而不是端点。
 
 你并不需要切换到config.ru仅仅因为你切换到模块化方式， 你同样不需要切换到模块化方式， 仅仅因为要运行 config.ru.
 把Sinatra当成中间件来使用
@@ -1524,19 +1530,15 @@ end
 
 在下列情况下你将拥有应用变量域的绑定：
 
-    在应用类中
-
-    在扩展中定义的方法
-
-    传递给 `helpers` 的代码块
-
-    用作`set`值的过程/代码块
+-  在应用类中
+-  在扩展中定义的方法
+-  传递给 `helpers` 的代码块
+-  用作`set`值的过程/代码块
 
 你可以访问变量域对象（就是应用类）就像这样：
 
-    通过传递给代码块的对象 (configure { |c| ... })
-
-    在请求变量域中使用`settings`
+- 通过传递给代码块的对象 (configure { |c| ... })
+- 在请求变量域中使用`settings`
 
 ### 请求/实例 变量域
 
@@ -1561,13 +1563,10 @@ end
 
 在以下情况将获得请求变量域：
 
-    get/head/post/put/delete 代码块
-
-    前置/后置 过滤器
-
-    辅助方法
-
-    模板/视图
+-  get/head/post/put/delete 代码块
+-  前置/后置 过滤器
+-  辅助方法
+-  模板/视图
 
 ### 代理变量域
 
@@ -1575,9 +1574,8 @@ end
 
 在以下情况将获得代理变量域：
 
-    顶层的绑定，如果你做过 require "sinatra"
-
-    在扩展了 `Sinatra::Delegator` mixin的对象
+- 顶层的绑定，如果你做过 require "sinatra"
+- 在扩展了 `Sinatra::Delegator` mixin的对象
 
 自己在这里看一下代码: Sinatra::Delegator mixin 已经 被包含进了主命名空间。
 
@@ -1602,29 +1600,20 @@ ruby myapp.rb [-h] [-x] [-e ENVIRONMENT] [-p PORT] [-o HOST] [-s HANDLER]
 
 下面的Ruby版本是官方支持的:
 
-Ruby 1.8.6
-    不推荐在1.8.6上安装Sinatra， 但是直到Sinatra 1.3.0发布才会放弃对它的支持。 RDoc 和 CoffeScript模板不被这个Ruby版本支持。 1.8.6在它的Hash实现中包含一个内存泄漏问题， 该问题会被1.1.1版本之前的Sinatra引发。 当前版本使用性能下降的代价排除了这个问题。你需要把Rack降级到1.1.x， 因为Rack \>= 1.2不再支持1.8.6。 
-Ruby 1.8.7
-    1.8.7 被完全支持，但是，如果没有特别原因， 我们推荐你升级到 1.9.2 或者切换到 JRuby 或者 Rubinius. 
-Ruby 1.9.2
-    1.9.2 被支持而且推荐。注意 Radius 和 Markaby 模板并不和1.9兼容。不要使用 1.9.2p0, 它被已知会产生 segmentation faults. 
-Rubinius
-    Rubinius 被官方支持 (Rubinius \>= 1.2.2)， 除了Textile模板。 
-JRuby
-    JRuby 被官方支持 (JRuby \>= 1.5.6)。 目前未知和第三方模板库有关的问题， 但是，如果你选择了JRuby，请查看一下JRuby rack 处理器， 因为 Thin web 服务器还没有在JRuby上获得支持。 
+- Ruby 1.8.6: 不推荐在1.8.6上安装Sinatra， 但是直到Sinatra 1.3.0发布才会放弃对它的支持。 RDoc 和 CoffeScript模板不被这个Ruby版本支持。 1.8.6在它的Hash实现中包含一个内存泄漏问题， 该问题会被1.1.1版本之前的Sinatra引发。 当前版本使用性能下降的代价排除了这个问题。你需要把Rack降级到1.1.x， 因为Rack \>= 1.2不再支持1.8.6。 
+- Ruby 1.8.7: 1.8.7 被完全支持，但是，如果没有特别原因， 我们推荐你升级到 1.9.2 或者切换到 JRuby 或者 Rubinius. 
+- Ruby 1.9.2: 1.9.2 被支持而且推荐。注意 Radius 和 Markaby 模板并不和1.9兼容。不要使用 1.9.2p0, 它被已知会产生 segmentation faults. 
+- Rubinius: Rubinius 被官方支持 (Rubinius \>= 1.2.2)， 除了Textile模板。 
+- JRuby: JRuby 被官方支持 (JRuby \>= 1.5.6)。 目前未知和第三方模板库有关的问题， 但是，如果你选择了JRuby，请查看一下JRuby rack 处理器， 因为 Thin web 服务器还没有在JRuby上获得支持。 
 
 我们也会时刻关注新的Ruby版本。
 
 下面的 Ruby 实现没有被官方支持， 但是已知可以运行 Sinatra:
 
     JRuby 和 Rubinius 老版本
-
     MacRuby
-
     Maglev
-
     IronRuby
-
     Ruby 1.9.0 and 1.9.1
 
 不被官方支持的意思是，如果在不被支持的平台上有运行错误， 我们假定不是我们的问题，而是平台的问题。
@@ -1666,7 +1655,7 @@ Sinatra应该会运行在任何支持上述Ruby实现的操作系统。
 
 现在你可以像这样运行你的应用:
 
-bundle exec ruby myapp.rb
+    bundle exec ruby myapp.rb
 
 ### 使用自己的
 
@@ -1678,8 +1667,8 @@ bundle exec ruby myapp.rb
 
 为了在未来更新 Sinatra 源代码:
 
-cd myapp/sinatra
-git pull
+    cd myapp/sinatra
+    git pull
 
 ### 全局安装
 
@@ -1692,5 +1681,4 @@ git pull
 
 如果你以root身份安装 gems，最后一步应该是
 
-sudo rake install
-
+    sudo rake install
