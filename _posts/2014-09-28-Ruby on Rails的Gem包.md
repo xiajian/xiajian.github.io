@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Ruby on Rails的Gem包
+category : ruby
 ---
 
 来自: 开源中国社区 http://www.oschina.net/translate/10-essential-useful-ruby-on-rails-4-gems

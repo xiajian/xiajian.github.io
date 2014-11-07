@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Bootstrap:JS插件学习
+category : javascript
 ---
 
 来源: <http://www.ueffort.com/bootstrap-js-cha-jian-xue-xi/>

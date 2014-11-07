@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Gem包:devise
+category :  ruby
 ---
 
 ## 缘起

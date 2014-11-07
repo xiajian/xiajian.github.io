@@ -1,6 +1,7 @@
 ---
 layout: post
 title: JQuery插件:colorbox
+category :  jQuery
 ---
 
 ## 缘起

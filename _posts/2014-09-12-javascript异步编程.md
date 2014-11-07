@@ -1,7 +1,9 @@
 ---
 layout: post
 title: Javascript异步编程的笔记
+category :  javascript
 ---
+
 JavaScript是多媒体、多任务、多内核网络世中的单线程的语言。
 
 事件，多线程，复杂的事件集。单线程设计，setTimeout，回调，清晰，可维护性的异步代码。

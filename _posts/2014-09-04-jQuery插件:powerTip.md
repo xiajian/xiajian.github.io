@@ -1,6 +1,7 @@
 ---
 layout: post
 title: JQuery插件：powertip
+category :  jQuery
 ---
 
 ## 缘起

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: JQuery插件：cluetip
+category :  jQuery
 ---
 
 ## 缘起

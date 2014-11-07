@@ -1,6 +1,7 @@
 ---
 layout: post
 title: JQuery插件：poshyTip
+category :  jQuery
 ---
 
 插件介绍的地址: <http://vadikom.com/demos/poshytip/>

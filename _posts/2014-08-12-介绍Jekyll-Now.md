@@ -1,6 +1,8 @@
 ---
 layout: post
 title: 介绍Jekyll Now
+tagline: "Supporting tagline"
+tags : [jekyll now]
 ---
 
 缘起
