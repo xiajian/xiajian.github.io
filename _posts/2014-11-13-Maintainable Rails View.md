@@ -537,8 +537,9 @@ def show
 
 ## 13. Decoration using I18n
 
-大家对 Rails 的 I18n 机制的印象都是「作翻译」，其实 I18n 也可以拿来做 "Decoration"。如：
+大家对 Rails 的 I18n 机制的印象都是「作翻译」，其实 I18n 也可以拿来做包装 "Decoration"。如：
 
+```ruby
 def render_user_geneder(user)
   if user.gender == "male"
     "男 (Male)"
@@ -546,13 +547,15 @@ def render_user_geneder(user)
     "女 (Female)"
   end
 end
-
+# 与上述代码功能相同，用来翻译
 def render_user_gender(user)
   I18n.t("users.gender_desc.#{user.geneder}")
 end
+```
 
 这样的情景其实也被可以套用在这种 yes/no ( true/false) 的场景：
 
+```ruby
 def render_book_purchase_option(book)
   if book.aviable_for_purchase?
     "Yes"
@@ -560,9 +563,9 @@ def render_book_purchase_option(book)
     "No"
   end
 end
+```
 
 善用 I18n，可以节省不少装饰用的程式码。
-
 
 以下的重点是Object-Oriented View。
 
@@ -596,6 +599,7 @@ end
 
 但是，再怎么整理，Model 还是会肥起来：
 
+```ruby
 class Article < ActiveRecord::Base 
   def human_publish_status
   end
@@ -608,19 +612,23 @@ class Article < ActiveRecord::Base 
 
   ........
 end
+```
 
 最后你只好把这些 Logic 又抽出成 Module：
 
+```ruby
 class Article < ActiveRecord::Base
   include HumanArticleAttributes
 end
+```
 
-等等...这样好像有很大的问题？XDDDDD 这些程式码其实大部分都是 View 里面的 Logic，怎么到最后都变成 Model 里面的东西。
-Drapper ( Decorators/View-Models for Rails Applications )
+等等...这样好像有很大的问题？ 这些程序其实大部分都是 View 里面的 Logic，怎么到最后都变成 Model 里面的东西。
+
+### Drapper ( Decorators/View-Models for Rails Applications )
 
 我们可以用 Decorators/View-Models 解决这样的问题。因为这本来就是属于「View 层次」的东西。
 
-有一个还不错的 Gem 叫 Draper 可以进行这样的抽象整理。
+有一个还不错的 Gem 叫 [Draper](https://github.com/drapergem/draper) 可以进行这样的抽象整理。
 
 其实开发者最希望 View 里面只要有一行
 
@@ -628,6 +636,7 @@ Drapper ( Decorators/View-Models for Rails Applications )
 
 我们可以透过 Draper 的 DSL，做到这样的封装。
 
+```ruby
 class ArticleDecorator < Draper::Decorator
   delegate_all
 
@@ -643,12 +652,15 @@ class ArticleDecorator < Draper::Decorator
     object.published_at.strftime("%A, %B %e")
   end
 end
+```
 
 然后在 Controller 里面呼叫 decorate 就可以了
 
+```ruby
 def show
   @article = Article.find(params[:id]).decorate
 end
+```
 
 ## 15. Decoration using View Object
 
@@ -656,6 +668,7 @@ end
 
 这是一个 event 页面。在这个页面里面，如果当前 User 是 event host，则显示 "You"，否则显示 Host name。且参加者里面也要剔除当前 User。
 
+```erb
 <dl class="event-detail">
   <dt>Event Host</dt>
   <dd>
@@ -668,9 +681,11 @@ end
   <dt>Participants</dt>
   <dd><%= @event.participants.reject { |p| p == current_user }.map(&:name).join(", ") %></dd>
 </dl>
+```
 
 写成 Helper 实在是有点啰唆。我们不如改用 View Object 进行整理。
 
+```ruby
 class EventDetailView
   def initialize(template, event, current_user)
     @template = template
@@ -697,20 +712,24 @@ class EventDetailView
     @event.participants.reject { |p| p == @current_user }
   end
 end
+```
 
-则 View 就可以很漂亮的被收纳成以下：
+则 View 就可以很漂亮的被简化成以下：
 
+```erb
 <dl class="event-detail">
   <dt>Host</dt>
   <dd><%= event_detail.host %></dd>
   <dt>Participants</dt>
   <dd><%= event_detail.participant_names %></dd>
 </dl>
+```
 
 ## 16. Form Builder
 
 有时候我们为了排版 Form，不得不在 Form 里面也穿插一些 HTML 作 styling。
 
+```erb
 <%= form_for @user do |form| %>
   <div class="field">
     <%= form.label :name %>
@@ -722,8 +741,9 @@ end
     <%= form.text_field :email %>
   </div>
 <% end %>
+```
 
-但要写十几遍 <div class="field"> 是一件很烦人的事。我们最希望的是，其实 View 里面只要这样写就 OK 了：
+但要写十几遍 `<div class="field">` 是一件很烦人的事。我们最希望的是，其实 View 里面只要这样写就 OK 了：
 
 <%= form_for @user, :builder => HandcraftBuilder do |form| %>
   <%= form.custom_text_field :name %>
@@ -732,6 +752,7 @@ end
 
 这样的烦恼可以透过客制 Form Builder 解决：
 
+```ruby
 class HandcraftBuilder < ActionView::Helpers::FormBuilder
   def custom_text_field(attribute, options = {})
     @template.content_tag(:div, class: "field") do
@@ -739,13 +760,13 @@ class HandcraftBuilder < ActionView::Helpers::FormBuilder
     end
   end
 end
-
+```
 其他 Form Builder
 
-    simple_form
-    bootstrap_form
+- [simple_form](https://github.com/plataformatec/simple_form)
+- [bootstrap_form](https://github.com/bootstrap-ruby/rails-bootstrap-forms)
 
-不过现在还需要自己写 Form Builder 吗？其实机会蛮少了。主要的原因是如热门的 Framework： Bootstrap 有专属的 gem bootstrap_form 。而 simple_form 也提供 template ，透过 API 就可以轻松客制出一个 Form Builder。
+不过现在还需要自己写 Form Builder 吗？其实机会蛮少了。主要的原因是如热门的 Framework： [Bootstrap](http://getbootstrap.com/) 有专属的 gem [bootstrap_form](https://github.com/bootstrap-ruby/rails-bootstrap-forms) 。而 simple_form 也提供 template ，透过 API 就可以轻松客制出一个 Form Builder。
 
 ## 17. Form Object (wrap logic in FORM, not in model nor in controller)
 
@@ -753,7 +774,7 @@ Form Object 是一个比较新的概念。它的想法是，其实表单的逻�
 
 我们可以重新设计一个 Form Object，使用 ActiveModel 的部份 API 将逻辑重新包装，塞进 Form Builder 里面：
 
-（ 详细手法可以见这篇文章： Form-backing objects for fun and profit )
+详细手法可以见这篇文章： [Form-backing objects for fun and profit](http://pivotallabs.com/form-backing-objects-for-fun-and-profit/)
 
 ```ruby
 class Forms::Registration
@@ -771,11 +792,10 @@ class Forms::Registration
 end
 ```
 
-这巧妙的解决了一些问题。比如让人很烦的 massive assignment issue（ 其实使用 strong_parameter 也会让人心情烦躁）。而且 strong_parameter 并没有办法解决这样的问题：
+这巧妙的解决了一些问题。比如让人很烦的 massive assignment issue（ 其实使用 `strong_parameter` 也会让人心情烦躁）。而且 `strong_parameter` 并没有办法解决这样的问题：
 
 ```erb
 <%= simple_form_for @registration, :url => registrations_path, :as => :registration do |f| %>
-
   <%= f.input :name %>
   <%= f.input :email %>
 
@@ -805,9 +825,9 @@ end
 
 而这么恶心的 controller 如果又再加上 captcha 或是一些客制选项，那就又会变得更恐怖了。不过 Form Object 的设计门槛也不是很低。
 
-所以 cells 的作者又推出了这么一个 Gem : Reform ，简化 Form Object 的包装。
+所以 cells 的作者又推出了这么一个 Gem : [Reform](https://github.com/apotonick/reform) ，简化 Form Object 的包装。
 
-Reform (Decouples your models from form validation, presentation and workflows.)
+## Reform (Decouples your models from form validation, presentation and workflows.)
 
 透过 Reform ，刚刚的 Logic 可以被简化成:
 
@@ -876,9 +896,9 @@ class PostController < ApplicationController
   end
 end
 ```
-Cancan (Authorization Gem for Ruby on Rails)
+## Cancan (Authorization Gem for Ruby on Rails)
 
-cancan 是最常被想到的一个整理的招数。透过 Rule Engine 的结构，整理权限：
+[cancan](https://github.com/ryanb/cancan) 是最常被想到的一个整理的招数。透过 Rule Engine 的结构，整理权限：
 
 ```ruby
 <% if can? :update, @post %>
@@ -908,13 +928,13 @@ end
 
 我之前曾经写过一个 Cancan 系列，如果你有兴趣深入把玩 Cancan 的话，以下是系列连结：
 
-    Cancan 实现角色权限设计的最佳实践(1)
-    Cancan 实现角色权限设计的最佳实践(2)
-    Cancan 实现角色权限设计的最佳实践(3)
+* [Cancan 实现角色权限设计的最佳实践(1)](http://blog.xdite.net/posts/2012/07/30/cancan-rule-engine-authorization-based-library-1/)
+* [Cancan 实现角色权限设计的最佳实践(2)](http://blog.xdite.net/posts/2012/07/30/cancan-rule-engine-authorization-based-library-2/)
+* [Cancan 实现角色权限设计的最佳实践(3)](http://blog.xdite.net/posts/2012/07/30/cancan-rule-engine-authorization-based-library-3/)
 
 Pundit (Minimal authorization through OO design and pure Ruby classes)
 
-不过 cancan 这种 Rule Engine 式的设计常被开发者嫌过度笨重。最近还新诞生了一种设计手法，利用 Policy Object 对于权限进行整理，其中有一个 gem : pundit 算做得蛮不错的。
+不过 cancan 这种 Rule Engine 式的设计常被开发者嫌过度笨重。最近还新诞生了一种设计手法，利用 Policy Object 对于权限进行整理，其中有一个 gem : [pundit](https://github.com/elabs/pundit) 算做得蛮不错的。
 
 Pundit 的想法是把单独的一组 logic 抽取出来，放在 app/policies 下。
 
@@ -935,25 +955,29 @@ end
 
 而在 View 里面单独使用 policy object 验证：
 
+```erb
 <% if policy(@post).edit? %>
   <%= render :partial => "post/edit_bar" %>
 <% end %>
+```
 
 controller 里面也只要 include Pundit ，就可以套用逻辑。
 
+```ruby
 class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery
 end
+```
 
-Summary
+## Summary
 
 总结以上 18 个设计手法，看似复杂，其实原则不外乎：
 
-    Always assume things need to be decorated (永远假设东西必须要被装饰)
-    Extract logic into methods / classes ( 将逻辑封装成 method 或者 class )
-    Avoid perform query in view/helper ( 尽量避免在 view/helper 里面进行资料查询 )
-    When things get complicated, build a new control center （当事情变得复杂，不要拘泥于旧的手段，找一个新的中心重新整理控制）
+*  Always assume things need to be decorated (永远假设东西必须要被装饰)
+*  Extract logic into methods / classes ( 将逻辑封装成 method 或者 class )
+*  Avoid perform query in view/helper ( 尽量避免在 view/helper 里面进行资料查询 )
+*  When things get complicated, build a new control center （当事情变得复杂，不要拘泥于旧的手段，找一个新的中心重新整理控制）
 
 掌握这些原则，就可以尽量把 View 整理的干干净净。
 reference
