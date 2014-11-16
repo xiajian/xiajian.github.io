@@ -6,7 +6,7 @@ category : javascript
 
 来源: <http://www.ueffort.com/bootstrap-js-cha-jian-xue-xi/>
 
-由于，自己的Jekyll博客上，使用了Bootstrap，所以，想要学习并了解Bootstrap相关的js插件，然后，有空给自己的博客添加一些动态效果。
+由于，自己的Jekyll博客上，使用了Bootstrap，所以，想要学习并了解Bootstrap相关的js插件，然后，有空给自己的博客添加一些动态效果。注意：boostrap中的js插件并不需要额外的引入新的js文件，而是其boostrap.js中本身就包含了这些js插件。插件的调用也非常的简单，通常只要设置一下data属性即可，感觉相当的方便
 
 ## 过度效果：transition.js
 
