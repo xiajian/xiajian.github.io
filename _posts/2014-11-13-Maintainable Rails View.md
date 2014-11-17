@@ -31,6 +31,8 @@ Talk 包含以下几个主题：
 
 本文将介绍 18 个整理view手法。值得注意的是，这些手法是「循序渐进」的，即前面的手法未必是「最好」的，而是在「初期整理阶段」是一个好的手法，而事情变得复杂的时候，你才需要越后面的技巧去协助整理。
 
+Helper(辅助ruby方法)和Partial(局部模板)都是用来整理view的常用工具，容易混淆两者的使用。Partial通常用来处理大段重复的程序码或独立局部功能。Helper专属于需要逻辑输出的HTML的工具，常见的`stylsheet_link_tag`，`link_to`都是Helper的范畴。Rails内建了很多helper: `simple_format`, `auto_link`, `truncate`, `html_escape`，`form_for`。
+
 ## 1. Move logic to Helper
 
 这是一段经常在 View 里面直觉写出来的判断程序。
