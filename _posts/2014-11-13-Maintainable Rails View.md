@@ -6,7 +6,9 @@ category: rails, view
 
 ## 前言
 
-昨天，看到一本书上说: `地位越高的人越容易忘记自己姓什么`。 我想把网站变的快一点，但是，知识的了解也很匮乏，工作时又不是特别的尽心，偶尔还跑去看动漫，所谓漫漫长路的人生烦恼。以下是，在推酷上看到了，复制过来，学习一下。原作者[xdite](http://blog.xdite.net)大概有6年RoR经验，是个不错的"导师"。
+昨天，看到一本书上说: `地位越高的人越容易忘记自己姓什么`。 我想把网站变的快一点，但是，知识的掌握也很匮乏，工作时又不是特别的尽心，偶尔还跑去看动漫，所谓漫漫长路的人生烦恼。以下是，在推酷上看到了，复制过来，学习一下。原作者[xdite](http://blog.xdite.net)大概有6年RoR经验，是个不错的"导师"。
+
+文章来源: <http://segmentfault.com/blog/ytwman/1190000000507093>的参考链接
 
 ## 正文
 
@@ -32,6 +34,8 @@ Talk 包含以下几个主题：
 本文将介绍 18 个整理view手法。值得注意的是，这些手法是「循序渐进」的，即前面的手法未必是「最好」的，而是在「初期整理阶段」是一个好的手法，而事情变得复杂的时候，你才需要越后面的技巧去协助整理。
 
 Helper(辅助ruby方法)和Partial(局部模板)都是用来整理view的常用工具，容易混淆两者的使用。Partial通常用来处理大段重复的程序码或独立局部功能。Helper专属于需要逻辑输出的HTML的工具，常见的`stylsheet_link_tag`，`link_to`都是Helper的范畴。Rails内建了很多helper: `simple_format`, `auto_link`, `truncate`, `html_escape`，`form_for`。
+
+本文中，最重要的是：对Helper和Partial的理解。
 
 ## 1. Move logic to Helper
 
@@ -459,7 +463,7 @@ your content stuff
 
 需要插入 inline javascripts 的地方再这样写，这样 inline javascripts 就会在正确的位置 page_specific_javascript 被执行。
 
-```ruby
+```erb
 your content stuff 
 <%= content_for :page_specific_javascript do %>
   <script type= "text/javascript">
@@ -515,10 +519,12 @@ main content
 
 有些开发者学到了 yield 这招，就会开始觉得这招实在太棒了，觉得应该可以开始把 Logic 拆散在 View 里面。如把 meta 定义在 View 里面：
 
+```erb
 <%= content_for :meta do %>
   <meta content="xdite's blog" name="description">
   <meta content="Blog.XDite.net" property="og:title">
 <% end %>
+```
 
 其实 过犹不及 也是不好的。如果是关于 meta 的部分，放在 Controller 里面其实是比较整理和好收纳的。反而可以
 
@@ -528,14 +534,15 @@ main content
 ```ruby
 def show
     @blog = current_blog
-    drop_blog_title @blog.name
-    drop_blog_descption @blog.description
-  end
+    drop_blog_title @blog.name             # blog的name, meta中的属性
+    drop_blog_descption @blog.description  # blog中描述，meta中属性
+end
 
 <%= stylesheet_tag "application" %>
 <%= render_page_title %>
 <%= render_page_descrption %>
 ```
+> 理解:  meta主要是用来做seo的 - 个人理解
 
 ## 13. Decoration using I18n
 
@@ -549,7 +556,7 @@ def render_user_geneder(user)
     "女 (Female)"
   end
 end
-# 与上述代码功能相同，用来翻译
+# 与上述代码功能相同，用来翻译，t函数是I18n提供的，
 def render_user_gender(user)
   I18n.t("users.gender_desc.#{user.geneder}")
 end
@@ -567,7 +574,7 @@ def render_book_purchase_option(book)
 end
 ```
 
-善用 I18n，可以节省不少装饰用的程式码。
+善用 I18n，可以节省不少装饰用的程序。
 
 以下的重点是Object-Oriented View。
 
@@ -634,7 +641,7 @@ end
 
 其实开发者最希望 View 里面只要有一行
 
-<%= @article.publication_status %>
+    <%= @article.publication_status %>
 
 我们可以透过 Draper 的 DSL，做到这样的封装。
 
@@ -747,10 +754,12 @@ end
 
 但要写十几遍 `<div class="field">` 是一件很烦人的事。我们最希望的是，其实 View 里面只要这样写就 OK 了：
 
+```erb
 <%= form_for @user, :builder => HandcraftBuilder do |form| %>
   <%= form.custom_text_field :name %>
   <%= form.custom_text_field :email %>
 <% end %>
+```
 
 这样的烦恼可以透过客制 Form Builder 解决：
 
@@ -769,6 +778,8 @@ end
 - [bootstrap_form](https://github.com/bootstrap-ruby/rails-bootstrap-forms)
 
 不过现在还需要自己写 Form Builder 吗？其实机会蛮少了。主要的原因是如热门的 Framework： [Bootstrap](http://getbootstrap.com/) 有专属的 gem [bootstrap_form](https://github.com/bootstrap-ruby/rails-bootstrap-forms) 。而 simple_form 也提供 template ，透过 API 就可以轻松客制出一个 Form Builder。
+
+> 表单构建器, 从事web之后，发现连接(link)和表单(form)都很重要。
 
 ## 17. Form Object (wrap logic in FORM, not in model nor in controller)
 
@@ -829,7 +840,7 @@ end
 
 所以 cells 的作者又推出了这么一个 Gem : [Reform](https://github.com/apotonick/reform) ，简化 Form Object 的包装。
 
-## Reform (Decouples your models from form validation, presentation and workflows.)
+### Reform (Decouples your models from form validation, presentation and workflows.)
 
 透过 Reform ，刚刚的 Logic 可以被简化成:
 
@@ -898,7 +909,8 @@ class PostController < ApplicationController
   end
 end
 ```
-## Cancan (Authorization Gem for Ruby on Rails)
+
+### Cancan (Authorization Gem for Ruby on Rails)
 
 [cancan](https://github.com/ryanb/cancan) 是最常被想到的一个整理的招数。透过 Rule Engine 的结构，整理权限：
 
@@ -934,7 +946,7 @@ end
 * [Cancan 实现角色权限设计的最佳实践(2)](http://blog.xdite.net/posts/2012/07/30/cancan-rule-engine-authorization-based-library-2/)
 * [Cancan 实现角色权限设计的最佳实践(3)](http://blog.xdite.net/posts/2012/07/30/cancan-rule-engine-authorization-based-library-3/)
 
-Pundit (Minimal authorization through OO design and pure Ruby classes)
+### Pundit (Minimal authorization through OO design and pure Ruby classes)
 
 不过 cancan 这种 Rule Engine 式的设计常被开发者嫌过度笨重。最近还新诞生了一种设计手法，利用 Policy Object 对于权限进行整理，其中有一个 gem : [pundit](https://github.com/elabs/pundit) 算做得蛮不错的。
 
@@ -982,7 +994,8 @@ end
 *  When things get complicated, build a new control center （当事情变得复杂，不要拘泥于旧的手段，找一个新的中心重新整理控制）
 
 掌握这些原则，就可以尽量把 View 整理的干干净净。
-reference
+
+## 参考
 
 在撰写以上内容时，我的参考内容有：
 
@@ -991,3 +1004,7 @@ reference
 *  http://pivotallabs.com/form-backing-objects-for-fun-and-profit/
 *  http://saturnflyer.com/blog/jim/2013/10/21/how-to-make-your-code-imply-responsibilities/
 *  http://objectsonrails.com/
+
+## 后记
+
+鼓动Rich在Learnpub上购买这本书，结果发现和上面的文章中内容一致。看来，给xdite捐钱了，算了，就当是学费吧。
