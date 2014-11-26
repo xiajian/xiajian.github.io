@@ -26,7 +26,7 @@ LazyHighCharts提供了简单且灵活的方法，从而在Ruby中使用HighChar
 
 ```ruby
 @chart = LazyHighCharts::HighChart.new('graph') do |f|
-  f.title(:text => "Population vs GDP For 5 Big Countries [2009]")
+  f.title(:text => "Population vs GDP For 5 Big Countries [2009]") 
   f.xAxis(:categories => ["United States", "Japan", "China", "Germany", "France"])
   f.series(:name => "GDP in Billions", :yAxis => 0, :data => [14119, 5068, 4985, 3339, 2656])
   f.series(:name => "Population in Millions", :yAxis => 1, :data => [310, 127, 1340, 81, 65])
@@ -40,6 +40,7 @@ LazyHighCharts提供了简单且灵活的方法，从而在Ruby中使用HighChar
   f.chart({:defaultSeriesType=>"column"})
 end
 ```
+> 思: 图标的绘制存在几个要素，标题、x轴和y轴，序列化的线。
 
 视图中的代码:
 
@@ -84,5 +85,21 @@ demo应用程序中使用的gem包:
 代码阅读经验: 
 
 * affix 粘着位样式只能相对于页面的特定位置
-* link_to的remote属性，可以远程请求js，link_to中的代码块设置的是其第一个属性
-* 
+* link_to的remote属性，可以远程请求js，link_to中的代码块设置的是其第一个属性 - 显示属性。
+* 几个新的标签: header, main, footer, section等
+* `high_stock`函数第一个参数是插入的div的id，远程插入div的js代码为: 
+
+```javascript
+# append默认是追加到dom元素的底部
+$('#line_ajax').append("<%= escape_javascript(high_chart('chart_line_ajax', @chart)) -%>")
+```
+
+由于是demo，数据的构建是直接写在model中的。最大的收获就是，link_to中的remote属性，看起来是利用`data-remote`实现的。
+
+觉的项目中的highchart使用乱糟糟的，决定升级一下lazy_high_charts，期望不要出什么差错。
+
+问题: http://www.highcharts.com/errors/16 - 存在多个Highcharts。
+
+> 解决: highcharts和highstock是两个不同的东西。high_stock对应highstock.js， high_chart对应highcharts.js/highcharts-more.js。
+
+原生highchart的使用方法: Highcharts(使用`git grep`在代码库中查找)。
