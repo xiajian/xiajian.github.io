@@ -321,7 +321,7 @@ class FancyFormBuilder < ActionView::Helpers::FormBuilder
       label(attribute) + text_field(attribute, options)
     end
   end
-end
+nd
 ```
 
 ### Rendering the custom builder
