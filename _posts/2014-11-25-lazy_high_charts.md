@@ -102,4 +102,4 @@ $('#line_ajax').append("<%= escape_javascript(high_chart('chart_line_ajax', @cha
 
 > 解决: highcharts和highstock是两个不同的东西。high_stock对应highstock.js， high_chart对应highcharts.js/highcharts-more.js。
 
-原生highchart的使用方法: Highcharts(使用`git grep`在代码库中查找)。
+原生highchart的使用方法: Highcharts(使用`git grep`在代码库中查找)。data属性可以携带很多数据。
