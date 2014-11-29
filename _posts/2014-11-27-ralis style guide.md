@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Rails style guide
+title: Rails风格指南
 ---
 
 ## 前言
 
-不知道在搜什么的时候，看到了这两篇风格指南，C&P，并打算阅读一下。
+不知道在搜什么的时候，看到了这两篇风格指南(Ruby和Rails)，C&P，并打算阅读一下。
 
 ## 正文
 
@@ -15,7 +15,7 @@ title: Rails style guide
 这份指南目的于演示一整套 Rails 3 开发的风格惯例及最佳实践。这是一份与由现存社群所驱动的[Ruby 编码风格指南](https://github.com/bbatsov/ruby-style-guide)互补的指南。
 
 而本指南中[测试 Rails 应用](#testing)小节摆在[开发 Rails 应用](#developing)之后，因为我相信[行为驱动开发](http://en.wikipedia.org/wiki/Behavior_Driven_Development)
-(BDD) 是最佳的软体开发之道。铭记在心吧。
+(BDD) 是最佳的软体开发之道。铭记在心吧，各种驱动开发搞的人心烦。
 
 Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南。在我的心里，我坚信 [RSpec](https://www.relishapp.com/rspec) 优于 Test::Unit，[Sass](http://sass-lang.com/) 优于 CSS 以及
 [Haml](http://haml-lang.com/)，([Slim](http://slim-lang.com/)) 优于 Erb。所以不要期望在这里找到 Test::Unit, CSS 及 Erb 的忠告。
@@ -53,23 +53,24 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
 
 ## 配置
 
-* 把惯用的初始化代码放在 `config/initializers`。 在 initializers 内的代码于应用启动时执行。
-* 每一个 gem 相关的初始化代码应当使用同样的名称，放在不同的文件里，如： `carrierwave.rb`, `active_admin.rb`, 等等。
+* 把惯用的初始化代码放在 `config/initializers`文件中。 在 initializers 内的代码于应用启动时执行。
+* gem包相关的初始化代码应当使用同样的名称，放在不同的文件里，如： `carrierwave.rb`, `active_admin.rb`, 等等。
 * 相应调整配置开发、测试及生产环境（在 `config/environments/` 下对应的文件）
   * 标记额外的资产给（如有任何）预编译：
 
         ```Ruby
         # config/environments/production.rb
         # 预编译额外的资产(application.js, application.css, 以及所有已经被加入的非 JS 或 CSS 的文件)
+        # 对预编译的规则还是有点不太明白
         config.assets.precompile += %w( rails_admin/rails_admin.css rails_admin/rails_admin.js )
         ```
 
 * 将所有环境皆通用的配置档放在 `config/application.rb` 文件。
-* 构建一个与生产环境(production enviroment)相似的，一个额外的 `staging` 环境。
+* 构建一个与生产环境(production enviroment)相似的，一个额外的 `staging` 环境，主要用来测试部署。
 
 ## 路由
 
-* 当你需要加入一个或多个动作至一个 RESTful 资源时（你真的需要吗？），使用 `member` and `collection` 路由。
+* 当你需要加入一个或多个动作至一个 RESTful 资源时（你真的需要吗？），使用 `member` and `collection` 路由。collection表示所有人都可以访问，member表示特定授权的人可以访问。
 
     ```Ruby
     # 差
@@ -109,7 +110,7 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
     end
     ```
 
-* 使用嵌套路由(nested routes)来更佳地表达与 ActiveRecord 模型的关系。
+* 使用嵌套路由(nested routes)来更佳地表达与 ActiveRecord 模型的关系。注：这确实让人耳目一新。
 
     ```Ruby
     class Post < ActiveRecord::Base
@@ -126,7 +127,7 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
     end
     ```
 
-* 使用命名空间路由来群组相关的行为。
+* 使用命名空间路由来组织相关的行为。
 
     ```Ruby
     namespace :admin do
@@ -147,13 +148,13 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
 
 * 让你的控制器保持苗条 ― 它们应该只替视图层取出数据且不包含任何业务逻辑（所有业务逻辑应当放在模型里）。
 * 每个控制器的行动应当（理想上）只调用一个除了初始的 find 或 new 方法。
-* 控制器与视图之间共享不超过两个实例变量(instance variable)。
+* 控制器与视图之间共享不超过两个实例变量(instance variable)。注：默认的实例变量就不止两个了。
 
 ## 模型
 
 * 自由地引入不是 ActiveRecord 的类别吧。
 * 替模型命名有意义（但简短）且不带缩写的名字。
-* 如果你需要模型有著 ActiveRecord 行为的对象，比方说验证这一块，使用 [ActiveAttr](https://github.com/cgriego/active_attr) gem。
+* 如果你需要模型有著 ActiveRecord 行为的对象，比方说验证这一块，使用 [ActiveAttr](https://github.com/cgriego/active_attr) gem。有点不太明白这里表达意思。
 
     ```Ruby
     class Message
@@ -176,12 +177,12 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
 
 ### ActiveRecord
 
-* 避免改动缺省的 ActiveRecord（表的名字、主键，等等），除非你有一个非常好的理由（像是不受你控制的数据库）。
+* 避免改动缺省的 ActiveRecord（表的名字、主键，等等），除非你有一个非常好的理由（比如，不受你控制的数据库）。
 * 把宏风格的方法（`has_many`, `validates`, 等等）放在类别定义的前面。
 
     ```Ruby
     class User < ActiveRecord::Base
-      # 默认的scope放在最前面(如果有)
+      # 默认的scope放在最前面(如果有), scope表示范围。
       default_scope { where(active: true) }
 
       # 接下来是常量
@@ -264,7 +265,7 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
     end
     ```
 
-* 所有惯用的验证器应放在一个共享的 gem 。
+* 所有惯用的验证器应放在一个共享的 gem 。话说，没有使用特定的验证器。
 * 自由地使用命名的作用域(scope)。
 
     ```Ruby
@@ -330,7 +331,7 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
         end
         ```
 
-        查看 [gem 文档](https://github.com/norman/friendly_id)获得更多关于使用的信息。
+     查看 [gem 文档](https://github.com/norman/friendly_id)获得更多关于使用的信息。
 
 ### ActiveResource
 
@@ -338,7 +339,7 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
 `encode` 以及 `decode`。
 
     ```Ruby
-    module ActiveResource
+    module ActiveResource  # ActiveResource是同响应的资源相关
       module Formats
         module Extend
           module CSVFormat
@@ -396,7 +397,7 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
 * 把 `schema.rb` 保存在版本管控之下。
 * 使用 `rake db:scheme:load` 取代 `rake db:migrate` 来初始化空的数据库。
 * 使用 `rake db:test:prepare` 来更新测试数据库的 schema。
-* 避免在表里设置缺省数据。使用模型层来取代。
+* 避免在表里设置缺省数据。使用模型层来取代。这是什么道理！！
 
     ```Ruby
     def amount
@@ -413,7 +414,6 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
     ```
 
 * 当编写建设性的迁移时（加入表或栏位），使用 Rails 3.1 的新方式来迁移 - 使用 `change` 方法取代 `up` 与 `down` 方法。
-
 
     ```Ruby
     # 过去的方式
@@ -518,7 +518,7 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
     `users.show.title` 的数值能这样被 `app/views/users/show.html.haml` 查询：
 
     ```Ruby
-    = t '.title'
+    = t '.title'  # 这是国际化的提供的方法
     ```
 
 * 在控制器与模型使用点分隔的键，来取代指定 `:scope` 选项。点分隔的调用更容易阅读及追踪层级。
@@ -990,7 +990,7 @@ Rails 是一个坚持己见的框架，而这也是一份坚持己见的指南�
     describe Set do
       it_behaves_like "a collection"
     end
-
+    ```
 
 ### 视图
 

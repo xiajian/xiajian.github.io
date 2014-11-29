@@ -7,17 +7,17 @@ title: The twelve-Factor App
 
 在研究`lazy_high_charts`的demo时，看到其中包含名字很奇怪的gem([rails_12factor](https://github.com/heroku/rails_12factor))，然后追踪到<http://12factor.net/>。
 
-看来，最近成名的工程师都热衷于写作，比如37Signals的《Reworks》以及这个Heroku的《The twelve-Factor App》。以下是其中的内容:
+看来，最近成名的工程师都热衷于写作，比如37Signals的《Reworks》以及这个Heroku的《[The twelve-Factor App](http://12factor.net/)》。以下是其中的内容:
 
 ## Introduction
 
 In the modern era, software is commonly delivered as a service: called web apps, or software-as-a-service. The twelve-factor app is a methodology for building software-as-a-service apps that:
 
-    Use declarative formats for setup automation, to minimize time and cost for new developers joining the project;
-    Have a clean contract with the underlying operating system, offering maximum portability between execution environments;
-    Are suitable for deployment on modern cloud platforms, obviating the need for servers and systems administration;
-    Minimize divergence between development and production, enabling continuous deployment for maximum agility;
-    And can scale up without significant changes to tooling, architecture, or development practices.
+* Use declarative formats for setup automation, to minimize time and cost for new developers joining the project;
+* Have a clean contract with the underlying operating system, offering maximum portability between execution environments;
+* Are suitable for deployment on modern cloud platforms, obviating the need for servers and systems administration;
+* Minimize divergence between development and production, enabling continuous deployment for maximum agility;
+* And can scale up without significant changes to tooling, architecture, or development practices.
 
 The twelve-factor methodology can be applied to apps written in any programming language, and which use any combination of backing services (database, queue, memory cache, etc).
 Background
@@ -30,8 +30,6 @@ Our motivation is to raise awareness of some systemic problems we’ve seen in m
 Who should read this document?
 
 Any developer building applications which run as a service. Ops engineers who deploy or manage such applications.
-
-
 
 ## I. Codebase
 

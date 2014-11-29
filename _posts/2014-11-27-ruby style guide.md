@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Ruby style guide
+title: Ruby 风格指南
 ---
 
 # 序幕
@@ -8,28 +8,11 @@ title: Ruby style guide
 > 榜样很重要 <br>
 > ——墨菲警官《机器战警》
 
-身为 Ruby 开发者，有件总是令我烦心的事——Python 开发者有一份好的编程风格参考指南（[PEP-8](http://www.python.org/dev/peps/pep-0008/)）而我们永远没有一份官方指南，一份记录 Ruby 编程风格及最佳实践的指南。我确信风格很重要。我也相信像 Ruby 这样的黑客社区，应该可以自己写一份这个梦寐以求的文档。
+Ruby风格指南，灵感来自[PEP-8](http://www.python.org/dev/peps/pep-0008/)，另有[Rails风格指南](https://github.com/bbatsov/rails-style-guide)。
 
-这份指南开始是作为我们公司内部的 Ruby 编程指南 (在下所写的)。后来，我决定要把成果贡献给广大的 Ruby 社区，况且这个世界再多一份公司司内部文件又有何意义。然而由社区制定及策动的一系列 Ruby 编程惯例、实践及风格，确能让世界收益。
+Ruby 风格指南中推荐实际使用中的最佳实践，即如何写出易维护的Ruby代码。指南的作用指导实践，指南源自作者的经验，[《Programming Ruby 1.9》](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0)，[《The Ruby Programming Language》](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
 
-从编写这份指南开始，我收到了优秀 Ruby 社区的很多用户反馈。感谢所有的建议及帮助！同心协力，我们能创造出让每一个 Ruby 开发者受益的资源。
-
-顺道一提，如果你对 Rails 感兴趣，你可以看看这份 [Ruby on Rails 3 风格指南](https://github.com/bbatsov/rails-style-guide) 作为补充。
-
-# Ruby 风格指南
-
-这份 Ruby 风格指南向你推荐实际使用中的最佳实践，Ruby 程序员如何写出可被别的 Ruby 程序员维护的代码。我们只说实际使用中的用法。指南再好，但里面说的过于理想化结果大家拒绝使用或者可能根本没人用，又有何意义。
-
-本指南依照相关规则分成数个小节。我尽力在规则后面说明理由（如果省略了说明，那是因为其理由显而易见）。
-
-规则不是我凭空想出来的——绝大部分来自我作为从业多年的职业软件工程师的经验，从 Ruby 社区成员得到的反馈及建议，和几个评价甚高的 Ruby 编程资源，像 [《Programming Ruby 1.9》](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) 以及 [《The Ruby Programming Language》](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177)。
-
-本指南仍在完善中——某些规则缺乏实例，某些例子也不够清楚。到时候都会解决的——放心吧。
-
-你可以使用 [Transmuter](https://github.com/TechnoGate/transmuter) 生成本指南的 PDF 或 HTML 版本。
-
-[rubocop](https://github.com/bbatsov/rubocop) 项目会自动检查你的 Ruby 代码是否符合这份 Ruby 风格指南。
-
+[Transmuter](https://github.com/TechnoGate/transmuter) 可以生成本指南的 PDF 或 HTML 版本。[rubocop](https://github.com/bbatsov/rubocop) 项目会自动检查你的 Ruby 代码是否符合这份 Ruby 风格指南。
 
 ## 目录
 
@@ -75,7 +58,7 @@ title: Ruby style guide
     $ git config --global core.autocrlf true
     ```
 
-* 不使用 `;` 隔开语句和表达式。推论——一行一条语句。
+* 不使用 `;` 隔开语句和表达式。推论——`一行一条语句`。
 
     ```Ruby
     # 差
@@ -95,7 +78,7 @@ title: Ruby style guide
 * 对于没有成员的类，尽可能使用单行类定义。
 
     ```Ruby
-    # 差
+    # 差 , 解析器会将这种写法转换成FooError = Class.new(StandardError)
     class FooError < StandardError
     end
 
@@ -188,8 +171,6 @@ title: Ruby style guide
     ```Ruby
     some(arg).other
     [1, 2, 3].length
-
-
     ```
 
 
@@ -207,7 +188,7 @@ title: Ruby style guide
 * 把 `when` 跟 `case` 缩排在同一层。我知道很多人不同意这一点，但这是《The Ruby Programming Language》及《Programming Ruby》所使用的风格。
 
     ```Ruby
-    # 差
+    # 差,更倾向这种表述方式
     case
       when song.name == 'Misty'
         puts 'Not again!'
@@ -245,6 +226,7 @@ title: Ruby style guide
     else 'Jazz'
     end
 
+    # 这里合并为一句, some_cond ? calc_something : calc_something_else
     result = if some_cond
       calc_something
     else
@@ -291,9 +273,7 @@ title: Ruby style guide
     ```Ruby
     def some_method
       data = initialize(options)
-
       data.manipulate!
-
       data.result
     end
 
@@ -319,7 +299,6 @@ title: Ruby style guide
     some_method(size, count, color)
     ```
 
-
 * 当给方法的参数赋默认值时，在 `=` 两边使用空格：
 
     ```Ruby
@@ -336,7 +315,7 @@ title: Ruby style guide
 
     虽然几本 Ruby 书建议用第一个风格，不过第二个风格在实践中更为常见（并可争议地可读性更高一点）。
 
-* 避免在不需要的时候使用行继续符 `\` 。实际编码时，除非用于连接字符串, 否则避免在任何情况下使用行继续符。
+* 避免在不需要的时候使用行继续符 \ 。实际编码时，除非用于连接字符串, 否则避免在任何情况下使用行继续符。
 
     ```Ruby
     # 差
@@ -445,7 +424,7 @@ title: Ruby style guide
     ```
 
 * 使用 RDoc 以及它的惯例来撰写 API 文档。注解区块及 `def` 不要用空行隔开。
-* 每一行限制在 80 个字符内。
+* 每一行限制在 80 个字符内，我要省空间，狂超80字。
 * 避免行尾空格。
 * 文件以空白行结尾。
 * 不要使用区块注释。它们不能由空白引导（`=begin` 必须顶头开始），并且不如普通注释容易辨认。
@@ -464,7 +443,7 @@ title: Ruby style guide
 
 ## 语法
 
-* 使用 `::` 引用常量（包括类和模块）和构造器 (比如 `Array()` 或者 `Nokogiri::HTML()`)。永远不要使用 `::` 来调用方法。
+* 使用 `::` 引用常量（包括类和模块）和构造器 (比如 `Array()` 或者 `Nokogiri::HTML()`)。永远不要使用 `::` 来调用方法，调用方法使用`.`。
 
     ```Ruby
     # 差
@@ -617,7 +596,7 @@ title: Ruby style guide
     x = !something
     ```
 
-* 避免使用 `!!`。
+* 避免使用 `!!`。双重否定，转换语句。
 
     ```Ruby
     # 差
@@ -663,7 +642,7 @@ title: Ruby style guide
 
 * 避免多行的 `? : `（三元操作符）；使用 `if/unless` 来取代。
 
-* 单行主体用 `if/unless` 修饰符。另一个好的方法是使用 `&&/||` 控制流程。
+* 单行主体用 `if/unless` 修饰符。另一个好的方法是使用 `&&/||` 控制流程。`&&/||`控制流程确实好用。
 
     ```Ruby
     # 差
@@ -728,7 +707,7 @@ title: Ruby style guide
     end
     ```
 
-* 不要使用括号围绕 `if/unless/while` 的条件式。
+* 不要使用括号围绕 `if/unless/while` 的条件式。不用括号就是方便。
 
     ```Ruby
     # 差
@@ -824,7 +803,7 @@ title: Ruby style guide
 
     ```Ruby
     class Person
-      attr_reader :name, :age
+      attr_reader :name, :age  # 这样看起来更像申明式的dsl
 
       # 忽略
     end
@@ -840,7 +819,7 @@ title: Ruby style guide
     bowling.score.should == 0
     ```
 
-* 省略可选哈希参数的外部花括号。
+* 省略可选哈希参数的外部花括号，如果是作为最后一个参数。
 
     ```Ruby
     # 差
@@ -914,10 +893,10 @@ title: Ruby style guide
       end
     end
 
-    # 好
+    # 好 
     def with_tmp_dir(&block)
       Dir.mktmpdir do |tmp_dir|
-        Dir.chdir(tmp_dir, &block)
+        Dir.chdir(tmp_dir, &block) # Dir的chdir方法本身接受块
       end
     end
 
@@ -936,11 +915,11 @@ title: Ruby style guide
 
     # 好
     def some_method(some_arr)
-      some_arr.size
+      some_arr.size  # 反正最后一条语句会作为函数的返回值
     end
     ```
 
-* 避免在不需要的情况使用 `self` 。（只有在调用一个 self write 访问器时会需要用到。）
+* 避免在不需要的情况使用 `self` 。（只有在调用一个 self write 访问器时会需要用到。读得时候不需要，写的时候需要，这是为了避免歧义。`status = :in_progress`本身可以看作局部变量赋值）
 
     ```Ruby
     # 差
@@ -962,11 +941,11 @@ title: Ruby style guide
     end
     ```
 
-* 避免局部变量 shadowing 外部方法，除非它们彼此相等。
+* 避免局部变量遮蔽(shadowing)外部方法，除非它们彼此相等。
 
     ```Ruby
     class Foo
-      attr_accessor :options
+      attr_accessor :options  # 申明式的方法
 
       # 勉强可以
       def initialize(options)
@@ -1048,8 +1027,9 @@ title: Ruby style guide
 
     # 好
     enabled = true if enabled.nil?
+    ```
 
-* 使用 &&= 可先检查是否存在变量，如果存在则做相应动作。这样就无需用 `if` 检查变量是否存在了。
+* 使用 `&&=` 可先检查是否存在变量，如果存在则做相应动作。这样就无需用 `if` 检查变量是否存在了。
 
     ```Ruby
     # 差
@@ -1070,7 +1050,7 @@ title: Ruby style guide
     something &&= something.downcase
     ```
 
-* 避免使用 `case` 语句的 `===` 操作符（case equality operator）。从名称可知，这是 `case` 台面下所用的操作符，在 `case` 语句外的场合使用，会产生难以理解的代码。
+* 避免使用 `case` 语句的 `===` 操作符（case equality operator）。从名称可知，这是 `case` 语句中所用的操作符，在 `case` 语句外的场合使用，会产生难以理解的代码。
 
     ```Ruby
     # 差
@@ -1088,7 +1068,7 @@ title: Ruby style guide
 
     ```Ruby
     # bad
-    $:.unshift File.dirname(__FILE__)
+    $:.unshift File.dirname(__FILE__)  # __FILE__类型的变量给人以迷惑
 
     # good
     require 'English'
@@ -1112,7 +1092,7 @@ title: Ruby style guide
 * 用新的 lambda 字面语法定义单行区块，用 `lambda` 方法定义多行区块。
 
     ```Ruby
-    # 差
+    # 差，看起来还是比较好理解的
     lambda = lambda { |a, b| a + b }
     lambda.call(1, 2)
 
@@ -1142,7 +1122,7 @@ title: Ruby style guide
     p = proc { |n| puts n }
     ```
 
-* 用 `proc.call()` 而不是 `proc[]` 或 `proc.()`。
+* 用 `proc.call()` 而不是 `proc[]` 或 `proc.()`。这是一条可读性的规则。
 
     ```Ruby
     # 差 - 看上去像枚举访问
@@ -1158,7 +1138,7 @@ title: Ruby style guide
     l.call(1)
     ```
 
-* 未使用的区块参数和局部变量使用 `_` 前缀或直接使用 `_`（虽然表意性差些） 。Ruby解释器和RuboCop都能辨认此规则，并会抑制相关地有变量未使用的警告。
+* 未使用的区块参数和局部变量使用 `_` 前缀或直接使用 `_`（虽然表意性差些）。Ruby解释器和RuboCop都能辨认此规则，并会抑制相关地有变量未使用的警告。
 
     ```Ruby
     # 差
@@ -1170,7 +1150,7 @@ title: Ruby style guide
     end
 
     # good
-    result = hash.map { |_k, v| v + 1 }
+    result = hash.map { |_k, v| v + 1 } # 块存在的参数需求和相应变量
 
     def something(x)
       _unused_var, used_var = something_else(x)
@@ -1191,7 +1171,7 @@ title: Ruby style guide
 * 使用 `warn` 而不是 `$stderr.puts`。除了更加清晰简洁，如果你需要的话，
   `warn` 还允许你压制（suppress）警告（通过 `-W0` 将警告级别设为 `0`）。
 
-* 倾向使用 `sprintf` 和它的别名 `format` 而不是相当隐晦的 `String#%` 方法.
+* 倾向使用 `sprintf` 和它的别名 `format` 而不是相当隐晦的 `String#%` 方法. 确实会有格式化字符串的需求。
 
     ```Ruby
     # 差
@@ -1214,14 +1194,14 @@ title: Ruby style guide
     # => '20 10'
     ```
 
-* 倾向使用 `Array#join` 而不是相当隐晦的使用字符串作参数的 `Array#*`。
+* 倾向使用 `Array#join` 而不是相当隐晦的使用字符串作参数的 `Array#*`(表示实例方法)。
 
     ```Ruby
     # 差
     %w(one two three) * ', '
     # => 'one, two, three'
 
-    # 好
+    # 好，用来拼接字符串
     %w(one two three).join(', ')
     # => 'one, two, three'
     ```
@@ -1234,7 +1214,7 @@ title: Ruby style guide
     paths = [paths] unless paths.is_a? Array
     paths.each { |path| do_something(path) }
 
-    # 好
+    # 好, 参数中带*前缀表示的是数组
     [*paths].each { |path| do_something(path) }
 
     # 好（而且更具易读性一点）
@@ -1247,7 +1227,7 @@ title: Ruby style guide
     # 差
     do_something if x >= 1000 && x < 2000
 
-    # 好
+    # 好，数组和区域
     do_something if (1000...2000).include?(x)
 
     # 好
@@ -1255,7 +1235,7 @@ title: Ruby style guide
 
     ```
 
-* 尽量用判断方法而不是使用 `==` 。比较数字除外。
+* 尽量用判断方法(或谓词方法)而不是使用 `==` 。比较数字除外。
 
     ```Ruby
     # 差
@@ -1268,7 +1248,7 @@ title: Ruby style guide
     if x == nil
     end
 
-    # 好
+    # 好，偶数和奇数的判断
     if x.even?
     end
 
@@ -1307,11 +1287,9 @@ title: Ruby style guide
 
     ```Ruby
     # 差
-
     END { puts 'Goodbye!' }
 
-    # 好
-
+    # 好，at_exit方法是何含义
     at_exit { puts 'Goodbye!' }
     ```
 
@@ -1334,7 +1312,7 @@ title: Ruby style guide
         end
       end
 
-    # 好
+    # 好，这种写法很有启发性
       def compute_thing(thing)
         return unless thing[:foo]
         update_with_bar(thing[:foo])
@@ -1488,7 +1466,7 @@ title: Ruby style guide
       end
 
       def flatten_once
-        dup.flatten_once!
+        dup.flatten_once! # dup方法是何含义？？
       end
     end
     ```
@@ -1505,7 +1483,7 @@ title: Ruby style guide
 
 * 倾向使用 `map` 而不是 `collect` ， `find` 而不是 `detect` ， `select` 而不是 `find_all` ， `reduce` 而不是 `inject` 以及 `size` 而不是 `length` 。这不是一个硬性要求；如果使用别名增加了可读性，使用它没关系。这些有押韵的方法名是从 Smalltalk 继承而来，在别的语言不通用。鼓励使用 `select` 而不是 `find_all` 的理由是它跟 `reject` 搭配起来是一目了然的。
 
-* 不用用 `count` 代替 `size`。除了`Array`其它`Enumerable`对象都需要遍历整个集合才能得到大小。
+* 不用 `count` 代替 `size`。除了`Array`，其它`Enumerable`对象都需要遍历整个集合才能得到大小。
 
     ```Ruby
     # bad
@@ -1514,7 +1492,6 @@ title: Ruby style guide
     # good
     some_hash.size
     ```
-
 
 * 倾向使用 `flat_map` 而不是 `map` + `flatten` 的组合。
   这并不适用于深度大于 2 的数组，举个例子，如果 `users.first.songs == ['a', ['b', 'c']]` ，则使用 `map + flatten` 的组合，而不是使用 `flat_map`。
@@ -1591,7 +1568,7 @@ title: Ruby style guide
 
 ## 类与模块
 
-* 在类别定义里使用一致的结构。
+* 在类别定义里使用一致的结构, 这个结构很不错。
 
     ```Ruby
     class Person
@@ -1629,7 +1606,7 @@ title: Ruby style guide
     end
     ```
 
-* 如果某个类需要多行代码，则不要嵌套在其它类中。应将其独立写在文件中，存放以包含它的类的的名字命名的文件夹中。
+* 如果某个类需要多行代码，则不要嵌套在其它类中。应将其独立写在文件中，存放以包含它的类的的名字命名的文件夹中。-- java中的类强制写在一行代码中
 
     ```Ruby
     # 差
@@ -1695,7 +1672,7 @@ title: Ruby style guide
     end
     ```
 
-* 当你想将模块的实例方法变成类别方法时，偏爱使用 `module_function` 胜过 `extend self`。
+* 当你想将模块的实例方法变成类别方法时，偏爱使用 `module_function` 胜过 `extend self`。 第一次看到这种表述。
 
     ```Ruby
     # 差
@@ -1738,6 +1715,7 @@ title: Ruby style guide
         @last_name = last_name
       end
 
+      # 必须实现的方法
       def to_s
         "#{@first_name #@last_name}"
       end
@@ -1762,7 +1740,7 @@ title: Ruby style guide
       end
     end
 
-    # 好
+    # 好，ruby语言本身带来的惯例约束
     class Person
       attr_reader :first_name, :last_name
 
@@ -1773,7 +1751,7 @@ title: Ruby style guide
     end
     ```
 
-* 不要使用 `attr`。使用 `attr_reader` 和 `attr_accessor`。
+* 不要使用 `attr`。使用 `attr_reader` ，`attr_accessor` 以及 `attr_writter`。
 
     ```Ruby
     # 差 - ruby 1.9 中就不推荐了
@@ -1798,13 +1776,13 @@ title: Ruby style guide
       end
     end
 
-    # 更好
+    # 更好, `Struct.new`方法是啥，难道是结构体
     Person = Struct.new(:first_name, :last_name) do
     end
-    ````
+    ```
 
 * 不要扩展 `Struct.new`。它已经是个类了。对它扩展不但引入了无意义的类的层次也会在该文件多次被require时出现奇怪的错误。
-* 考虑加入工厂方法以提供附加的有意义的方式来生成一个特定的类实例。
+* 考虑加入`工厂方法`以提供附加的有意义的方式来生成一个特定的类实例。设计模式之工厂方法
 
     ```Ruby
     class Person
@@ -1870,7 +1848,7 @@ title: Ruby style guide
     Parent.print_class_var # => will print "child"
     ```
 
-    如同你所看到的，在类型层级中的所有类其实都共享单独一个类变量。通常情况下应该倾向使用实例变量而不是类变量。
+    如同你所看到的，在类型层级中的所有类其实都共享单独一个类变量。通常情况下应该倾向使用实例变量而不是类变量。**注**：不太明白，类变量有何用处。
 
 * 依据方法的目的用途指定适当的可见层级（`private`，`protected`）。别把所有方法都设为 `public`（方法的缺省值）。我们现在是在写“Ruby”，不是“Python”。
 * 将 `public`，`protected`，`private` 和被应用的方法定义保持一致的缩排。在上下各留一行来强调这个可见性应用于之后的所有方法。
@@ -1907,7 +1885,7 @@ title: Ruby style guide
         # 省略方法体
       end
 
-      # 另一种便捷的方式
+      # 另一种便捷的方式，单件方法有何用处
       class << self
         def first_method
           # 省略方法体
@@ -2006,7 +1984,7 @@ title: Ruby style guide
     def with_io_error_handling
        yield
     rescue IOError
-      # 处理 IOError
+      # 处理 IOError, 这里可能表示，特定异常的处理逻辑类似
     end
 
     with_io_error_handling { something_that_might_fail }
@@ -2081,7 +2059,7 @@ title: Ruby style guide
     end
     ```
 
-* 把较具体的异常放在救援串连的较上层，不然它们永远不会被拯救。
+* 把较具体的异常放在救援串连的较上层，不然它们永远不会被拯救。这是代码规则还是语法描述。
 
     ```Ruby
     # 差
@@ -2129,7 +2107,7 @@ title: Ruby style guide
     end
     ```
 
-* 倾向使用标准库的异常类而不是导入新的异常类。
+* 倾向使用标准库的异常类而不是导入新的异常类，这需要更多对标准库的理解。
 
 ## 集合
 
@@ -2179,7 +2157,7 @@ title: Ruby style guide
     VALUES = [1001, 2020, 3333, ]
     # 好
     VALUES = [1001, 2020, 3333]
-    ````
+    ```
 
 * 避免在数组中创造巨大的间隔。
 
@@ -2199,7 +2177,7 @@ title: Ruby style guide
     hash = { one: 1, two: 2, three: 3 }
     ```
 
-* 避免使用可变的对象作为键值。
+* 避免使用可变的对象作为键值，键值应当是不可变的。
 
 * 当哈希的键为符号时，使用 Ruby 1.9 的哈希的字面语法。
 
@@ -2303,7 +2281,7 @@ title: Ruby style guide
     name = 'Bozhidar'
     ```
 
-    （风格 B） 用双引号。除非字符串中含有双引号，或者含有你希望抑制的逃逸字符。
+    （风格 B） 用双引号。除非字符串中含有双引号，或者含有你希望抑制的转义字符。
 
     ```Ruby
     # 差
@@ -2367,7 +2345,7 @@ title: Ruby style guide
   使用 `String#<<` 来替代。`<<` 就地改变字符串实例，因此比 `String#+` 来得快。`String#+` 创造了一堆新的字符串对象。
 
     ```Ruby
-    # 好也比较快
+    # 好也比较快，构建生成HTML数据的时候使用`<<`追加新的字符串。
     html = ''
     html << '<h1>Page title</h1>'
 
@@ -2402,7 +2380,7 @@ title: Ruby style guide
     first_group = string[/text(grp)/, 1] # 或得分组的内容
     string[/text (grp)/, 1] = 'replace' # string => 'text replace'
     ```
-* 当你不需要替结果分组时，使用非分组的群组。
+* 当你不需要替结果分组时，使用非分组的表达式
 
     ```Ruby
     /(first|second)/ # 差
@@ -2436,7 +2414,7 @@ title: Ruby style guide
     process meaningful_var
     ```
 
-* 字符类别只有几个你需要关心的特殊字符：`^`、`-`、`\`、`]`，所以你不用转义 `[]` 中的 `.` 或中括号。
+* 字符类别只有几个你需要关心的特殊字符：`^`、`-`、\、`]`，所以你不用转义 `[]` 中的 `.` 或中括号。
 
 * 小心使用 `^` 与 `$` ，它们匹配的是一行的开始与结束，不是字符串的开始与结束。如果你想要匹配整个字符串，使用 `\A` 与 `\z`。(译注：`\Z` 实为 `/\n?\z/`，使用 `\z` 才能匹配到有含新行的字符串的结束)
 
@@ -2445,6 +2423,7 @@ title: Ruby style guide
     string[/^username$/] # 匹配
     string[/\Ausername\z/] # 不匹配
     ```
+
 * 针对复杂的正则表达式，使用 `x` 修饰符。可提高可读性并可以加入有用的注释。只是要注意空白字符会被忽略。
 
     ```Ruby
@@ -2641,20 +2620,7 @@ title: Ruby style guide
 
 [RubyMine](http://www.jetbrains.com/ruby/) 的代码检查[部分基于](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)本指南。
 
-# 贡献
-
-在本指南所写的每条规则都不是定案。这只是我渴望想与同样对 Ruby 编程风格有兴趣的大家一起工作，以致于最终我们可以替整个 Ruby 社区创造一个有益的资源。
-
-欢迎 open tickets 或 push 一个带有改进的更新请求。在此提前感谢你的帮助！
-
-# 授权
+## 授权
 
 ![Creative Commons License](http://i.creativecommons.org/l/by/3.0/88x31.png)
 This work is licensed under a [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/deed.zh)
-
-# 口耳相传
-
-一份社区驱动的风格指南，如果没多少人知道，对一个社区来说就没有多少用处。微博转发这份指南，分享给你的朋友或同事。我们得到的每个评价、建议或意见都可以让这份指南变得更好一点。而我们想要拥有的是最好的指南，不是吗？
-
-共勉之，<br>
-[Bozhidar](https://twitter.com/bbatsov)
