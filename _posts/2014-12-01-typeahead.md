@@ -414,92 +414,44 @@ jQuery.fn._typeahead = typeahead;
 
 ### 数据集(Datasets)
 
-A typeahead is composed of one or more datasets. When an end-user modifies the
-value of a typeahead, each dataset will attempt to render suggestions for the
-new value. 
+`typeahead`可以由一个或多个数据集组成。但用户修改typeahead的值时，每个数据集都会尝试渲染为新的查询渲染值。
 
-`typeahead`可以由一个或多个数据集组成。但用户修改typeahead的值时，每个数据集都会
+大多数情况下，一个数据集足够了。只有在需要在下拉菜单中，以某些分类关系分组渲染推荐时，才需要使用多个数据源。例如，在`twitter.com`中，搜索预输入将结果分组为相关搜索，趋势，账户 - 这就需要使用多个数据集。
 
-For most use cases, one dataset should suffice. It's only in the scenario where
-you want rendered suggestions to be grouped in the dropdown menu based on some 
-sort of categorical relationship that you'd need to use multiple datasets. For
-example, on twitter.com, the search typeahead groups results into recent 
-searches, trends, and accounts – that would be a great use case for using 
-multiple datasets.
+数据集可以通过如下的选项进行配置: 
 
-Datasets can be configured using the following options.
+* `source` – 推荐的数据源支持。值为带有`(query, cb)`签名的函数。该函数将会计为`query`计算推荐集，然后以计算的推荐集调用`cb`。函数`cb`的调用可以是同步的，也可以是异步的。Bloodhound推荐引擎可在这里使用，更多参考[Bloodhound Integration]。**必须**
 
-* `source` – The backing data source for suggestions. Expected to be a function 
-  with the signature `(query, cb)`. It is expected that the function will 
-  compute the suggestion set (i.e. an array of JavaScript objects) for `query` 
-  and then invoke `cb` with said set. `cb` can be invoked synchronously or 
-  asynchronously. A Bloodhound suggestion engine can be used here, to learn 
-  how, see [Bloodhound Integration](#bloodhound-integration). **Required**.
+* `name` – 数据集的名字。该名字可以被追加到`tt-dataset-`，从而形成包含DOM元素的类名。只能由下划线、-，字母和数字组成。默认为随机数。
 
-* `name` – The name of the dataset. This will be appended to `tt-dataset-` to 
-  form the class name of the containing DOM element.  Must only consist of 
-  underscores, dashes, letters (`a-z`), and numbers. Defaults to a random 
-  number.
+* `displayKey` – 对于一个给定的推荐对象，决定其的字符串表示，并将会在某个输入控件选择后使用。其值可以是关键字符串，或者是将推荐对象转换为string的函数。默认为`value`。
+* `templates` – 渲染数据集使用的哈希模板。注意：预编译的模板是将javascript对象作为第一参数，并返回为HTML字符串。
 
-* `displayKey` – For a given suggestion object, determines the string 
-  representation of it. This will be used when setting the value of the input
-  control after a suggestion is selected. Can be either a key string or a 
-  function that transforms a suggestion object into a string. Defaults to 
-  `value`.
+  * `empty` – 当给定查询推荐数为0时，渲染`empty`中的内容。`empty`的值可以是HTML字符串或预编译模板。如果是预编译模板，其内容中将包含`query`。 
 
-* `templates` – A hash of templates to be used when rendering the dataset. Note
-  a precompiled template is a function that takes a JavaScript object as its
-  first argument and returns a HTML string.
+  * `footer` – 数据集底部渲染的内容，可为HTML字符串或预编译模板。如果是预编译模板，其中包含`query`和`isEmpty`。
 
-  * `empty` – Rendered when `0` suggestions are available for the given query. 
-  Can be either a HTML string or a precompiled template. If it's a precompiled
-  template, the passed in context will contain `query`.
+  * `header` – 数据集头部渲染的内容，可为HTML字符串或预编译模板。如果是预编译模板，其中包含`query`和 `isEmpty`。
 
-  * `footer`– Rendered at the bottom of the dataset. Can be either a HTML 
-  string or a precompiled template. If it's a precompiled template, the passed 
-  in context will contain `query` and `isEmpty`.
-
-  * `header` – Rendered at the top of the dataset. Can be either a HTML string 
-  or a precompiled template. If it's a precompiled template, the passed in 
-  context will contain `query` and `isEmpty`.
-
-  * `suggestion` – Used to render a single suggestion. If set, this has to be a 
-  precompiled template. The associated suggestion object will serve as the 
-  context. Defaults to the value of `displayKey` wrapped in a `p` tag i.e. 
-  `<p>{{value}}</p>`.
+  * `suggestion` – 用来渲染单个推荐。其值必须是预编译模板。其中包含关联的建议对象。默认为将`displayKey`包装在`p`标签中：`<p>{{value}}</p>`
 
 ### Custom Events
 
-The typeahead component triggers the following custom events.
+typeahead组件触发了如下的定制的事件: 
 
-* `typeahead:opened` – Triggered when the dropdown menu of a typeahead is 
-  opened.
-
-* `typeahead:closed` – Triggered when the dropdown menu of a typeahead is 
-  closed.
-
-* `typeahead:cursorchanged` – Triggered when the dropdown menu cursor is moved
-  to a different suggestion. The event handler will be invoked with 3 
-  arguments: the jQuery event object, the suggestion object, and the name of 
-  the dataset the suggestion belongs to.
-
-* `typeahead:selected` – Triggered when a suggestion from the dropdown menu is 
-  selected. The event handler will be invoked with 3 arguments: the jQuery 
-  event object, the suggestion object, and the name of the dataset the 
-  suggestion belongs to.
-
-* `typeahead:autocompleted` – Triggered when the query is autocompleted. 
-  Autocompleted means the query was changed to the hint. The event handler will 
-  be invoked with 3 arguments: the jQuery event object, the suggestion object, 
-  and the name of the dataset the suggestion belongs to. 
+* `typeahead:opened` – 当typeahead的下拉菜单打开时触发。
+* `typeahead:closed` – 当typeahead的下拉菜单关闭时触发。
+* `typeahead:cursorchanged` – 但下拉菜单的光标移动到另一个推荐时，触发事件。事件处理器将接受三个参数： jQuery事件对象、推荐对象以及推荐对象所属的数据集名。
+* `typeahead:selected` – 当下拉菜单被渲染时触发。事件处理器接受三个参数： jQuery事件对象，推荐对象以及推荐对象所属的数据集名。
+* `typeahead:autocompleted` – 当查询自动补全时触发。自动补全意味着将`hint`改变为查询，事件器将调用3个参数: jQuery事件对象、推荐对象以及推荐对象所属的数据集名。 
 
 All custom events are triggered on the element initialized as a typeahead.
 
+所有的定制事件将会在元素初始化为typeahead时触发。
+
 ### Look and Feel
 
-Below is a faux mustache template describing the DOM structure of a typeahead 
-dropdown menu. Keep in mind that `header`, `footer`, `suggestion`, and `empty` 
-come from the provided templates detailed [here](#datasets). 
+下面是虚构的mustache模板，用来描述typeahead下拉菜单DOM元素结构。 注意，`header`, `footer`, `suggestion`以及 `empty`都是有datase提供的模板。
 
 ```html
 <span class="tt-dropdown-menu">
@@ -520,15 +472,11 @@ come from the provided templates detailed [here](#datasets).
 </span>
 ```
 
-When an end-user mouses or keys over a `.tt-suggestion`, the class `tt-cursor` 
-will be added to it. You can use this class as a hook for styling the "under 
-cursor" state of suggestions.
+当用户在`.tt-suggestion`的a链接上移动鼠标或键盘时，将会追加样式`tt-cursor`。可使用该样式类标识位于光标下的推荐。
 
 ## Bloodhound Integration
 
-Because datasets expect their `source` to be a function, you cannot directly
-pass a Bloodhound suggestion engine in as `source`. Rather, you'll need to 
-pass the suggestion engine's typeahead adapter:
+由于数据集期望`source`属性是一个函数，所以，不能直接将Bloodhound推荐引擎传递进来。相反的，需要使用推荐引擎的typeahead适配器`ttAdapter`。
 
 ```javascript
 var engine = new Bloodhound({ /* options */ });
@@ -543,4 +491,4 @@ $('.typeahead').typeahead(null, {
 
 ## 小结
 
-看完之后，觉得预输入这种东西，还真是强大的不得了啊，需要监听的事件不少啊。自己结合这jquery ui的autocomplete的实现实在是太挫了。
+看完之后，觉得预输入这种东西，还真是强大的不得了啊，需要监听的事件不少啊。自己曾结合jquery ui的autocomplete的实现实在是太挫了，依赖的东西太多了。但是，怎么将其应用到网站上，貌似还有些距离。
