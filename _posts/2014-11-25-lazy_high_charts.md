@@ -26,7 +26,7 @@ LazyHighCharts提供了简单且灵活的方法，从而在Ruby中使用HighChar
 
 ```ruby
 @chart = LazyHighCharts::HighChart.new('graph') do |f|
-  f.title(:text => "Population vs GDP For 5 Big Countries [2009]") 
+  f.title(:text => "Population vs GDP For 5 Big Countries [2009]")       # 参数赋值的另一种方法: f.options[:title][:text] 
   f.xAxis(:categories => ["United States", "Japan", "China", "Germany", "France"])
   f.series(:name => "GDP in Billions", :yAxis => 0, :data => [14119, 5068, 4985, 3339, 2656])
   f.series(:name => "Population in Millions", :yAxis => 1, :data => [310, 127, 1340, 81, 65])
@@ -40,7 +40,7 @@ LazyHighCharts提供了简单且灵活的方法，从而在Ruby中使用HighChar
   f.chart({:defaultSeriesType=>"column"})
 end
 ```
-> 思: 图标的绘制存在几个要素，标题、x轴和y轴，序列化的线。
+> 思: 图标的绘制存在几个要素，标题、x轴和y轴，序列化的线。传递的参数就是一个巨大的选项hash数组。
 
 视图中的代码:
 

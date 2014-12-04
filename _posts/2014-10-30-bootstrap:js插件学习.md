@@ -4,13 +4,25 @@ title: Bootstrap:JS插件学习
 category : javascript
 ---
 
-来源: <http://www.ueffort.com/bootstrap-js-cha-jian-xue-xi/>
-
 由于，自己的Jekyll博客上，使用了Bootstrap，所以，想要学习并了解Bootstrap相关的js插件，然后，有空给自己的博客添加一些动态效果。注意：boostrap中的js插件并不需要额外的引入新的js文件，而是其boostrap.js中本身就包含了这些js插件。插件的调用也非常的简单，通常只要设置一下data属性即可，感觉相当的方便
+
+## 概述
+
+Bootstrap的js插件可以逐个引入，也可以一起全部引入。一些使用建议: 
+
+* 使用压缩的js文件
+* 组件的data属性: 不要在同一元素叠太多插件属性
+* 注意插件之间的依赖关系
+
+插件的使用，除了使用data api，还可以使用js api。js api接受options的js对象作为参数，不提供时使用默认值。插件通过`Constructor`属性暴露其原始构造函数: `$.fn.popover.Constructor`(其中popover是插件名)。插件实例的获取: `$('[rel="popover"]').data('popover')`，其中，`popover`为插件的名字。
+
+插件可以通过修改自身`Constructor.DEFAULTS`对象，从而改变插件的默认设置。通过`.noConflict`方法避免命名冲突。Boostrap的大多数插件提供自定以事件，事件动词原型表示时间开始时触发，过去式表示动作执行后触发。bs 3.0后，使用的命名空间的方式。
+
+`<noscript>`标签向用户解释如何启用js。
 
 ## 过度效果：transition.js
 
-> 只需要简单的引入，是对css过度效果的模拟，也被用来检测当前浏览器对css过渡效果是否支持
+只需要简单的引入，是对css过度效果的模拟，也被用来检测当前浏览器对css过渡效果是否支持。 还有就是可以用作其他的插件中使用的效果。
 
 ## 模态框：modal.js
 
@@ -48,6 +60,8 @@ option：
 -  shown.bs.modal:启用模态框后
 -  hide.bs.modal:关闭模态框前
 -  hidden.bs.modal:关闭模态框后
+
+存在的问题就是，可能不支持ajax请求填充内容。这一点，可以通过<https://github.com/jschr/bootstrap-modal>进行扩展。
 
 ## 下拉菜单：dropdown.js
 
@@ -87,24 +101,26 @@ string:
 
 通过设定：
 
-    data-spy="scroll"添加监听功能
-    data-target="选择器"为Bootstrap中.nav组件的父元素
-    导航内的链接#xxx,页面必须存在与该锚点相同id的DOM元素
+*  data-spy="scroll"添加监听功能
+*  data-target="选择器"为Bootstrap中.nav组件的父元素
+*  导航内的链接#xxx,页面必须存在与该锚点相同id的DOM元素
 
 js调用：
 
+```javascript
 $('选择器').scrollspy(option|string);
+```
 
-option：
+选项：
 
-    target：监听所对应的对象
-    offset：从上滚动的偏移量，可以设置在data-offset
-    string：
-        refresh：每当页面中增加删除页面元素时，都需要调用该操作
+* target：监听所对应的对象
+* offset：从上滚动的偏移量，可以设置在data-offset
+* string：
+  * refresh：每当页面中增加删除页面元素时，都需要调用该操作
 
 事件：
 
-    activate.bs.scrollspy:当滚动监听到某个元素为active时
+*  activate.bs.scrollspy:当滚动监听到某个元素为active时
 
 ## 标签页：tab.js
 
@@ -119,9 +135,9 @@ HTML：
 
 通过设定：
 
-    data-toggle="tab"为该元素绑定标签功能
-    data-toggle="pill"为该元素绑定标签功能
-    导航内的连接为#xxx,必须存在与该锚点相同id的DOM元素，并且在tab-content内
+* data-toggle="tab"为该元素绑定标签功能
+* data-toggle="pill"为该元素绑定标签功能
+* 导航内的连接为#xxx,必须存在与该锚点相同id的DOM元素，并且在tab-content内
 
 js调用：
 
@@ -132,23 +148,23 @@ $('#myTab a:first').tab('show') // Select first tab
 $('#myTab a:last').tab('show') // Select last tab
 $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
 ```
-string:
+其参数字符串:
 
-    show：激活单独标签页
+-  show：激活单独标签页
 
 事件：
 
-    show.bs.tab:激活单独标签页前
-    shown.bs.tab:激活单独标签页后
+-  show.bs.tab:激活单独标签页前
+-  shown.bs.tab:激活单独标签页后
 
 ## 工具提示：tooltip.js
 
-    （data-api需要单独初始化）
+tooltip.js的data-api需要单独初始化。注：提示类的插件需要仔细学习认证学习一下。确实，存在一些需要提示功能的地方。
 
 注：
 
-    btn-group或input-group内的元素，需要添加container:'body'
-    disabled元素需要包裹在<div>中，然后对该div使用提示
+*  btn-group或input-group内的元素，需要添加container:'body'
+*  disabled元素需要包裹在<div>中，然后对该div使用提示
 
 js调用：
 
@@ -184,27 +200,29 @@ option:
 
 事件：
 
-    show.bs.tooltip:在显示提示前
-    shown.bs.tooltip：在显示提示后
-    hide.bs.tooltip:在关闭提示前
-    hide.bs.tooltip:在关闭提示后
+*  show.bs.tooltip:在显示提示前
+*  shown.bs.tooltip：在显示提示后
+*  hide.bs.tooltip:在关闭提示前
+*  hide.bs.tooltip:在关闭提示后
 
 ## 弹出框：popover.js
 
-    （data-api需要单独初始化）
+与tooltip.js类似，data-api需要单独初始化）
 
 依赖：依赖于tooltip.js插件
+
 注：
 
-    btn-group或input-group内的元素，需要添加container:'body'
-    disabled元素需要包裹<div>在中，然后对该div使用提示
+*  btn-group或input-group内的元素，需要添加container:'body'
+*  disabled元素需要包裹`<div>`在中，然后对该div使用提示
 
 js调用：
 
 ```javascript
 $('选择器').popover(option|string);
 ```
-option:
+
+选项:
 
     animation：开启过度动画
         true：开启
@@ -232,24 +250,25 @@ option:
 
 事件：
 
-    show.bs.popover:在显示弹出前
-    shown.bs. popover ：在显示弹出后
-    hide.bs. popover :在关闭弹出前
-    hide.bs. popover :在关闭弹出后
+*  show.bs.popover:在显示弹出前
+*  shown.bs. popover ：在显示弹出后
+*  hide.bs. popover :在关闭弹出前
+*  hide.bs. popover :在关闭弹出后
 
 ## 警告框：alert.js
 
 HTML：
 
-    为警告框添加动画效果
-    添加.fade开启淡入特效
-    添加.in让初始化时具有淡入特效
+*  为警告框添加动画效果
+*  添加.fade开启淡入特效
+*  添加.in让初始化时具有淡入特效
 
 通过设定：
 
     data-dismiss="alert"为警告框添加关闭功能
 
 js调用：
+
 ```javascript
 $('选择器').alert(string);
 ```
@@ -261,8 +280,8 @@ string：
 
 事件：
 
-    close.bs.alert：关闭警告框前
-    closed.bs.alert：关闭警告框后
+*  close.bs.alert：关闭警告框前
+*  closed.bs.alert：关闭警告框后
 
 ## 按钮：button.js
 
@@ -283,32 +302,34 @@ string：
     并对将input包裹在<label class="btn btn-primary"></label>
 
 js调用：
+
 ```
 $('选择器').button(string);
 ```
 
 string:
 
-    toggle：开启或者关闭按钮状态
-    loading：将按钮设定为加载状态
-    reset：重置按钮状态
-    string：重置按钮状态，并设定按钮文本为传入值
+*  toggle：开启或者关闭按钮状态
+*  loading：将按钮设定为加载状态
+*  reset：重置按钮状态
+*  string：重置按钮状态，并设定按钮文本为传入值
 
 ## 折叠：collapse.js
 
-    （对支持则跌功能的组件，添加样式和灵活的支持：accordions和导航）
+支持折叠功能的组件，添加样式和灵活的支持：accordions和导航。
 
 依赖：依赖于transition.js
 
 通过设定：
 
-    data-toggle="collapse"开启折叠页面元素的能力
-    data-target="选择器"
-    href="选择器"也可
-    为可折叠的页面元素添加collapse
-    data-parent="选择器"，实现切换折叠效果，赋予统一的父元素
+*  data-toggle="collapse"开启折叠页面元素的能力
+*  data-target="选择器"
+*  href="选择器"也可
+*  为可折叠的页面元素添加collapse
+*  data-parent="选择器"，实现切换折叠效果，赋予统一的父元素
 
 js调用：
+
 ```javascript
 $('选择器').collapse(option|string);
 ```
@@ -326,10 +347,10 @@ option：
 
 事件：
 
-    show.bs.collapse:折叠显示前
-    shown.bs.collapse:折叠显示后
-    hide.bs.collapse:折叠隐藏前
-    hidden.bs.collapse:折叠隐藏后
+* show.bs.collapse:折叠显示前
+* shown.bs.collapse:折叠显示后
+* hide.bs.collapse:折叠隐藏前
+* hidden.bs.collapse:折叠隐藏后
 
 ## 轮播：carousel.js
 
@@ -339,29 +360,29 @@ HTML：
 
 ```html
 <div class="carousel slide">
-<div class="carousel-inner">
-<div class="item"><img alt="" /></div>
-</div>
-</div>
+  <div class="carousel-inner">
+    <div class="item"><img alt="" /></div>
+    </div>
+  </div>
 </div>
 <div class="carousel-caption"></div>
 ```
 
 通过设定：
 
-    data-ride="carousel":启动轮播功能
-    data-target="选择器"设定操作轮播的对象
-    href=
+*  data-ride="carousel":启动轮播功能
+*  data-target="选择器"设定操作轮播的对象
+*  href=
 
 左右控件：
 
-    data-slide="prev"绑定左切换
-    data-slide="next"绑定右切换
+* data-slide="prev"绑定左切换
+* data-slide="next"绑定右切换
 
 单项切换：
 
-    dataslide-to="int"从0开始，绑定每个元素
-    active：当前激活样式
+*  dataslide-to="int"从0开始，绑定每个元素
+*  active：当前激活样式
 
 js调用：
 
@@ -387,28 +408,34 @@ option:
 
 事件：
 
-    slide.bs.carousel:切换前调用
-    slid.bs.carousel:播放完成后调用
+*  slide.bs.carousel:切换前调用
+*  slid.bs.carousel:播放完成后调用
 
 ## 页面定位：affix.js
 
+尝试使用了一下，没能做到自己想要的效果，稍微感觉有点沮丧。
+
 通过设定：
 
-    data-spy="affix"开启affix
-    data-offset-top="200"定位浮动
+*  data-spy="affix" 开启affix
+*  data-offset-top="200" 定位浮动
 
 注：
 
-    需要设定affix，affix-top，affix-bottom3种状态的样式，插件不设定
-    affix是正常时的样式，fixed定位
-    affix-top是初始状态的样式
-    affix-bottom是停止时的样式，absolute定位
+*  需要设定affix，affix-top，affix-bottom3种状态的样式，插件不设定
+*  affix是正常时的样式，fixed定位
+*  affix-top是初始状态的样式
+*  affix-bottom是停止时的样式，absolute定位
 
 js调用：
 
 ```javascript
 $('选择器').affix(option);
 ```
-option:
 
-    offset:{top:,bottom:}
+选项: offset:{top:,bottom:}
+
+## 参考文献
+
+[1]. <http://www.ueffort.com/bootstrap-js-cha-jian-xue-xi/>
+[2]. <http://www.bootcss.com/>
