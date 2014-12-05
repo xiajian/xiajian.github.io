@@ -63,6 +63,10 @@ option：
 
 存在的问题就是，可能不支持ajax请求填充内容。这一点，可以通过<https://github.com/jschr/bootstrap-modal>进行扩展。
 
+### bootstrap-modal.js
+
+`bootstrap-modal`在响应性、可折叠性，ajax等方面，扩展了bootstrap原有的modal.js。其中，引入了一个ModalManager类，通过监听模态框的事件(联想bs的事件命名空间)，从而操作和处理多个模态框。
+
 ## 下拉菜单：dropdown.js
 
 > 可以为所有东西添加下拉菜单：导航条，标签页，胶囊式按钮
@@ -122,13 +126,14 @@ $('选择器').scrollspy(option|string);
 
 *  activate.bs.scrollspy:当滚动监听到某个元素为active时
 
+> 思考: affix粘条功能是需要对滚动事件进行监听的。
 ## 标签页：tab.js
 
 HTML：
 
 -  为ul添加.nav .nav-tabs即可赋予Bootstrap的标签页样式
 -  为ul添加.nav .nav-pills即可赋予Bootstrap的胶囊式标签页样式
--  切换的内容包裹在<div class="content"></div>
+-  切换的内容包裹在`<div class="content"></div>`
 -  每个内容添加.tab-pane
 -  添加.fade开启淡入特效
 -  添加.in让初始化时具有淡入特效
@@ -148,6 +153,7 @@ $('#myTab a:first').tab('show') // Select first tab
 $('#myTab a:last').tab('show') // Select last tab
 $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
 ```
+
 其参数字符串:
 
 -  show：激活单独标签页
@@ -159,7 +165,7 @@ $('#myTab li:eq(2) a').tab('show') // Select third tab (0-indexed)
 
 ## 工具提示：tooltip.js
 
-tooltip.js的data-api需要单独初始化。注：提示类的插件需要仔细学习认证学习一下。确实，存在一些需要提示功能的地方。
+tooltip.js的data-api需要单独初始化。注：提示类的插件需要仔细学习认证学习一下。确实，存在一些需要提示功能的地方。此外，结合着思考一下，关于之前探索的几个提示插件: cluetip, powertip, poshyTip。整理，并总结出工具提示的核心处理流程。
 
 注：
 
@@ -285,7 +291,7 @@ string：
 
 ## 按钮：button.js
 
-    （完善按钮的状态控制）
+完善按钮的状态控制，即，点击禁用之类的控制。
 
 注：
 
@@ -303,7 +309,7 @@ string：
 
 js调用：
 
-```
+```javascript
 $('选择器').button(string);
 ```
 
@@ -347,9 +353,9 @@ option：
 
 事件：
 
-* show.bs.collapse:折叠显示前
-* shown.bs.collapse:折叠显示后
-* hide.bs.collapse:折叠隐藏前
+* show.bs.collapse:  折叠显示前
+* shown.bs.collapse: 折叠显示后
+* hide.bs.collapse:  折叠隐藏前
 * hidden.bs.collapse:折叠隐藏后
 
 ## 轮播：carousel.js
@@ -390,7 +396,7 @@ js调用：
 $('选择器').carousel(option|string);
 ```
 
-option:
+选项 :
 
     interval:轮换等待事件，默认：5000(ms)
         false:不自动开始循环
@@ -413,7 +419,7 @@ option:
 
 ## 页面定位：affix.js
 
-尝试使用了一下，没能做到自己想要的效果，稍微感觉有点沮丧。
+看到别人作出那样的粘条效果，尝试使用了一下，没能做到自己想要的效果，稍微感觉有点沮丧。网站上原来的粘条功能是通过`jquery.fixbox.js`实现的，使用非常的方便，只需添加`fixed`样式即可。
 
 通过设定：
 

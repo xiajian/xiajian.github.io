@@ -3,7 +3,7 @@ layout: post
 title: XMLHttpRequest Level 1
 ---
 
-[XMLHttpRequest Level 1](http://www.w3.org/TR/XMLHttpRequest/)是W3C的草案，个人在看《Web 性能》时看到，试着翻译一下。
+[XMLHttpRequest Level 1](http://www.w3.org/TR/XMLHttpRequest/)是W3C的草案，个人在看《Web 性能权威指南》时看到，试着翻译一下。
 
 ## 摘要
 ----
@@ -16,11 +16,7 @@ XMLHttpRequest规范定义了在客户端和服务器端传递数据的API，其
 
 > 本节是非规范的。
 
-XMLHttpRequest对象是用来下载资源的API。 object is an API for fetching resources.
-
-The name XMLHttpRequest is historical and has no bearing on its functionality.
-
-Some simple code to do something with data from an XML document fetched over the network:
+XMLHttpRequest对象是用来下载资源的API。XMLHttpRequest的命名源自历史，并且已变的名不符其实。下面是一个简单的代码实例，处理从网络上下载下来的数据。
 
 ```javascript
 function processData(data) {
@@ -42,23 +38,25 @@ function handler() {
 }
 
 var client = new XMLHttpRequest();
-client.onreadystatechange = handler;
-client.open("GET", "unicorn.xml");
-client.send();
+client.onreadystatechange = handler; // 这里其实就是将client作为this对象传递给handler函数
+client.open("GET", "unicorn.xml");   // url 参数都不传?
+client.send();    // 发送http请求
 ```
 
-If you just want to log a message to the server:
+如果想要在服务器上记录消息，可以通过如下的代码设置: 
 
 ```javascript
 function log(message) {
   var client = new XMLHttpRequest();
   client.open("POST", "/log");
-  client.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+  client.setRequestHeader("Content-Type", "text/plain;charset=UTF-8"); // 设置HTTP的请求头
   client.send(message);
 }
 ```
 
 Or if you want to check the status of a document on the server:
+
+或者，想要检查服务器上的文档的状态: 
 
 ```javascript
 function fetchStatus(address) {
@@ -68,41 +66,39 @@ function fetchStatus(address) {
     if(this.readyState == this.DONE)
       returnStatus(this.status);
   }
-  client.open("HEAD", address);
+  client.open("HEAD", address);  // 设置HEAD请求，不需要返回内容体
   client.send();
 }
 ```
 
 ### 1.1 Specification history
 
-The XMLHttpRequest object was initially defined as part of the WHATWG's HTML effort. (Based on Microsoft's implementation many years prior.) It moved to the W3C in 2006. Extensions (e.g. progress events and cross-origin requests) to XMLHttpRequest were developed in a separate draft (XMLHttpRequest Level 2) until end of 2011, at which point the two drafts were merged and XMLHttpRequest became a single entity again from a standards perspective. End of 2012 it moved back to the WHATWG. 
+XMLHttpRequest对象的初始定义来自WHATWG关于HTML的努力(基于Microsoft之前的实现)。并在2006年，工作移交给W3C。XMLHttpRequest的相关扩展，例如处理事件(progress events)和跨域请求(cross-origin requests)，在2011年之前，还是单独的草案(XMLHttpRequest Level 2)。自2011之后，两份草案合并成一份预标准，并在2012年回到WHATWG讨论组。
 
-## 2 Conformance
+## 2 约定
 
-All diagrams, examples, and notes in this specification are non-normative, as are all sections explicitly marked non-normative. Everything else in this specification is normative.
+本规范中的所有图表、样例以及注释都是非规范的，一些非规范的章节显式标注。除此以外，其他的内容都是规范的。
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in the normative parts of this specification are to be interpreted as described in RFC2119. For readability, these words do not appear in all uppercase letters in this specification. [RFC2119]
+在规范描述中出现的"MUST", "MUST NOT", "REQUIRED", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY"以及"OPTIONAL"关键字，在[RFC2119]()已详细解释。为了可读性，本文档中这些词不再以大写形式出现。
 
-2.1 Extensibility
+### 2.1 Extensibility
 
-User agents, Working Groups, and other interested parties are strongly encouraged to discuss new features with the WHATWG community.
+用户代理(User agents), 工作小组以及其他的兴趣组，建议去WHATWG社区进行讨论。
 
-## 3 Terminology
+## 3 术语
 
-This specification uses terminology, cross-linked throughout, from DOM, DOM Parsing and Serialization, Encoding, Fetch, File API, HTML, HTTP, URL, Web IDL, and XML. [DOM] [DOMPS] [ENCODING] [FETCH] [FILEAPI] [HTML] [HTTP] [URL] [WEBIDL] [XML] [XMLNS]
+本规范对术语使用交叉连接，例如 DOM, DOM Parsing and Serialization, Encoding, Fetch, File API, HTML, HTTP, URL, Web IDL以及XML ，一律写作[DOM] [DOMPS] [ENCODING] [FETCH] [FILEAPI] [HTML] [HTTP] [URL] [WEBIDL] [XML] [XMLNS]。交叉链接使用HTML的排版格式。
 
-It uses the typographic conventions from HTML. [HTML]
+本规范中的用户认证包含：cookies， HTTP授权，客户端SSL认证。但是，不包含代理授权和源头部。[COOKIES]
 
-The term user credentials for the purposes of this specification means cookies, HTTP authentication, and client-side SSL certificates. Specifically it does not refer to proxy authentication or the Origin header. [COOKIES]
+## 4 XMLHttpRequest的接口
 
-
-## 4 Interface XMLHttpRequest
+下文的XMLHttpRequest接口使用的是一种类似接口定义语言描述的。
 
 ```javascript
-[NoInterfaceObject,
- Exposed=(Window,Worker)]
+[NoInterfaceObject, Exposed=(Window,Worker)]
 interface XMLHttpRequestEventTarget : EventTarget {
-  // event handlers
+  // 支持的事件处理器，共7个
   attribute EventHandler onloadstart;
   attribute EventHandler onprogress;
   attribute EventHandler onabort;
@@ -117,21 +113,20 @@ interface XMLHttpRequestUpload : XMLHttpRequestEventTarget {
 };
 
 enum XMLHttpRequestResponseType {
-  "",
-  "arraybuffer",
-  "blob",
-  "document",
-  "json",
-  "text"
+  "",             //空类型
+  "arraybuffer",  //缓冲数组
+  "blob",         //blob - 二进制大字段类型
+  "document",     //xml文档
+  "json",         //json数据
+  "text"          //纯文本
 };
 
-[Constructor,
- Exposed=(Window,Worker)]
+[Constructor, Exposed=(Window,Worker)]
 interface XMLHttpRequest : XMLHttpRequestEventTarget {
-  // event handler
+  // XMLHttpRequest新增的事件处理器
   attribute EventHandler onreadystatechange;
 
-  // states
+  // xhr对象的状态, 共5个状态
   const unsigned short UNSENT = 0;
   const unsigned short OPENED = 1;
   const unsigned short HEADERS_RECEIVED = 2;
@@ -139,98 +134,99 @@ interface XMLHttpRequest : XMLHttpRequestEventTarget {
   const unsigned short DONE = 4;
   readonly attribute unsigned short readyState;
 
-  // request
+  // 请求
   void open(ByteString method, USVString url);
   void open(ByteString method, USVString url, boolean async, optional USVString? username = null, optional USVString? password = null);
   void setRequestHeader(ByteString name, ByteString value);
-           attribute unsigned long timeout;
-           attribute boolean withCredentials;
-  readonly attribute XMLHttpRequestUpload upload;
+           attribute unsigned long timeout;       // 耗时
+           attribute boolean withCredentials;     // 身份验证
+  readonly attribute XMLHttpRequestUpload upload; // 关联的独一无二的XMLHttpRequestUpload的对象
   void send(optional (Document or BodyInit)? body = null);
   void abort();
 
-  // response
-  readonly attribute USVString responseURL;
-  readonly attribute unsigned short status;
-  readonly attribute ByteString statusText;
-  ByteString? getResponseHeader(ByteString name);
+  // 响应
+  readonly attribute USVString responseURL;  // 响应URL
+  readonly attribute unsigned short status;  // 响应状态
+  readonly attribute ByteString statusText;  // 状态相关的文本描述
+  ByteString? getResponseHeader(ByteString name);  // 响应头
   ByteString getAllResponseHeaders();
   void overrideMimeType(DOMString mime);
-           attribute XMLHttpRequestResponseType responseType;
+           attribute XMLHttpRequestResponseType responseType;  // 响应类型
   readonly attribute any response;
-  readonly attribute USVString responseText;
+  readonly attribute USVString responseText;  // 响应文本
   [Exposed=Window] readonly attribute Document? responseXML;
 };
 ```
 
-Each XMLHttpRequest object has a unique, associated XMLHttpRequestUpload object.
+每个XMLHttpRequest对象都有一个与之关联的独一无二的XMLHttpRequestUpload对象。
 
 ### 4.1 Constructors
 
-The XMLHttpRequest object has an associated settings object.
+XMLHttpRequest对象拥有一个设置对象。
 
-client = new XMLHttpRequest()
-    Returns a new XMLHttpRequest object. 
+```javascript
+client = new XMLHttpRequest() // Returns a new XMLHttpRequest object. 
+```
 
-The XMLHttpRequest() constructor must run these steps:
+`XMLHttpRequest()`初始化器必须执行如下的步骤:
 
-- Let xhr be a new XMLHttpRequest object.
-- Set xhr's settings object to the relevant settings object for the global object of xhr's interface object.
-- Return xhr. 
+- 将xhr赋值为new XMLHttpRequest
+- 将xhr的设置对象映射到其全局接口所关联的对象
+- 返回xhr. 
 
 ### 4.2 Garbage collection
 
 An XMLHttpRequest object must not be garbage collected if its state is OPENED and the send() flag is set, its state is HEADERS_RECEIVED, or its state is LOADING and it has one or more event listeners registered whose type is one of readystatechange, progress, abort, error, load, timeout, and loadend.
 
-If an XMLHttpRequest object is garbage collected while its connection is still open, the user agent must terminate the request.
+以下情况中，XMLHttpRequest对象不会被垃圾回收: 
+
+* stats为`OPENED`且设置了send()
+* stats为`HEADERS_RECEIVED`
+* status为`LOADING`并且注册了readystatechange, progress, abort, error, load, timeout以及loadend事件中的一个或多个
+
+如果XMLHttpRequest对象已被gc，但其连接依然开着，用户代理(浏览器)必须终结该请求。
 
 ### 4.3 Event handlers
 
-The following are the event handlers (and their corresponding event handler event types) that must be supported on objects implementing an interface that inherits from XMLHttpRequestEventTarget as attributes:
-event handler 	event handler event type
-onloadstart 	loadstart
-onprogress 	progress
-onabort 	abort
-onerror 	error
-onload 	load
-ontimeout 	timeout
-onloadend 	loadend
+下表中列出了事件处理器(及其对应的事件处理类型)，这些事件处理器必须实现`XMLHttpRequestEventTarget`中的接口。
 
-The following is the event handler (and its corresponding event handler event type) that must be supported as attribute solely by the XMLHttpRequest object:
-event handler 	event handler event type
-onreadystatechange 	readystatechange
+event handler |	event handler event type 
+------------- | --------------------------------
+onloadstart 	| loadstart
+onprogress 	  | progress
+onabort 	    | abort
+onerror 	    | error
+onload 	      | load
+ontimeout 	  | timeout
+onloadend 	  | loadend
+
+如下的事件处理器(及其对应的事件类型)必须作为XMLHttpRequest对象的属性:
+
+ event handler     |	event handler event type
+------------------ | ---------------------------
+onreadystatechange |	readystatechange
 
 ### 4.4 States
 
-client . readyState
+```javascript
+client.readyState // 返回当前状态 
+```
 
-    Returns the current state. 
+XMLHttpRequest可以处于一系列的状态。 readyState属性返回当前状态的属性，其可为如下的这些值: 
 
-The XMLHttpRequest object can be in several states. The readyState attribute must return the current state, which must be one of the following values:
+* UNSENT (值为 0)  对象已创建
+* OPENED (值为 1)  成功调用了`open()`方法。在此状态下，请求头部可以使用`setRequestHeader()`进行设置，请求可通过`send()`方法发送
+* HEADERS_RECEIVED (值为 2)  All redirects (if any) have been followed and all HTTP headers of the response have been received. 
+* LOADING (值为 3)  响应体被接受 
+* DONE (值为 4)  数据转换完成，或者转换时出错了(例如：无限重定向)
 
-UNSENT (numeric value 0)
-
-    The object has been constructed.
-OPENED (numeric value 1)
-
-    The open() method has been successfully invoked. During this state request headers can be set using setRequestHeader() and the request can be made using the send() method.
-HEADERS_RECEIVED (numeric value 2)
-
-    All redirects (if any) have been followed and all HTTP headers of the response have been received. 
-LOADING (numeric value 3)
-
-    The response's body is being received. 
-DONE (numeric value 4)
-
-    The data transfer has been completed or something went wrong during the transfer (e.g. infinite redirects).
-
-Initially the XMLHttpRequest object must be in the UNSENT state.
-
-The send() flag indicates that the send() method has been invoked. It is initially unset and is used during the OPENED state.
+初始化后的XMLHttpRequest对象的状态为`UNSENT`。send()的flag表明send()方法被调用，其起初未设置，并在OPENED状态下使用。
 
 ### 4.5 Request
 
 Each XMLHttpRequest object has the following request-associated concepts: request method, request URL, author request headers, request body, synchronous flag, upload complete flag, and upload events flag.
+
+每个XMLHttpRequest对象都存在如下的请求相关的概念: 请求方法，请求URL，请求头，请求体，异步标记，上传完成标识以及上传事件标识。
 
 The author request headers is an initially empty header list.
 
@@ -242,75 +238,73 @@ To terminate the request, terminate the fetch algorithm operated by the XMLHttpR
 
 #### 4.5.1 The open() method
 
-client . open(method, url [, async = true [, username = null [, password = null]]])
-
+```javascript
+client.open(method, url [, async = true [, username = null [, password = null]]])
     Sets the request method, request URL, and synchronous flag.
-
     Throws a SyntaxError exception if either method is not a valid HTTP method or url cannot be parsed.
-
     Throws a SecurityError exception if method is a case-insensitive match for `CONNECT`, `TRACE` or `TRACK`.
-
     Throws an InvalidAccessError exception if async is false, the JavaScript global environment is a document environment, and either the timeout attribute is not zero, the withCredentials attribute is true, or the responseType attribute is not the empty string. 
+```
 
 Developers must not pass false for the async argument when the JavaScript global environment is a document environment as it has detrimental effects to the end user's experience. User agents are strongly encouraged to warn about such usage in developer tools and may experiment with throwing an InvalidAccessError exception when it occurs so the feature can eventually be removed from the platform.
 
 The open(method, url, async, username, password) method must run these steps:
 
-    If settings object's responsible document is not fully active, throw an InvalidStateError exception.
+ If settings object's responsible document is not fully active, throw an InvalidStateError exception.
 
-    Set base to settings object's API base URL.
+ Set base to settings object's API base URL.
 
-    If method is not a method, throw a SyntaxError exception.
+ If method is not a method, throw a SyntaxError exception.
 
-    If method is a forbidden method, throw a SecurityError exception.
+ If method is a forbidden method, throw a SecurityError exception.
 
-    Normalize method.
+ Normalize method.
 
-    Let parsedURL be the result of parsing url with base.
+ Let parsedURL be the result of parsing url with base.
 
-    If parsedURL is failure, throw a SyntaxError exception.
+ If parsedURL is failure, throw a SyntaxError exception.
 
-    If the async argument is omitted, set async to true, and set username and password to null.
+ If the async argument is omitted, set async to true, and set username and password to null.
 
-    Unfortunately legacy content prevents treating the async argument being undefined identical from it being omitted.
+ Unfortunately legacy content prevents treating the async argument being undefined identical from it being omitted.
 
-    If parsedURL's relative flag is set, run these substeps:
+ If parsedURL's relative flag is set, run these substeps:
 
-        If the username argument is not null, set parsedURL's username to username.
+     If the username argument is not null, set parsedURL's username to username.
 
-        If the password argument is not null, set parsedURL's password to password. 
+     If the password argument is not null, set parsedURL's password to password. 
 
-    If async is false, the JavaScript global environment is a document environment, and either the timeout attribute value is not zero, the withCredentials attribute value is true, or the responseType attribute value is not the empty string, throw an InvalidAccessError exception.
+ If async is false, the JavaScript global environment is a document environment, and either the timeout attribute value is not zero, the withCredentials attribute value is true, or the responseType attribute value is not the empty string, throw an InvalidAccessError exception.
 
-    Terminate the request.
+ Terminate the request.
 
-    A fetch can be ongoing at this point.
+ A fetch can be ongoing at this point.
 
-    Set variables associated with the object as follows:
+ Set variables associated with the object as follows:
 
-        Set request method to method.
+     Set request method to method.
 
-        Set request URL to parsedURL.
+     Set request URL to parsedURL.
 
-        Set the synchronous flag, if async is false, and unset the synchronous flag otherwise.
+     Set the synchronous flag, if async is false, and unset the synchronous flag otherwise.
 
-        Empty author request headers.
+     Empty author request headers.
 
-        Set response to a network error.
+     Set response to a network error.
 
-        Set response ArrayBuffer object to null.
+     Set response ArrayBuffer object to null.
 
-        Set response Blob object to null.
+     Set response Blob object to null.
 
-        Set response Document object to null.
+     Set response Document object to null.
 
-        Set response JSON object to null. 
+     Set response JSON object to null. 
 
-    If the state is not OPENED, run these substeps:
+ If the state is not OPENED, run these substeps:
 
-        Change the state to OPENED.
+     Change the state to OPENED.
 
-        Fire an event named readystatechange. 
+     Fire an event named readystatechange. 
 
 #### 4.5.2 The setRequestHeader() method
 
