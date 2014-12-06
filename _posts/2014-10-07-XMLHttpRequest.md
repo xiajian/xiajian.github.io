@@ -167,6 +167,7 @@ XMLHttpRequest对象拥有一个设置对象。
 ```javascript
 client = new XMLHttpRequest() // Returns a new XMLHttpRequest object. 
 ```
+注: 对象的创建存在这样的几种方法是- 对象字面值、new xxx、Object.create()。
 
 `XMLHttpRequest()`初始化器必须执行如下的步骤:
 
@@ -228,83 +229,44 @@ Each XMLHttpRequest object has the following request-associated concepts: reques
 
 每个XMLHttpRequest对象都存在如下的请求相关的概念: 请求方法，请求URL，请求头，请求体，异步标记，上传完成标识以及上传事件标识。
 
-The author request headers is an initially empty header list.
+请求头初始为空列表，请求体初始为null，同步标识、上传完成标识以及上传事件标识起初未设置。
 
-The request body is initially null.
-
-The synchronous flag, upload complete flag, and upload events flag are initially unset.
-
-To terminate the request, terminate the fetch algorithm operated by the XMLHttpRequest object with reason fatal.
+可以致命的理由终止XMLHttpRequest对象的fetch算法，从而终止请求。
 
 #### 4.5.1 The open() method
 
 ```javascript
-client.open(method, url [, async = true [, username = null [, password = null]]])
-    Sets the request method, request URL, and synchronous flag.
-    Throws a SyntaxError exception if either method is not a valid HTTP method or url cannot be parsed.
-    Throws a SecurityError exception if method is a case-insensitive match for `CONNECT`, `TRACE` or `TRACK`.
-    Throws an InvalidAccessError exception if async is false, the JavaScript global environment is a document environment, and either the timeout attribute is not zero, the withCredentials attribute is true, or the responseType attribute is not the empty string. 
+/*
+ * 如果请求方法为无效HTTP方法或URL不能被解析，则抛出SyntaxError异常
+ * 如果请求方法为`CONNECT`, `TRACE`或`TRACK`，则抛出SecurityError异常
+ * Throws an InvalidAccessError exception if async is false, the JavaScript global environment is a document environment, and either the timeout attribute is not zero, the withCredentials attribute is true, or the responseType attribute is not the empty string.
+ */
+client.open(method, url [, async = true [, username = null [, password = null]]]) // 设置请求方法，请求URL以及请求标识
 ```
+如果javascript全局环境为文档环境时，不能将async参数设置为false，因为这回严重影响终端用户的体验。在开发者模式中的，用户代理(web浏览器)将会对种方式发出强烈警告，并抛出InvalidAccessError异常，从而将其从平台上移除。
 
-Developers must not pass false for the async argument when the JavaScript global environment is a document environment as it has detrimental effects to the end user's experience. User agents are strongly encouraged to warn about such usage in developer tools and may experiment with throwing an InvalidAccessError exception when it occurs so the feature can eventually be removed from the platform.
+`open(method, url, async, username, password)`方法需要运行如下的步骤:
 
-The open(method, url, async, username, password) method must run these steps:
-
- If settings object's responsible document is not fully active, throw an InvalidStateError exception.
-
- Set base to settings object's API base URL.
-
- If method is not a method, throw a SyntaxError exception.
-
- If method is a forbidden method, throw a SecurityError exception.
-
- Normalize method.
-
- Let parsedURL be the result of parsing url with base.
-
- If parsedURL is failure, throw a SyntaxError exception.
-
- If the async argument is omitted, set async to true, and set username and password to null.
-
- Unfortunately legacy content prevents treating the async argument being undefined identical from it being omitted.
-
- If parsedURL's relative flag is set, run these substeps:
-
-     If the username argument is not null, set parsedURL's username to username.
-
-     If the password argument is not null, set parsedURL's password to password. 
-
- If async is false, the JavaScript global environment is a document environment, and either the timeout attribute value is not zero, the withCredentials attribute value is true, or the responseType attribute value is not the empty string, throw an InvalidAccessError exception.
-
- Terminate the request.
-
- A fetch can be ongoing at this point.
-
- Set variables associated with the object as follows:
-
-     Set request method to method.
-
-     Set request URL to parsedURL.
-
-     Set the synchronous flag, if async is false, and unset the synchronous flag otherwise.
-
-     Empty author request headers.
-
-     Set response to a network error.
-
-     Set response ArrayBuffer object to null.
-
-     Set response Blob object to null.
-
-     Set response Document object to null.
-
-     Set response JSON object to null. 
-
- If the state is not OPENED, run these substeps:
-
-     Change the state to OPENED.
-
-     Fire an event named readystatechange. 
+1. 如果设置对象(settings object)的响应文档不完全活跃，则抛出InvalidStateError异常。
+2. 将设置对象(settings object)的API base URL设为base的值
+3. 将设置对象的起始源设置为source origin
+4. 如果设置对象的API引用源为文档，则将其设置为referer source
+5. 如果method不为HTTP方法(包含CONNECT, DELETE, GET, HEAD, OPTIONS, POST, PUT, TRACE 或 TRACK)，抛出SyntaxError异常
+6. 如果method为被禁止的方法(CONNECT, TRACE或者TRACK)，则抛出SecurityError异常
+7. 以base解析url的值，从而将其设置为URL的值。如果解析失败了，则抛出TypeError
+8. 如果未提供async参数，则将其设置为true，并设置用户名和密码为null
+9. 如果设置了parsedURL的相对标识，如果username和password均不为空，则将其设置到parsedURL的对应属性上
+10. 如果async为false, JavaScript全局环境为文档环境，并且timeout属性不为0,withCredentials为true，responseType属性值不为空字符串，则抛出InvalidAccessError异常
+11. 出现各种异常后，终结请求。否则，请求将蓄势待发，并设置如下的关联的变量:
+    * 将method设置为请求方法
+    * 将parsedURL设置为URL
+    * 设置同步标识，如果async为false，则取消同步标识的设置
+    * 清空请求头
+    * 设置响应为network错误
+    * 设置响应的ArrayBuffer、Blob、Document以及JSON对象为null
+12. 如果状态不为OPENED, 运行如下步骤:
+    * 将状态转为OPENED
+    * 触发名为readystatechange的事件
 
 #### 4.5.2 The setRequestHeader() method
 
@@ -1077,7 +1039,7 @@ In this example XMLHttpRequest, combined with concepts defined in the sections b
 
 Fully working code would of course be more elaborate and deal with more scenarios, such as network errors or the end user terminating the request.
 
-## References
+## 引用
 
 - [COOKIES] HTTP State Management Mechanism, Adam Barth. IETF. 
 - [DOM] DOM, Anne van Kesteren, Aryeh Gregor and Ms2ger. WHATWG. 
