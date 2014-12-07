@@ -270,130 +270,100 @@ client.open(method, url [, async = true [, username = null [, password = null]]]
 
 #### 4.5.2 The setRequestHeader() method
 
-client . setRequestHeader(name, value)
+```javascript
+/* 组成请求的头部
+ * 如果xhr的状态不为OPENED或者send()标志没有设置，则抛出InvalidStateError异常
+ * 如果name或value不是合法的数据，则抛出SyntaxError异常
+ */
+client.setRequestHeader(name, value)
+```
 
-    Combines a header in author request headers.
+**注意**: 下面的算法表示某些请求头能不能设置由用户代理决定。此外，如果用户没有显式设置某些请求头，那么在`send()`方法前，用户代理将自己设置这些请求头。
 
-    Throws an InvalidStateError exception if the state is not OPENED or if the send() flag is set.
+`setRequestHeader(name, value)`方法必须执行如下的步骤: 
 
-    Throws a SyntaxError exception if name is not a header name or if value is not a header value. 
+1. 如果状态不为OPENED，抛出InvalidStateError异常
+2. 如果`send()`标志未设置，抛出InvalidStateError异常
+3. 如果name和value非法，抛出SyntaxError异常
+4. 空字节序列表示空的请求头
+5. 如果name为禁用的HTTP请求头，则终止请求。ajax中禁用的请求头有: Accept-Charset, Accept-Encoding, Access-Control-Request-Headers, Access-Control-Request-Method, Connection, Content-Length, Cookie, Cookie2, Date, DNT, Expect, Host, Keep-Alive, Origin, Referer, TE, Trailer, Transfer-Encoding, Upgrade, User-Agent, Via以及那些以`Proxy-`和`Sec-`开头的请求头。
+6. 将name/value组合成请求头部
 
-As indicated in the algorithm below certain headers cannot be set and are left up to the user agent. In addition there are certain other headers the user agent will take control of if they are not set by the author as indicated at the end of the send() method section.
-
-The setRequestHeader(name, value) method must run these steps:
-
-    If the state is not OPENED, throw an InvalidStateError exception.
-
-    If the send() flag is set, throw an InvalidStateError exception.
-
-    If name is not a name or value is not a value, throw a SyntaxError exception.
-
-    An empty byte sequence represents an empty header value.
-
-    Terminate these steps if name is a forbidden header name.
-
-    Combine name/value in author request headers. 
-
-Some simple code demonstrating what happens when setting the same header twice:
+下面的简单的代码演示了，相同的首部被设置两次的效果：
 
 ```javascript
-// The following script:
+// 如下的代码将在请求头中包含`X-Test: one, two`
 var client = new XMLHttpRequest();
 client.open('GET', 'demo.cgi');
 client.setRequestHeader('X-Test', 'one');
 client.setRequestHeader('X-Test', 'two');
 client.send();
-
-// …results in the following header being sent:
-X-Test: one, two
 ```
 
-#### 4.5.3 The timeout attribute
+#### 4.5.3 `timeout`属性
 
-client . timeout
+```javascript
+// 以毫秒计数。设置为非零时，将在给定的时间过去后，如果请求未完成，并且同步标志未设置，将触发timeout事件，或者抛出TimeoutError异常(在send方法中)。
+// 当设置同步标识，且js的全局环境是document环境，为其赋值时将会抛出InvalidAccessError异常。
+client.timeout
+```
 
-    Can be set to a time in milliseconds. When set to a non-zero value will cause fetching to terminate after the given time has passed. When the time has passed, the request has not yet completed, and the synchronous flag is unset, a timeout event will then be dispatched, or a TimeoutError exception will be thrown otherwise (for the send() method).
+`timeout`属性必须要返回其值，其初始化的值为0。设置timeout属性必须要运行如下的步骤:
 
-    When set: throws an InvalidAccessError exception if the synchronous flag is set and the JavaScript global environment is a document environment. 
+1. 当设置同步标识，且js的全局环境是document环境，抛出InvalidAccessError异常
+2. 将其设置为新值
 
-The timeout attribute must return its value. Initially its value must be zero.
-
-Setting the timeout attribute must run these steps:
-
-    If the JavaScript global environment is a document environment and the synchronous flag is set, throw an InvalidAccessError exception.
-
-    Set its value to the new value. 
-
-This implies that the timeout attribute can be set while fetching is in progress. If that occurs it will still be measured relative to the start of fetching.
+这意味着，但读取依然在进行时，就可设置timeout属性。如果发生那种情况，将依然以读取开始的时间作为度量。
 
 #### 4.5.4 The withCredentials attribute
 
-client . withCredentials
+```javascript
+/* 在跨源请求中，用户证书(user credentials)必须设置为true。当其被排除在跨源请求中且cookies在响应中被忽略时，设置为false。默认为false
+ * 如果state为UNSENT、OPENED或设置send()标识时，给其赋值将抛出InvalidStateError异常
+ * 如果设置同步标识且javascript的全局环境为文档环境，给其赋值将抛出InvalidStateError异常
+ */
+client.withCredentials
+```
 
-    True when user credentials are to be included in a cross-origin request. False when they are to be excluded in a cross-origin request and when cookies are to be ignored in its response. Initially false.
+`withCredentials`属性必须返回值，其初，其值为false。withCredentials的赋值必须处理如下的步骤:
 
-    When set: throws an InvalidStateError exception if the state is not UNSENT or OPENED, or if the send() flag is set.
+1. 如果state不为UNSENT或OPENED，则抛出InvalidStateError异常
+2. 如果设置send()标志，则抛出InvalidStateError异常
+3. 如果JavaScript全局对象为文档对象，且设置同步标志，抛出InvalidAccessError异常
+4. 将其设置为给定的值
 
-    When set: throws an InvalidAccessError exception if either the synchronous flag is set and the JavaScript global environment is a document environment. 
-
-The withCredentials attribute must return its value. Initially its value must be false.
-
-Setting the withCredentials attribute must run these steps:
-
-    If the state is not UNSENT or OPENED, throw an InvalidStateError exception.
-
-    If the send() flag is set, throw an InvalidStateError exception.
-
-    If the JavaScript global environment is a document environment and the synchronous flag is set, throw an InvalidAccessError exception.
-
-    Set the withCredentials attribute's value to the given value. 
-
-The withCredentials attribute has no effect when fetching same-origin resources.
+`withCredentials`属性在获取同源资源时，没有作用。估计其主要是用来验证请求的。
 
 #### 4.5.5 The upload attribute
 
-client . upload
-
+```javascript
+// 返回关联的XMLHttpRequestUpload对象。当数据被传送到服务器时，可以用来收集传输信息。
+client.upload
+```
     Returns the associated XMLHttpRequestUpload object. It can be used to gather transmission information when data is transferred to a server. 
 
-The upload attribute must return the associated XMLHttpRequestUpload object.
-
-As indicated earlier, each XMLHttpRequest object has an associated XMLHttpRequestUpload object.
+`upload`属性必须返回关联的XMLHttpRequestUpload对象，并且每个XMLHttpRequest都拥有一个关联的XMLHttpRequestUpload对象。
 
 #### 4.5.6 The send() method
 
+```javascript
+// 启动请求，可选的参数提供请求对象。如果请求方法是`GET`或`HEAD`，则忽略参数。
+// 如果state不为OPENED或设置了send()标志，则抛出InvalidStateError异常
 client . send([body = null])
+```
 
-    Initiates the request. The optional argument provides the request body. The argument is ignored if request method is GET or HEAD.
+`send(body)` method must run these steps:
 
-    Throws an InvalidStateError exception if the state is not OPENED or if the send() flag is set. 
-
-The send(body) method must run these steps:
-
-    If the state is not OPENED, throw an InvalidStateError exception.
-
-    If the send() flag is set, throw an InvalidStateError exception.
-
-    If the request method is GET or HEAD, set body to null.
-
-    If body is null, go to the next step.
-
-    Otherwise, let encoding be null, Content-Type be null, and then follow these rules, depending on body:
-
-    Document
-
-        Set encoding to `UTF-8`.
-
-        If body is an HTML document, set Content-Type to `text/html`, and set Content-Type to `application/xml` otherwise. Then append `;charset=UTF-8` to Content-Type.
-
-        Set request body to body, serialized, converted to Unicode, and utf-8 encoded. Re-throw any exception serializing throws.
-
-        If body cannot be serialized, an InvalidStateError exception is thrown. 
-    BodyInit
-
-        If body is a string, set encoding to `UTF-8`.
-
-        Set request body and Content-Type to the result of extracting body. 
+1. 如果state不为OPENED或设置了send()标志，则抛出InvalidStateError异常
+2. 如果请求方法为GET或HEAD，将body设置为null
+3. 如果body为空，跳到下一步。否则，将encoding、Content-Type设置为null，然后，根据body遵循如下的规则:
+   * ArrayBufferView , 将data设置原始值
+   * Blob，如果对象类型不为空，则将mine类型设置为其类型
+   * Document 
+     * 设置encoding为`UTF-8`
+     * 如果body是HTML文档，则将 Content-Type设置为`text/html`或`application/xml`，并给Content-Type添加`;charset=UTF-8`
+     * 将请求体设置为body的值，序列化，转换为utf-8编码Unicode，并进行utf-8编码。在序列化过程中，可能抛出任何异常，比如InvalidStateError异常
+   * String, 将编码设置为`UTF-8`，设置请求体为body，并将设置mine类型为"text/plain;charset=UTF-8"
 
     If Content-Type is non-null and author request headers contains no header named `Content-Type`, append `Content-Type`/Content-Type to author request headers.
 
@@ -586,10 +556,12 @@ The request error steps for event event and optionally an exception exception ar
 
     Fire a progress event named loadend with 0 and 0.
 
-    4.5.7 The abort() method
+#### 4.5.7 The abort() method
 
-client . abort()
-    Cancels any network activity. 
+```javascript
+// 取消网络活动
+client.abort()
+```
 
 The abort() method must run these steps:
 
@@ -604,16 +576,19 @@ The abort() method must run these steps:
 ### 4.6 Response
 
 An XMLHttpRequest has an associated response. Unless stated otherwise it is a network error.
-4.6.1 The responseURL attribute
+
+#### 4.6.1 The responseURL attribute
 
 The responseURL attribute must return the empty string if response's url is null and its serialization with the exclude fragment flag set otherwise.
-4.6.2 The status attribute
+#### 4.6.2 The status attribute
 
 The status attribute must return the response's status.
-4.6.3 The statusText attribute
+
+#### 4.6.3 The statusText attribute
 
 The statusText attribute must return the response's status message.
-4.6.4 The getResponseHeader() method
+
+#### 4.6.4 The getResponseHeader() method
 
 The getResponseHeader(name) method must run these steps:
 
@@ -642,7 +617,7 @@ The print() function will get to process something like:
 
 text/plain; charset=UTF-8
 
-4.6.5 The getAllResponseHeaders() method
+#### 4.6.5 The getAllResponseHeaders() method
 
 The getAllResponseHeaders() method must return response's header list, in list order, as a single byte sequence with each header separated by a 0x0D 0x0A byte pair, and each name and value of a header separated by a 0x3A 0x20 byte pair.
 
@@ -650,6 +625,7 @@ The Fetch Standard filters response's header list. [FETCH]
 
 For the following script:
 
+```ruby
 var client = new XMLHttpRequest();
 client.open("GET", "narwhals-too.txt", true);
 client.send();
@@ -658,17 +634,20 @@ client.onreadystatechange = function() {
     print(this.getAllResponseHeaders());
   }
 }
+```
 
 The print() function will get to process something like:
 
+```
 Date: Sun, 24 Oct 2004 04:58:38 GMT
 Server: Apache/1.3.31 (Unix)
 Keep-Alive: timeout=15, max=99
 Connection: Keep-Alive
 Transfer-Encoding: chunked
 Content-Type: text/plain; charset=utf-8
+```
 
-4.6.6 Response body
+#### 4.6.6 Response body
 
 The response MIME type is the MIME type the `Content-Type` header contains excluding any parameters and converted to ASCII lowercase, or null if the response header can not be parsed or was omitted. The override MIME type is initially null and can get a value if overrideMimeType() is invoked. Final MIME type is the override MIME type unless that is null in which case it is the response MIME type.
 
@@ -767,7 +746,8 @@ A text response is the return value of these steps:
     Return the result of running decode on byte stream bytes using fallback encoding charset. 
 
 Authors are strongly encouraged to always encode their resources using utf-8.
-4.6.7 The overrideMimeType() method
+
+### 4.6.7 The overrideMimeType() method
 
 client . overrideMimeType(mime)
 
@@ -787,9 +767,9 @@ The overrideMimeType(mime) method must run these steps:
 
     If a `charset` parameter is successfully parsed, set override charset to its value. 
 
-4.6.8 The responseType attribute
+#### 4.6.8 The responseType attribute
 
-client . responseType [ = value ]
+client.responseType [ = value ]
 
     Returns the response type.
 
@@ -813,9 +793,9 @@ Setting the responseType attribute must run these steps:
 
     Set the responseType attribute's value to the given value. 
 
-4.6.9 The response attribute
+#### 4.6.9 The response attribute
 
-client . response
+client.response
 
     Returns the response's body. 
 
@@ -844,7 +824,8 @@ Otherwise
 
             Return the JSON response. 
 
-4.6.10 The responseText attribute
+
+#### 4.6.10 The responseText attribute
 
 client . responseText
 
@@ -860,7 +841,8 @@ The responseText attribute must return the result of running these steps:
 
     Return the text response. 
 
-4.6.11 The responseXML attribute
+
+#### 4.6.11 The responseXML attribute
 
 client . responseXML
 
@@ -877,25 +859,29 @@ The responseXML attribute must return the result of running these steps:
     Return the document response. 
 
 The responseXML attribute has XML in its name for historical reasons. It also returns HTML resources as documents.
-4.7 Events summary
 
-This section is non-normative.
+### 4.7 Events summary
 
-The following events are dispatched on XMLHttpRequest and/or XMLHttpRequestUpload objects:
-Event name 	Interface 	Dispatched when…
-readystatechange 	Event 	The readyState attribute changes value, except when it changes to UNSENT.
-loadstart 	ProgressEvent 	The fetch initiates.
-progress 	ProgressEvent 	Transmitting data.
-abort 	ProgressEvent 	When the fetch has been aborted. For instance, by invoking the abort() method.
-error 	ProgressEvent 	The fetch failed.
-load 	ProgressEvent 	The fetch succeeded.
-timeout 	ProgressEvent 	The author specified timeout has passed before the fetch completed.
-loadend 	ProgressEvent 	The fetch completed (success or failure).
+注: 本节为非规范
+
+如下的事件由XMLHttpRequest/XMLHttpRequestUpload对象分发并处理:  
+
+Event name        | Interface     |  Dispatched when…
+----------------- | ------------- | ---------------------------------------------------------------
+readystatechange 	| Event 	      | The readyState attribute changes value, except when it changes to UNSENT.
+loadstart 	      | ProgressEvent |	The fetch initiates.
+progress 	        | ProgressEvent |	Transmitting data.
+abort 	          | ProgressEvent |	When the fetch has been aborted. For instance, by invoking the abort() method.
+error 	          | ProgressEvent |	The fetch failed.
+load 	            | ProgressEvent |	The fetch succeeded.
+timeout           |	ProgressEvent |	The author specified timeout has passed before the fetch completed.
+loadend 	        | ProgressEvent |	The fetch completed (success or failure).
 
 ## 5 Interface FormData
 
 typedef (File or USVString) FormDataEntryValue;
 
+```javascript
 [Constructor(optional HTMLFormElement form),
  Exposed=(Window,Worker)]
 interface FormData {
@@ -909,6 +895,7 @@ interface FormData {
   void set(USVString name, USVString value);
   iterable<USVString, FormDataEntryValue>;
 };
+```
 
 The FormData object represents an ordered list of entries. Each entry consists of a name and a value.
 
@@ -995,14 +982,16 @@ To fire an progress event named e given transmitted and length, fire an event na
 This section is non-normative.
 
 The suggested type attribute values for use with events using the ProgressEvent interface are summarized in the table below. Specification editors are free to tune the details to their specific scenarios, though are strongly encouraged to discuss their usage with the WHATWG community to ensure input from people familiar with the subject.
-type attribute value 	Description 	Times 	When
-loadstart 	Progress has begun. 	Once. 	First.
-progress 	In progress. 	Once or more. 	After loadstart has been dispatched.
-error 	Progression failed. 	Zero or once (mutually exclusive). 	After the last progress has been dispatched.
-abort 	Progression is terminated.
-timeout 	Progression is terminated due to preset time expiring.
-load 	Progression is successful.
-loadend 	Progress has stopped. 	Once. 	After one of error, abort, timeout or load has been dispatched.
+
+类型属性值  | 描述         |   次数     |  触发时机
+----------- | ------------ | ---------- | -----------------------------
+loadstart   |	处理开始     | 	Once. 	  | First.
+progress 	  | 处理中       | Once or more. | 	After loadstart has been dispatched.
+error 	    | 处理失败     | Zero or once (mutually exclusive). |	After the last progress has been dispatched.
+abort 	    | 处理终结
+timeout 	  | Progression is terminated due to preset time expiring.
+load 	      | Progression is successful.
+loadend 	  | Progress has stopped. 	Once. 	After one of error, abort, timeout or load has been dispatched.
 
 The error, abort, timeout, and load event types are mutually exclusive.
 
@@ -1041,17 +1030,17 @@ Fully working code would of course be more elaborate and deal with more scenario
 
 ## 引用
 
-- [COOKIES] HTTP State Management Mechanism, Adam Barth. IETF. 
-- [DOM] DOM, Anne van Kesteren, Aryeh Gregor and Ms2ger. WHATWG. 
-- [DOMPS] DOM Parsing and Serialization, Travis Leithead. W3C. 
-- [ECMASCRIPT] ECMAScript Language Specification. ECMA. 
-- [ENCODING] Encoding, Anne van Kesteren. WHATWG. 
-- [FETCH] Fetch, Anne van Kesteren. WHATWG. 
-- [FILEAPI] File API, Arun Ranganathan and Jonas Sicking. W3C. 
-- [HTML] HTML, Ian Hickson. WHATWG. 
-- [HTTP] Hypertext Transfer Protocol -- HTTP/1.1, Roy Fielding, James Gettys, Jeffrey Mogul et al.. IETF. 
-- [RFC2119]  Key words for use in RFCs to Indicate Requirement Levels, Scott Bradner. IETF. 
-- [URL] URL, Anne van Kesteren. WHATWG. 
-- [WEBIDL] Web IDL, Cameron McCormack. W3C. 
-- [XML] Extensible Markup Language, Tim Bray, Jean Paoli, C. M. Sperberg-McQueen et al.. W3C. 
-- [XMLNS]  Namespaces in XML, Tim Bray, Dave Hollander, Andrew Layman et al.. W3C. 
+- [COOKIES](http://tools.ietf.org/html/rfc6265) HTTP State Management Mechanism, Adam Barth. IETF. 
+- [DOM](http://www.w3.org/TR/dom/) DOM, Anne van Kesteren, Aryeh Gregor and Ms2ger. WHATWG. 
+- [DOMPS](http://www.w3.org/TR/DOM-Parsing/) DOM Parsing and Serialization, Travis Leithead. W3C. 
+- [ECMASCRIPT](http://www.ecma-international.org/publications/standards/Ecma-262.htm) ECMAScript Language Specification. ECMA. 
+- [ENCODING](http://encoding.spec.whatwg.org/) Encoding, Anne van Kesteren. WHATWG. 
+- [FETCH]() Fetch, Anne van Kesteren. WHATWG. 
+- [FILEAPI](http://www.w3.org/TR/FileAPI/) File API, Arun Ranganathan and Jonas Sicking. W3C. 
+- [HTML](http://www.w3.org/TR/html5/) HTML, Ian Hickson. WHATWG. 
+- [HTTP](http://tools.ietf.org/html/rfc2616) Hypertext Transfer Protocol -- HTTP/1.1, Roy Fielding, James Gettys, Jeffrey Mogul et al.. IETF. 
+- [RFC2119](http://tools.ietf.org/html/rfc2119)  Key words for use in RFCs to Indicate Requirement Levels, Scott Bradner. IETF. 
+- [URL](http://url.spec.whatwg.org/) URL, Anne van Kesteren. WHATWG. 
+- [WEBIDL](http://dev.w3.org/2006/webapi/WebIDL/) Web IDL, Cameron McCormack. W3C. 
+- [XML](http://www.w3.org/TR/xml/) Extensible Markup Language, Tim Bray, Jean Paoli, C. M. Sperberg-McQueen et al.. W3C. 
+- [XMLNS](http://www.w3.org/TR/xml-names/)  Namespaces in XML, Tim Bray, Dave Hollander, Andrew Layman et al.. W3C. 
