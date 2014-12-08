@@ -491,6 +491,7 @@ $('.typeahead').typeahead(null, {
 
 ## 实例
 
+教程已看完，求实践。
 
 ## 小结
 
