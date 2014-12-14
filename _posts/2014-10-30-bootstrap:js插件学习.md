@@ -67,6 +67,14 @@ option：
 
 `bootstrap-modal`在响应性、可折叠性，ajax等方面，扩展了bootstrap原有的modal.js。其中，引入了一个ModalManager类，通过监听模态框的事件(联想bs的事件命名空间)，从而操作和处理多个模态框。
 
+单个ModalManager默认在body上创建，并通过jQuery插件接口进行访问: 
+
+```javascript
+$("body").modalmanager("loading");
+```
+
+`Bootstrap-Modal`可以用作Bootstrap的Modal类替代品，或者类库的补充。更多参考<https://github.com/jschr/bootstrap-modal>
+
 ## 下拉菜单：dropdown.js
 
 > 可以为所有东西添加下拉菜单：导航条，标签页，胶囊式按钮

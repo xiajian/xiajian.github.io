@@ -54,8 +54,6 @@ function log(message) {
 }
 ```
 
-Or if you want to check the status of a document on the server:
-
 或者，想要检查服务器上的文档的状态: 
 
 ```javascript
@@ -349,212 +347,113 @@ client.upload
 ```javascript
 // 启动请求，可选的参数提供请求对象。如果请求方法是`GET`或`HEAD`，则忽略参数。
 // 如果state不为OPENED或设置了send()标志，则抛出InvalidStateError异常
-client . send([body = null])
+client . send([data = null])
 ```
 
-`send(body)` method must run these steps:
+`send(data)` method must run these steps:
 
 1. 如果state不为OPENED或设置了send()标志，则抛出InvalidStateError异常
 2. 如果请求方法为GET或HEAD，将body设置为null
-3. 如果body为空，跳到下一步。否则，将encoding、Content-Type设置为null，然后，根据body遵循如下的规则:
+3. 如果data为空，跳到下一步。否则，将encoding、Content-Type设置为null，然后，根据body遵循如下的规则:
    * ArrayBufferView , 将data设置原始值
    * Blob，如果对象类型不为空，则将mine类型设置为其类型
    * Document 
      * 设置encoding为`UTF-8`
      * 如果body是HTML文档，则将 Content-Type设置为`text/html`或`application/xml`，并给Content-Type添加`;charset=UTF-8`
      * 将请求体设置为body的值，序列化，转换为utf-8编码Unicode，并进行utf-8编码。在序列化过程中，可能抛出任何异常，比如InvalidStateError异常
-   * String, 将编码设置为`UTF-8`，设置请求体为body，并将设置mine类型为"text/plain;charset=UTF-8"
+   * String, 将编码设置为`UTF-8`，设置请求体为body，并将设置mine类型为"text/plain;charset=UTF-8" 
+   * FormData, 将请求体设置为对data运行`multipart/form-data`编码算法的结果，并将`utf-8`设置为显式编码类型。将mine类型设置为 "multipart/form-data;"，U+0020空白字符， "boundary="以及由`multipart/form-data`编码算法生成的边界字符串进行连接。
+   
+   如果请求头中包含`Content-Type`头部，且其值为有效的MIME类型(charset参数不为大小写敏感，且encoding不为空); 如果不包含`Content-Type`，则设置`Content-Type`为mine类型的值。
+4. 如果设置同步标志，则释放存储互斥体
+5. 重置 error标志，upload完成标志以及upload事件标志
+6. 如果没有请求实体或其值为空，则设置upload完成标志
+7. If the synchronous flag is unset and one or more event listeners are registered on the XMLHttpRequestUpload object, set the upload events flag.
+8. If the synchronous flag is unset, run these substeps:
 
-    If Content-Type is non-null and author request headers contains no header named `Content-Type`, append `Content-Type`/Content-Type to author request headers.
+  *  Set the send() flag.
+  *  Fire a progress event named loadstart.
+  *  If the upload complete flag is unset, fire a progress event named loadstart on the XMLHttpRequestUpload object.
+  *  Return the send() method call, but continue running the steps in this algorithm.
 
-    Otherwise, if the header named `Content-Type` in author request headers has a value that is a valid MIME type, which has a `charset` parameter whose value is not a case-insensitive match for encoding, and encoding is not null, set all the `charset` parameters of that `Content-Type` header's value to encoding.
+9. If the source origin and the request URL are same origin
 
-    Let req be a new request, initialized as follows:
+      These are the same-origin request steps.
 
-    method
-        request method 
-    url
-        request URL 
-    header list
-        author request headers 
-    unsafe request flag
-        Set. 
-    origin
-        settings object's origin 
-    force Origin header flag
-        Set. 
-    referrer
-        settings object's API referrer source's URL if settings object's API referrer source is a document, and settings object's API referrer source otherwise 
-    body
-        request body 
-    client
-        settings object's global object 
-    context
-        xmlhttprequest 
-    authentication flag
-        Set. 
-    synchronous flag
-        Set if the synchronous flag is set. 
-    mode
-        CORS if the upload events flag is unset, and CORS-with-forced-preflight otherwise. 
-    credentials mode
-        If the withCredentials attribute value is true, include, and same-origin otherwise. 
-    use URL credentials flag
-        Set if either request URL's username is not the empty string or request URL's password is non-null. 
+      Fetch the request URL from origin source origin, using referrer source as override referrer source, with the synchronous flag set if the synchronous flag is set, using HTTP method request method, taking into account the request entity body, list of author request headers, and the rules listed at the end of this section.
 
-    If a header named `Accept-Language` is not in req's header list, append `Accept-Language`/an appropriate value to it.
+      If the synchronous flag is set
 
-    If a header named `Accept` is not in req's header list, append `Accept`/`*/*` to it.
+          While making the request also follow the same-origin request event rules.
 
-    Unset the upload complete flag and upload events flag.
+          The send() method call will now be returned by virtue of this algorithm ending.
+      If the synchronous flag is unset
 
-    If req's body is null, set the upload complete flag.
+          Make upload progress notifications.
 
-    Set the send() flag.
+          Make progress notifications.
 
-    If the synchronous flag is unset, run these substeps:
+          While processing the request, as data becomes available and when the user interferes with the request, queue tasks to update the response entity body and follow the same-origin request event rules.
 
-        If one or more event listeners are registered on the XMLHttpRequestUpload object, set the upload events flag.
+    Otherwise
 
-        Fire a progress event named loadstart with 0 and 0.
+        These are the cross-origin request steps.
 
-        If the upload complete flag is unset, fire a progress event named loadstart on the XMLHttpRequestUpload object with 0 and req's body's length.
+        Make a cross-origin request, passing these as parameters:
 
-        Fetch req. Handle the tasks queued on the networking task source per below.
+        request URL
+            The request URL.
+        request method
+            The request method.
+        author request headers
+            The list of author request headers.
+        request entity body
+            The request entity body.
+        source origin
+            The source origin.
+        referrer source
+            The referrer source. 
+        omit credentials flag
+            Set if withCredentials attribute's value is false. 
+        force preflight flag
+            Set if the upload events flag is set. 
 
-        If the timeout attribute value is not 0, terminate fetching after the amount of milliseconds specified by the timeout attribute value have passed with reason timeout.
+        If the synchronous flag is set
 
-        To process request body for request, run these subsubsteps:
+            While making the request also follow the cross-origin request event rules.
 
-            If not roughly 50ms have passed since these subsubsteps were last invoked, terminate these subsubsteps.
+            The send() method call will now be returned by virtue of this algorithm ending.
+        If the synchronous flag is unset
 
-            Fire a progress event named progress on the XMLHttpRequestUpload object with request's body's transmitted and request's body's length. 
+            While processing the request, as data becomes available and when the end user interferes with the request, queue tasks to update the response entity body and follow the cross-origin request event rules.
 
-        To process request end-of-file for request, run these subsubsteps:
+If the user agent allows the end user to configure a proxy it should modify the request appropriately; i.e., connect to the proxy host instead of the origin server, modify the Request-Line and send Proxy-Authorization headers as specified.
 
-            Set the upload complete flag.
+If the user agent supports HTTP Authentication and Authorization is not in the list of author request headers, it should consider requests originating from the XMLHttpRequest object to be part of the protection space that includes the accessed URIs and send Authorization headers and handle 401 Unauthorized requests appropriately.
 
-            Let transmitted be request's body's transmitted.
+If authentication fails, source origin and the request URL are same origin, Authorization is not in the list of author request headers, request URL's username is the empty string and request URL's password is null, user agents should prompt the end user for their username and password.
 
-            Let length be request's body's length.
+Otherwise, if authentication fails, user agents must not prompt the end user for their username and password. [HTTPAUTH]
 
-            Fire a progress event named progress on the XMLHttpRequestUpload object with transmitted and length.
+Unfortunately end users are prompted because of legacy content constraints. However, when possible this behavior is prohibited, as it is bad UI. E.g. that is why the same origin restriction is made above.
 
-            Fire a progress event named load on the XMLHttpRequestUpload object with transmitted and length.
+If the user agent supports HTTP State Management it should persist, discard and send cookies (as received in the Set-Cookie response header, and sent in the Cookie header) as applicable. [COOKIES]
 
-            Fire a progress event named loadend on the XMLHttpRequestUpload object with transmitted and length. 
+If the user agent implements a HTTP cache it should respect Cache-Control headers in author request headers (e.g. Cache-Control: no-cache bypasses the cache). It must not send Cache-Control or Pragma request headers automatically unless the end user explicitly requests such behavior (e.g. by reloading the page).
 
-        To process response for response, run these subsubsteps:
+For 304 Not Modified responses that are a result of a user agent generated conditional request the user agent must act as if the server gave a 200 OK response with the appropriate content. The user agent must allow author request headers to override automatic cache validation (e.g. If-None-Match or If-Modified-Since), in which case 304 Not Modified responses must be passed through. [HTTP]
 
-            Set response to response.
+If the user agent implements server-driven content-negotiation it must follow these constraints for the Accept and Accept-Language request headers:
 
-            Handle errors for response.
+    Both headers must not be modified if they are in author request headers.
 
-            If response is a network error, return.
+    If not in author request headers, Accept-Language with an appropriate value should be appended to it.
 
-            Change the state to HEADERS_RECEIVED.
+    If not in author request headers, Accept with value */* must be appended to it. 
 
-            Fire an event named readystatechange. 
+Responses must have the content-encodings automatically decoded. [HTTP]
 
-        To process response body for response, run these subsubsteps:
-
-            If not roughly 50ms have passed since these subsubsteps were last invoked, terminate these subsubsteps.
-
-            Handle errors for response.
-
-            If response is a network error, return.
-
-            If state is HEADERS_RECEIVED, change the state to LOADING and fire an event named readystatechange.
-
-            Fire a progress event named progress with response's body's transmitted and response's body's length. 
-
-        To process response end-of-file for response, run handle response end-of-file for response. 
-
-    Otherwise, if the synchronous flag is set, run these substeps:
-
-        Release the storage mutex.
-
-        Let response be the result of fetching req.
-
-        Run handle response end-of-file for response. 
-
-To handle response end-of-file for response, run these steps:
-
-    If the synchronous flag is set, set response to response.
-
-    Handle errors for response.
-
-    If response is a network error, return.
-
-    If the synchronous flag is unset, update response's body using response.
-
-    Change the state to DONE.
-
-    Unset the send() flag.
-
-    Fire an event named readystatechange.
-
-    Let transmitted be response's body's transmitted.
-
-    Let length be response's body's length.
-
-    Fire a progress event named progress with transmitted and length.
-
-    Fire a progress event named load with transmitted and length.
-
-    Fire a progress event named loadend with transmitted and length. 
-
-To handle errors for response run these steps:
-
-    If the send() flag is unset, return.
-
-    If response is a network error, run the request error steps for event error and exception NetworkError.
-
-    Otherwise, if response has a termination reason:
-
-    end-user abort
-
-        Run the request error steps for event abort and exception AbortError. 
-    fatal
-
-            Change the state to DONE.
-
-            Unset the send() flag.
-
-            Set response to a network error. 
-    timeout
-
-        Run the request error steps for event timeout and exception TimeoutError. 
-
-The request error steps for event event and optionally an exception exception are:
-
-    Change the state to DONE.
-
-    Unset the send() flag.
-
-    Set response to a network error.
-
-    If the synchronous flag is set, throw an exception exception.
-
-    Fire an event named readystatechange.
-
-    At this point it is clear that the synchronous flag is unset.
-
-    If the upload complete flag is unset, follow these substeps:
-
-        Set the upload complete flag.
-
-        Fire a progress event named progress on the XMLHttpRequestUpload object with 0 and 0.
-
-        Fire a progress event named event on the XMLHttpRequestUpload object with 0 and 0.
-
-        Fire a progress event named loadend on the XMLHttpRequestUpload object with 0 and 0. 
-
-    Fire a progress event named progress with 0 and 0.
-
-    Fire a progress event named event with 0 and 0.
-
-    Fire a progress event named loadend with 0 and 0.
+Besides the author request headers, user agents should not include additional request headers other than those mentioned above or other than those authors are not allowed to set using setRequestHeader(). This ensures that authors have a predictable API.
 
 #### 4.5.7 The abort() method
 
