@@ -26,6 +26,7 @@ typeahead的项目的目录结构如下:
 * karma.conf.js : 自动化单元测试
 * package.json : 类似Gemfile的，项目的包依赖
 * typeahead.js.jquery.json : 子项目包依赖
+* typeahead项目中样例在其`gh-pages`分支中。
 
 > Node小知识:  Jasmine做单元测试，Karma自动化完成单元测试，Grunt启动Karma统一项目管理，Yeoman最后封装成一个项目原型模板，npm做nodejs的包依赖管理，bower做javascript的包依赖管理
 
@@ -509,8 +510,16 @@ $('.typeahead').typeahead(null, {
 
 ## 实践
 
+教程已看完，求实践。其实typeahead项目中包含例子，但是，起初没想到其包含其项目的gh-pages分支中。目前，正在研究其提供的例子。
 
-教程已看完，求实践。
+首先，例子中里使用的css库: normalize.min.css，用到的js的库:
+
+* [handlebars.js](https://github.com/wycats/handlebars.js) : Mustache模板语言扩展的编译器，hogan.js是Mustache的编译器
+* jquery-1.10.2.min.js : typeahead.jquery.js依赖jquery
+* [ghostwriter.min.js](https://github.com/jharding/ghostwriter) : 提供简单的API，从而与`input[type="text"]`交互。给定特定元素，设置选项。
+* [typeahead.bundle.js](https://github.com/twitter/typeahead.js) : typeahead.jquery.js和bloodbound.js的文件组合。
+
+
 
 ## 小结
 
