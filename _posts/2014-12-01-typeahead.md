@@ -11,6 +11,24 @@ title: typeahead.js
 
 灵感来自twitter的自动补全搜索功能，typeahead.js是实现预输入的强大灵活的javascript库。Typeahead.js库包含了两个组件：推荐引擎[Bloodhound](https://github.com/twitter/typeahead.js/blob/master/doc/bloodhound.md)以及UI视图[typeahead](https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md)。
 
+typeahead的项目的目录结构如下: 
+
+* dist/ : 项目分发包的目录
+* doc/  : 文档目录
+* src/  : 源码目录
+* test/ : 测试目录
+* .jshintrc : ??
+* .travis.yml : travis-ci服务, github上的开源项目使用的持续构建服务
+* bower.json  : bower工具的配置文件
+* CHANGELOG.md : 更改日志
+* composer.json : 项目的组成信息
+* Gruntfile.js : 统一项目管理
+* karma.conf.js : 自动化单元测试
+* package.json : 类似Gemfile的，项目的包依赖
+* typeahead.js.jquery.json : 子项目包依赖
+
+> Node小知识:  Jasmine做单元测试，Karma自动化完成单元测试，Grunt启动Karma统一项目管理，Yeoman最后封装成一个项目原型模板，npm做nodejs的包依赖管理，bower做javascript的包依赖管理
+
 推荐引擎负责对给定的查询计算推荐结果，UI视图渲染推荐并处理DOM交互。这两者都可分开使用，但是，结合使用可以提供丰富的预输入的体验。以下，分别介绍两者。
 
 ## Bloodhound
@@ -489,7 +507,8 @@ $('.typeahead').typeahead(null, {
 });
 ```
 
-## 实例
+## 实践
+
 
 教程已看完，求实践。
 
