@@ -119,4 +119,4 @@ APIs会演化，尤其是在开发状态时。保持ApiTaster.routes和路由定
 
 最近，进入了滞涩期，所以，需要一些新的学习方法。比如，看一些开源的项目(gitlab和redmine)。
 
-找到新的写API的方式了，Grape gem包，还是使用sinatra。
+找到新的写API的方式了，Grape gem包，sinatra，还是Rails-API，持续纠结中。

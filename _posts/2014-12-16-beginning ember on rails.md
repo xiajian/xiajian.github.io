@@ -43,3 +43,5 @@ Ember本身依然在持续开发，并且其中有些部分依然处于变动中
 ## Beginning Ember.js on Rails: Part 1
 
 Ember.js并不依赖任何服务器端应用。实际上，它可用来控制单页面web应用或PhoneGap手机应用。开始学习Ember时，可以通过结合Rails来编写一个简单的CRUD程序。
+
+由于存在一些版本的问题，其文章上提供的例子稍后再试。
