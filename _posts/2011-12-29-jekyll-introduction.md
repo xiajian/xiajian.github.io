@@ -12,36 +12,26 @@ tags : [intro, beginner, jekyll, tutorial]
 
 ### What is Jekyll?
 
-Jekyll is a parsing engine bundled as a ruby gem used to build static websites from
-dynamic components such as templates, partials, liquid code, markdown, etc. Jekyll is known as "a simple, blog aware, static site generator".
-
+Jekyll是封装为ruby的gem的解析引擎，用来从诸如模板，部分视图，liquid代码，markdown的。Jekyll是"a simple, blog aware, static site generator"。
 
 ### Examples
 
 This website is created with Jekyll. [Other Jekyll websites](https://github.com/mojombo/jekyll/wiki/Sites).
 
-
-
 ### What does Jekyll Do?
 
-Jekyll is a ruby gem you install on your local system.
-Once there you can call `jekyll --server` on a directory and provided that directory
-is setup in a way jekyll expects, it will do magic stuff like parse markdown/textile files,
-compute categories, tags, permalinks, and construct your pages from layout templates and partials.
+Jekyll作为Ruby gem安装在本地系统中(这意味着需要安装ruby和rubygems)。只要在某个目录中提供jekyll期望的目录结构，然后运行`jekyll --server`，jekyll
+将会解析markdown/textile文件，计算目录，tags，永久链接，然后，从布局模板和部分视图中构建页面。
 
-Once parsed, Jekyll stores the result in a self-contained static `_site` folder.
-The intention here is that you can serve all contents in this folder statically from a plain static web-server.
+一旦解析完成，Jekyll将结果存放在自包含的静态`_site`目录中， 这意味着，可以将`_site`目录下的内容作为静态web服务器的内容。
 
-You can think of Jekyll as a normalish dynamic blog but rather than parsing content, templates, and tags
-on each request, Jekyll does this once _beforehand_ and caches the _entire website_ in a folder for serving statically.
+简单来说，Jekyll一次将内容，模板，tag生成静态缓存(HTML)，然后用作静态文件服务。
 
 ### Jekyll is Not Blogging Software
 
-**Jekyll is a parsing engine.**
+**Jekyll是解析引擎**
 
-Jekyll does not come with any content nor does it have any templates or design elements.
-This is a common source of confusion when getting started.
-Jekyll does not come with anything you actually use or see on your website - you have to make it.
+Jekyll不包含任何内容，模板或设计元素。刚起步时，很容易迷惑，因为Jekyll不提供任何在网站上得到的东西，你得自己动手去创建。
 
 ### Why Should I Care?
 
@@ -52,19 +42,28 @@ Heavily trafficked dynamic blogs must employ a caching layer that ultimately per
 
 Therefore if you like to keep things simple and you prefer the command-line over an admin panel UI then give Jekyll a try.
 
-**Developers like Jekyll because we can write content like we write code:**
+Jekyll迷你且高效。最重要的事情是: Jekyll创建站点的静态表现，从而仅需静态web服务器。传统的动态博客，比如Wordpress，需要数据库和服务器端代码。
+大流量的动态博客必须部署缓存层，从而提供静态内容的服务，这就同Jekyll做的差不错了。
 
-- Ability to write content in markdown or textile in your favorite text-editor.
-- Ability to write and preview your content via localhost.
-- No internet connection required.
-- Ability to publish via git.
-- Ability to host your blog on a static web-server.
-- Ability to host freely on GitHub Pages.
-- No database required.
+所以，如果想保持简单，且钟爱命令行而不是管理界面UI，尝试一下Jekyll。
 
-# How Jekyll Works
 
-The following is a complete but concise(简明的) outline of exactly how Jekyll works.
+**像写代码一样写内容**
+
+- 用你最爱的编辑器写markdown或textile，比如，vim
+- 本地预览写作内容
+- 无需网络链接
+- git推送
+- 只需静态服务器
+- 可免费搭建在GitHub Pages.
+- 无需数据库
+
+注: 突然想起，将静态资源全用缓存的话，没网时，就不能进行本地测试。当然，没网也不能提交。
+
+
+## How Jekyll Works
+
+以下是Jekyll完善且简洁的概述，介绍了Jekyll如何工作的。本文并不面面俱到，而是尝试给出一个全景式的认识。
 
 Be aware that core concepts are introduced in rapid succession without code examples.
 This information is not intended to specifically teach you how to do anything, rather it
@@ -106,9 +105,9 @@ Jekyll expects your website directory to be laid out like so:
 - **\_includes**
 	This folder is for partial views，部分视图。
 
-- **\_layouts**
+- **\_layouts** 
 	This folder is for the main templates your content will be inserted into.
-	You can have different layouts for different pages or page sections.
+	You can have different layouts for different pages or page sections. 模板
 
 - **\_posts**
 	This folder contains your dynamic content/posts.
@@ -124,14 +123,10 @@ Jekyll expects your website directory to be laid out like so:
 
 (read more: <https://github.com/mojombo/jekyll/wiki/Usage>)
 
-
 ### Jekyll Configuration
 
 Jekyll supports various configuration options that are fully outlined here:
 (<https://github.com/mojombo/jekyll/wiki/Configuration>)
-
-
-
 
 ## Content in Jekyll
 
@@ -211,7 +206,7 @@ This page will be available at `http://yourdomain.com/people/bob/essay.html`
 - **404.html**
   Create a root 404.html page and GitHub Pages will serve it as your 404 response.
 - **sitemap.html**
-  Generating a sitemap is good practice for SEO.
+  Generating a sitemap is good practice for SEO. 备注: sitemap.txt中记录了
 - **about.html**
   A nice about page is easy to do and gives the human perspective to your website.
 
