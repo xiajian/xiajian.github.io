@@ -6,8 +6,7 @@ tags : [intro, beginner, jekyll, tutorial]
 ---
 {% include JB/setup %}
 
-This Jekyll introduction will outline specifically  what Jekyll is and why you would want to use it.
-Directly following the intro we'll learn exactly _how_ Jekyll does what it does.
+本指南介绍什么是Jekyll以及如何使用，深入阅读将了解Jekyll的工作原理。
 
 ## Overview
 
@@ -15,6 +14,7 @@ Directly following the intro we'll learn exactly _how_ Jekyll does what it does.
 
 Jekyll is a parsing engine bundled as a ruby gem used to build static websites from
 dynamic components such as templates, partials, liquid code, markdown, etc. Jekyll is known as "a simple, blog aware, static site generator".
+
 
 ### Examples
 
@@ -64,13 +64,13 @@ Therefore if you like to keep things simple and you prefer the command-line over
 
 # How Jekyll Works
 
-The following is a complete but concise outline of exactly how Jekyll works.
+The following is a complete but concise(简明的) outline of exactly how Jekyll works.
 
 Be aware that core concepts are introduced in rapid succession without code examples.
 This information is not intended to specifically teach you how to do anything, rather it
 is intended to give you the _full picture_ relative to what is going on in Jekyll-world.
 
-Learning these core concepts should help you avoid common frustrations and ultimately
+Learning these core concepts should help you avoid common frustrations(挫折) and ultimately
 help you better understand the code examples contained throughout Jekyll-Bootstrap.
 
 
@@ -104,7 +104,7 @@ Jekyll expects your website directory to be laid out like so:
 	Stores configuration data.
 
 - **\_includes**
-	This folder is for partial views.
+	This folder is for partial views，部分视图。
 
 - **\_layouts**
 	This folder is for the main templates your content will be inserted into.
@@ -156,13 +156,13 @@ YAML Front-Matter is a valid YAML syntax specifying meta-data for the given file
 
 **Order**
 Ordering is an important part of Jekyll but it is hard to specify a custom ordering strategy.
-Only reverse chronological and chronological ordering is supported in Jekyll.
+Only reverse chronological(年代顺序) and chronological ordering is supported in Jekyll.
 
 Since the date is hard-coded into the filename format, to change the order, you must change the dates in the filenames.
 
 **Tags**
 Posts can have tags associated with them as part of their meta-data.
-Tags may be placed on posts by providing them in the post's YAML front matter.
+Tags may be placed on posts by providing them in the post's YAML front matter(扉页).
 You have access to the post-specific tags in the templates. These tags also get added to the sitewide collection.
 
 **Categories**

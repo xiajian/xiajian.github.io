@@ -15,9 +15,11 @@ Tags Manager是用来创建输入域tag的jQuery插件(依赖jQuery)，与[Typea
 
 ### 简单实例
 
-tagmanager.js的简单实例(在Rails中)
+tagmanager.js的简单实例:
 
-```erb
+
+
+```html
 <!-- typeahead.js以及tagmanager.js、tagmanger.css都是通过响应的资源文件控制的 -->
 <input type="text" name="tags" id="tags" class="tm-input input-medium input-info" placeholder="Tags" >
 
@@ -184,7 +186,7 @@ TagManager捆绑了Bootstrap主题集的颜色和样式，并提供了多种定�
 3. 通过`tagClass`参数，可以对tag使用定制的样式。
 
 <div class="pic">
-  <img src="/assets/imags/tagmanager.png" alt="TagManager的样式图片"/>
+  <img src="/assets/images/tagmanager.png" alt="TagManager的样式图片"/>
 </div>
 
 为了正确的对其，推荐使用`tm-tag`样式，如果在Bootstrap的控制器分组容器中使用TagManager，务必在容器节点中添加`tm-group`样式。
@@ -213,4 +215,10 @@ tagmanager插件作者认为上述的四个是相当不错的，但是出于如�
 
 ## 后记
 
-居然看完了，为了某个一次性的输入提示的一次性需求。不过，也因此接触和学习不少有趣的东西，比如jQuery插件的写法。
+居然看完了，为了某个一次性的输入提示的一次性需求，居然花了时间实践和翻译。不过，也因此接触和学习不少有趣的东西，比如jQuery插件的写法，以及函数调用惯例的实现。
+
+<script type="text/javascript" src="http://apps.bdimg.com/libs/tagmanager/3.0.0/tagmanager.js">
+<link type="text/css" rel="stylesheet" href="http://apps.bdimg.com/libs/tagmanager/3.0.0/tagmanager.css">
+<script type="text/javascript" charset="utf-8">
+  
+</script>
