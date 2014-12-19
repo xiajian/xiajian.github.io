@@ -58,29 +58,22 @@ Jekyll迷你且高效。最重要的事情是: Jekyll创建站点的静态表现
 - 可免费搭建在GitHub Pages.
 - 无需数据库
 
-注: 突然想起，将静态资源全用缓存的话，没网时，就不能进行本地测试。当然，没网也不能提交。
+**注**: 突然想起，将静态资源全用缓存的话，没网时，就不能进行本地测试。当然，没网也不能提交，网都没了，还玩个妹啊！！
 
 
 ## How Jekyll Works
 
-以下是Jekyll完善且简洁的概述，介绍了Jekyll如何工作的。本文并不面面俱到，而是尝试给出一个全景式的认识。
+以下是Jekyll完善且简洁的概述，介绍了Jekyll如何工作的。本指南并不面面俱到，而是尝试给出一个关于Jekyll的全景式的认识。
 
-Be aware that core concepts are introduced in rapid succession without code examples.
-This information is not intended to specifically teach you how to do anything, rather it
-is intended to give you the _full picture_ relative to what is going on in Jekyll-world.
-
-Learning these core concepts should help you avoid common frustrations(挫折) and ultimately
-help you better understand the code examples contained throughout Jekyll-Bootstrap.
-
+学习这些核心概念将帮助你避免挫折，最终帮助你理解`Jekyll-Bootstrap`中的代码样例。
 
 ## Initial Setup
 
-After [installing jekyll](/index.html#start-now) you'll need to format your website directory in a way jekyll expects.
-Jekyll-bootstrap conveniently provides the base directory format.
+在安装Jekyll之后，使用命令`jekyll new xxxx`创建新的jekyll项目。`Jekyll-bootstrap`则默认提供这样的目录格式。
 
 ### The Jekyll Application Base Format
 
-Jekyll expects your website directory to be laid out like so:
+Jekyll期望的网站目录格式如下:
 
     .
     |-- _config.yml
@@ -100,60 +93,53 @@ Jekyll expects your website directory to be laid out like so:
 
 
 - **\_config.yml**
-	Stores configuration data.
+	 存放配置数据
 
 - **\_includes**
-	This folder is for partial views，部分视图。
+	部分视图所在的目录
 
 - **\_layouts** 
-	This folder is for the main templates your content will be inserted into.
-	You can have different layouts for different pages or page sections. 模板
+  该目录是内容插入其中的主要模板，可以为不同的页面或页面区域设定不同的模板。
 
 - **\_posts**
-	This folder contains your dynamic content/posts.
-	the naming format is required to be `@YEAR-MONTH-DATE-title.MARKUP@`.
+	该目录包含动态内容/post，其命名格式必须是`@YEAR-MONTH-DATE-title.MARKUP@`
 
 - **\_site**
 	This is where the generated site will be placed once Jekyll is done transforming it.
+  Jekyll存放转换后的站点文件的目录。
 
 - **assets**
-	This folder is not part of the standard jekyll structure.
-	The assets folder represents _any generic_ folder you happen to create in your root directory.
-	Directories and files not properly formatted for jekyll will be left untouched for you to serve normally.
+  该目录并不属于标准的jekyll结构。assets目录表示任何在根目录创建的目录。目录和文件并不会被Jekyll格式化
+  也不能被访问。
 
-(read more: <https://github.com/mojombo/jekyll/wiki/Usage>)
+(更多参考: <https://github.com/mojombo/jekyll/wiki/Usage>)
 
 ### Jekyll Configuration
 
-Jekyll supports various configuration options that are fully outlined here:
+Jekyll支持很多配置选项，全部列出如下:
 (<https://github.com/mojombo/jekyll/wiki/Configuration>)
 
 ## Content in Jekyll
 
-Content in Jekyll is either a post or a page.
-These content "objects" get inserted into one or more templates to build the final output for its respective static-page.
+Jekyll中的内容可以是post或这page。内容对象可以插到一个或多个模板中，从而构建最终输出的静态页面。
 
 ### Posts and Pages
 
-Both posts and pages should be written in markdown, textile, or HTML and may also contain Liquid templating syntax.
-Both posts and pages can have meta-data assigned on a per-page basis such as title, url path, as well as arbitrary custom meta-data.
+所有的posts和pages都因该以markdown，textile或HTML编写，并且其中包含Liquid模板语法。posts和pages都因该具备标题、url路径以及定制化的元数据等页面的基本属性。
 
 ### Working With Posts
 
 **Creating a Post**
-Posts are created by properly formatting a file and placing it the `_posts` folder.
+Posts以恰当的格式创建，并放置在`_posts`目录下。
 
 **Formatting**
-A post must have a valid filename in the form `YEAR-MONTH-DATE-title.MARKUP` and be placed in the `_posts` directory.
-If the data format is invalid Jekyll will not recognize the file as a post. The date and title are automatically parsed from the filename of the post file.
-Additionally, each file must have [YAML Front-Matter](https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter) prepended to its content.
-YAML Front-Matter is a valid YAML syntax specifying meta-data for the given file.
+post必须具备有效的文件名格式(`YEAR-MONTH-DATE-title.MARKUP`)，并放置在`_posts`目录下。如果名字不合法，就不会被看作post。标题和日期会自动从post文件名中解析出。
+此外，每个文件必须具备[YAML Front-Matter](https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter) 。YAML Front-Matter是通过YAML语法指定给定文件的元数据。
 
 **Order**
-Ordering is an important part of Jekyll but it is hard to specify a custom ordering strategy.
-Only reverse chronological(年代顺序) and chronological ordering is supported in Jekyll.
+定序是Jekyll中重要的部分，但其策略很难指定。Jekyll仅支持正年代顺序和逆年代顺序。
 
-Since the date is hard-coded into the filename format, to change the order, you must change the dates in the filenames.
+由于日期是直接硬编码到文件中，为了改变顺序，需要修改文件名的日期。
 
 **Tags**
 Posts can have tags associated with them as part of their meta-data.
@@ -206,29 +192,26 @@ This page will be available at `http://yourdomain.com/people/bob/essay.html`
 - **404.html**
   Create a root 404.html page and GitHub Pages will serve it as your 404 response.
 - **sitemap.html**
-  Generating a sitemap is good practice for SEO. 备注: sitemap.txt中记录了
+  Generating a sitemap is good practice for SEO. 备注: sitemap.txt中记录了站点中，所有可访问URL。
 - **about.html**
   A nice about page is easy to do and gives the human perspective to your website.
 
 
 ## Templates in Jekyll
 
-Templates are used to contain a page's or post's content.
-All templates have access to a global site object variable: `site` as well as a page object variable: `page`.
-The site variable holds all accessible content and metadata relative to the site.
-The page variable holds accessible data for the given page or post being rendered at that point.
+模板是用来包含page或post内容的。所有的模板都可以通过全局站点对象变量和页面对象访问: `site`以及`page`。
+站点变量(`site`)存放这所有与站点相关的、可访问的内容和元数据。
+页面变量(`page`)存放着给定页面访问的数据或者post所渲染的位置。
 
 **Create a Template**
-Templates are created by properly formatting a file and placing it in the `_layouts` directory.
+模板以特定格式创建，并存放在`_layouts`目录中。
 
 **Formatting**
-Templates should be coded in HTML and contain YAML Front Matter.
-All templates can contain Liquid code to work with your site's data.
+模板以HTML编码且包含YAML Front Matter。所有的模板都包含带有站点数据的Liquid代码。
 
 **Rending Page/Post Content in a Template**
-There is a special variable in all templates named : `content`.
-The `content` variable holds the page/post content including any sub-template content previously defined.
-Render the content variable wherever you want your main content to be injected into your template:
+模板中存在一个特殊的变量: `content`。`content`变量中包含 page/post内容，以及先前定义的子模板内容。无论在渲染内容变量，
+都需要将内容注入到模板中：
 
 {% capture text %}...
 <body>
@@ -240,79 +223,61 @@ Render the content variable wherever you want your main content to be injected i
 ...{% endcapture %}
 {% include JB/liquid_raw %}
 
+注: 这里使用`capture`捕获变量。 
+
 ### Sub-Templates
 
 Sub-templates are exactly templates with the only difference being they
 define another "root" layout/template within their YAML Front Matter.
 This essentially means a template will render inside of another template.
 
+子模板是和模板的唯一的区别在于，他们定义在另一个根目录下。这意味着，一个模板可以另一个模板内渲染。
+
 ### Includes
-In Jekyll you can define include files by placing them in the `_includes` folder.
-Includes are NOT templates, rather they are just code snippets that get included into templates.
-In this way, you can treat the code inside includes as if it was native to the parent template.
 
-Any valid template code may be used in includes.
-
+Jekyll中在`_includes`目录中，定义include文件。Includes并不是模板，而仅仅只是包含在模板中代码片段。
+这些代码片段可以看作部分视图。includes中可以包含任何有效的模板代码。
 
 ## Using Liquid for Templating
 
-Templating is perhaps the most confusing and frustrating part of Jekyll.
-This is mainly due to the fact that Jekyll templates must use the Liquid Templating Language.
+模板是Jekyll中最令人迷惑且沮丧的部分。这部分是由于Jekyll模板必须是用Liquid模板语言。
 
 ### What is Liquid?
 
-[Liquid](https://github.com/Shopify/liquid) is a secure templating language developed by [Shopify](http://shopify.com).
-Liquid is designed for end-users to be able to execute logic within template files
-without imposing any security risk on the hosting server.
+[Liquid](https://github.com/Shopify/liquid) 是由[Shopify](http://shopify.com)开发的安全的模板语言。Liquid作为一门终端用户使用的，带逻辑且对服务器无风险的模板语言。
 
-Jekyll uses Liquid to generate the post content within the final page layout structure and as the primary interface for working with
-your site and post/page data.
+Jekyll使用Liquid生成带有页面布局结构以及站点元数据的post页面。
 
 ### Why Do We Have to Use Liquid?
 
-GitHub uses Jekyll to power [GitHub Pages](http://pages.github.com/).
-GitHub cannot afford to run arbitrary code on their servers so they lock developers down via Liquid.
+GitHub使用Jekyll提供[GitHub Pages](http://pages.github.com/). 
+GitHub 不能承受在其服务器上运行任意代码，所以，他们通过Liquid限制开发者。
 
 ### Liquid is Not Programmer-Friendly.
 
-The short story is liquid is not real code and its not intended to execute real code.
-The point being you can't do jackshit in liquid that hasn't been allowed explicitly by the implementation.
-What's more you can only access data-structures that have been explicitly passed to the template.
+liquid本身并不是真整的代码，其不能执行真正的代码。这意味着，只能访问已经明确传递给模板的数据结构，不能对其进行hack。
 
-In Jekyll's case it is not possible to alter what is passed to Liquid without hacking the gem or running custom plugins.
-Both of which cannot be supported by GitHub Pages.
+GitHub Pagesd提供的Jekyll环境中，不能修改和运行定制插件。
 
-As a programmer - this is very frustrating.
+作为程序员而言，这令人沮丧。
 
-But rather than look a gift horse in the mouth we are going to
-suck it up and view it as an opportunity to work around limitations and adopt client-side solutions when possible.
+但是不要吹毛求疵，正确看待Jekyll提供的限制，并调整客户端解决方案。
 
-**Aside**
-My personal stance is to not invest time trying to hack liquid. It's really unnecessary
-_from a programmer's_ perspective. That is to say if you have the ability to run custom plugins (i.e. run arbitrary ruby code)
-you are better off sticking with ruby. Toward that end I've built [Mustache-with-Jekyll](http://github.com/plusjade/mustache-with-jekyll)
-
+**旁白**
+不建议hack liquid。如果想要运行定制化插件的能力，最好坚持使用ruby。此外，可以使用[Mustache-with-Jekyll](http://github.com/plusjade/mustache-with-jekyll)
 
 ## Static Assets
 
-Static assets are any file in the root or non-underscored subfolders that are not pages.
-That is they have no valid YAML Front Matter and are thus not treated as Jekyll Pages.
-
-Static assets should be used for images, css, and javascript files.
-
-
-
+静态资源可以在根目录下的任何文件，或不以`_`开头的目录。总之，不会被看著Jekyll Pages。静态资源可以是图片，css，js文件。
 
 ## How Jekyll Parses Files
 
-Remember Jekyll is a processing engine. There are two main types of parsing in Jekyll.
+Jekyll是一个解析引擎，主要解析lianghzong类型的文件：
 
-- **Content parsing.**
-	This is done with textile or markdown.
-- **Template parsing.**
-  This is done with the liquid templating language.
+- **Content parsing.** markdown或者textile
+- **Template parsing.** liquid模板语言解析
 
-And thus there are two main types of file formats needed for this parsing.
+存在两种主要类型的文件格式需要解析: 
 
 - **Post and Page files.**
   All content in Jekyll is either a post or a page so valid posts and pages are parsed with markdown or textile.
@@ -321,16 +286,14 @@ And thus there are two main types of file formats needed for this parsing.
 	Since include files are simply injected into templates they are essentially parsed as if they were native to the template.
 
 **Arbitrary files and folders.**
-Files that _are not_ valid pages are treated as static content and pass through
-Jekyll untouched and reside on your blog in the exact structure and format they originally existed in.
+不是有效的页面的文件将被看作静态内容，Jekyll不对其进行处理。
 
 ### Formatting Files for Parsing.
 
 We've outlined the need for valid formatting using **YAML Front Matter**.
-Templates, posts, and pages all need to provide valid YAML Front Matter even if the Matter is empty.
-This is the only way Jekyll knows you want the file processed.
+模板，post以及pagas都需要提供有效的YAML Front Matter，即使Matter为空。这是Jekyll知道如果处理文件的唯一方法。
 
-YAML Front Matter must be prepended to the top of template/post/page files:
+YAML Front Matter必须放置在template/post/page文件的顶部：
 
     ---
     layout: post
@@ -340,11 +303,7 @@ YAML Front Matter must be prepended to the top of template/post/page files:
 
     ... contents ...
 
-Three hyphens on a new line start the Front-Matter block and three hyphens on a new line end the block.
-The data inside the block must be valid YAML.
-
-Configuration parameters for YAML Front-Matter is outlined here:
-[A comprehensive explanation of YAML Front Matter](https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter)
+YAML Front-Matter包裹在三个连字符的新行之间。预定义的配置选项有: layout, permalink, published, category, categories, tags。更多内容参考: <http://jekyllrb.com/docs/frontmatter/>
 
 #### Defining Layouts for Posts and Templates Parsing.
 
@@ -352,14 +311,11 @@ The `layout` parameter in the YAML Front Matter defines the template file for wh
 If a template file specifies its own layout, it is effectively being used as a `sub-template.`
 That is to say loading a post file into a template file that refers to another template file with work in the way you'd expect; as a nested sub-template.
 
-
-
-
+YAML Front Matter中的`layout`参数定义给定的post或模板应该插入的模板。如果，模板文件中指定了布局，则其称为子模板。嵌套子模板。
 
 ## How Jekyll Generates the Final Static Files.
 
-Ultimately, Jekyll's job is to generate a static representation of your website.
-The following is an outline of how that's done:
+Jekyll的任务是生成站点的静态表示。以下，是Jekyll的处理的步骤: 
 
 1. **Jekyll collects data.**
   Jekyll scans the posts directory and collects all posts files as post objects. It then scans the layout assets and collects those and finally scans other directories in search of pages.
