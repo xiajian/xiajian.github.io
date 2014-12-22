@@ -16,6 +16,7 @@
     <!-- Optional theme -->
     <link href="http://apps.bdimg.com/libs/bootstrap/3.0.3/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="http://cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" media="all">
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/tagmanager/3.0.0/tagmanager.css" title="stylesheet" type="text/css" media="all" >
     
     <!-- Custom styles -->
     <link href="/assets/stylesheets/pygments.css" rel="stylesheet" type="text/css" media="all">
@@ -95,6 +96,8 @@
     <script src="http://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://apps.bdimg.com/libs/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script src="http://cdn.bootcss.com/scrollup/2.4.0/jquery.scrollUp.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/tagmanager/3.0.0/tagmanager.js"></script>
     <script src="/assets/javascripts/site.js"></script>
+    {% if page.js %}<script src="/assets/javascripts/{{page.js}}"></script>{% endif %}
   </body>
 </html>

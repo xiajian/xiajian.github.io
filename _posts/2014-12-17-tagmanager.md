@@ -1,6 +1,7 @@
 ---
 layout: post
 title: tagmanager.js
+js: "tag.js"
 ---
 
 ## 前言
@@ -17,7 +18,9 @@ Tags Manager是用来创建输入域tag的jQuery插件(依赖jQuery)，与[Typea
 
 tagmanager.js的简单实例:
 
-
+<form class="form-inline">
+  <input type="text" name="tags" id="tags" class="tm-input input-medium input-info" placeholder="Tags" >
+</form>
 
 ```html
 <!-- typeahead.js以及tagmanager.js、tagmanger.css都是通过响应的资源文件控制的 -->
@@ -59,7 +62,7 @@ tagmanager.js的简单实例:
 
 上面的例子中，使用的typeahead的source属性，预取本地的数据。可以使用Ajax(prefecth等)，function等数据源。
 
-可以使用Ajax推送tags，从而在用户指定的终点创建或者删除tag。使用`AjaxPushAllTags`在每次更新时，将所有的tag都推送上去，而不是递增的推送每一个tag。使用`AjaxPushParameters`选项，可以在每次ajax请求时，附加额外选项。代码示例如下:
+可以使用Ajax推送tags，从而在用户指定的终点创建或者删除tag。使用`AjaxPushAllTags`在每次更新时，将所有的tag都推送上去，而不是递增的推送每一个tag。使用`AjaxPushParameters`选项，可以在每次ajax请求时，附加额外选项。代码示例如下(示例就算了，没有高兴去找json数据源):
 
 ```
 $(".tm-input").tagsManager({
@@ -75,7 +78,13 @@ $(".tm-input").tagsManager({
 
 Tagmanger拥有相当不错的API，可编程式的添加或移除tag，更多完整的选项参考配置章节。
 
-文档的使用api的代码例子令人感到迷惑，代码居然和上述使用Ajax的一样。觉得很奇怪，去文档的html上查看了一下，果然存在响应的事件代码。具体的代码如下:
+文档的使用api的代码例子令人感到迷惑，代码居然和上述使用Ajax的一样。觉得很奇怪，去文档的html上查看了一下，果然存在响应的事件代码。具体的代码和效果如下:
+
+<form class="form-inline">
+  <input type="text" name="tags" id="tag-api" class="tm-input input-medium tm-input-warning" placeholder="Tags" >
+  <button id="addtag" class="btn btn-info">添加</button>
+  <button id="removetag" class="btn btn-info">移除</button>
+</form>
 
 ```html
 <h3>Tagmanager API的测试实例:</h3>
@@ -216,9 +225,3 @@ tagmanager插件作者认为上述的四个是相当不错的，但是出于如�
 ## 后记
 
 居然看完了，为了某个一次性的输入提示的一次性需求，居然花了时间实践和翻译。不过，也因此接触和学习不少有趣的东西，比如jQuery插件的写法，以及函数调用惯例的实现。
-
-<script type="text/javascript" src="http://apps.bdimg.com/libs/tagmanager/3.0.0/tagmanager.js">
-<link type="text/css" rel="stylesheet" href="http://apps.bdimg.com/libs/tagmanager/3.0.0/tagmanager.css">
-<script type="text/javascript" charset="utf-8">
-  
-</script>
