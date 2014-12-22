@@ -10,6 +10,8 @@ description: "Jekyll bootstrap的使用，及其其间出现的问题"
 
 ## 正文
 
+jb自带了创建文章的rake任务: `rake post title="xxx"` ,其中，post为模板名，title为post的标题。
+
 将Jekyll简介翻译完成，大概花费了好几天的上班时间。结果，原本想解决的问题，并没有找到在erb中的类似的解决方案。相反的，知道了某些
 变量可直接在模板中使用，比如: page、post、content之流。
 

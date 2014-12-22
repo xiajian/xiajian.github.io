@@ -78,7 +78,8 @@ method will not execute the initialization logic and will just return the same
 jQuery promise returned by the initial invocation. If `reinitialize` is truthy,
 the method will behave as if it were being called for the first time.
 
-在`initialize`调用之后，后续调用方法的行为依赖于`reinitialize`参数。如果`reinitialize`为false，函数不执行初始化逻辑，并仅仅返回和最初调用相同的jQuery promise。如果`reinitialize`为真，初始化就重新执行。
+在`initialize`调用之后，后续调用方法的行为依赖于`reinitialize`参数。如果`reinitialize`为false，函数不执行初始化逻辑，并仅仅返回和最初调用相同的jQuery promise。
+如果`reinitialize`为真，初始化就重新执行。
 
 ```javascript
 var promise1 = engine.initialize();
@@ -519,7 +520,7 @@ $('.typeahead').typeahead(null, {
 * [ghostwriter.min.js](https://github.com/jharding/ghostwriter) : 提供简单的API，从而与`input[type="text"]`交互。给定特定元素，设置选项。
 * [typeahead.bundle.js](https://github.com/twitter/typeahead.js) : typeahead.jquery.js和bloodbound.js的文件组合。
 
-
+实践参考tagmanger.js中的例子，使用的整体感觉不是特别的好。
 
 ## 小结
 

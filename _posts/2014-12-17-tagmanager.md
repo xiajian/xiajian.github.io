@@ -22,6 +22,13 @@ tagmanager.js的简单实例:
   <input type="text" name="tags" id="tags" class="tm-input input-medium input-info" placeholder="Tags" >
 </form>
 
+配合typeahead与tagmanger的实例(采用本地数据源，远程的数据懒得造):
+
+<input class="input-medium tm-input tm-input-success tm-input-small" name="type" type="text"  placeholder="Tags" id="test-typeahead" />
+
+<span class="badge badge-important">注意</span>: 发现一个问题，自bootstrap3剥离了typeahead之后，这两者就不同好好的结合在一起了，typeahead
+缺少对应的样式。此外，发现typeahead生成的html会存在一个隐藏的input，其中，使用了tt-hint样式类。会覆盖一部分的tag，这其实是样式的问题，但不懂相关的知识。
+
 ```html
 <!-- typeahead.js以及tagmanager.js、tagmanger.css都是通过响应的资源文件控制的 -->
 <input type="text" name="tags" id="tags" class="tm-input input-medium input-info" placeholder="Tags" >
@@ -38,7 +45,7 @@ tagmanager.js的简单实例:
     $("#test-typeahead").typeahead({
       name: 'countries',
       limit: 15,
-      source: [ "Russia", "France", "Ukraine", "Spain", "Sweden", "Norway", "Germany", "Finland", "Poland", "Italy", "United Kingdom", "Romania", "Belarus", "Kazakhstan", "Greece", "Bulgaria", "Iceland", "Hungary", "Portugal", "Serbia", "Austria", "Czech Republic", "Republic of Ireland", "Georgia", "Lithuania", "Latvia", "Croatia", "Bosnia and Herzegovina", "Slovakia", "Estonia", "Denmark", "Netherlands", "Switzerland", "Moldova", "Belgium", "Albania", "Macedonia", "Turkey", "Slovenia", "Montenegro", "Azerbaijan", "Luxembourg", "Andorra", "Malta", "Liechtenstein", "San Marino", "Monaco", "Vatican City", "efe" ]
+      local: [ "Russia", "France", "Ukraine", "Spain", "Sweden", "Norway", "Germany", "Finland", "Poland", "Italy", "United Kingdom", "Romania", "Belarus", "Kazakhstan", "Greece", "Bulgaria", "Iceland", "Hungary", "Portugal", "Serbia", "Austria", "Czech Republic", "Republic of Ireland", "Georgia", "Lithuania", "Latvia", "Croatia", "Bosnia and Herzegovina", "Slovakia", "Estonia", "Denmark", "Netherlands", "Switzerland", "Moldova", "Belgium", "Albania", "Macedonia", "Turkey", "Slovenia", "Montenegro", "Azerbaijan", "Luxembourg", "Andorra", "Malta", "Liechtenstein", "San Marino", "Monaco", "Vatican City", "efe" ]
       }).on('typeahead:selected', function(e,d){
         tagApi.tagsManager("pushTag", d.value);
         });
