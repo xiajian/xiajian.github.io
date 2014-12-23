@@ -8,38 +8,25 @@ category: rails, templates
 
 由[Maintainable Rails View]()追溯到的资料，怎么说呢，原本是PPT的内容。收获是，原来存在可直接从Markdown转换为Slides的gem包。
 
-## Why are we here?
+## 正文
 
-Templates are frequently neglected.
+Rails应用中view的基础是布局。模板通常会被忽略。
 
-## Assumptions
+不可维护的模板包含: 
 
-You know how to write "clean" markup.
+* 重复标签
+* 模板中包含逻辑(高度重复，难于测试)
 
-## Unmaintainable templates
+好的设计师重复自己，好的程序员从不重复。
 
-* Markup repetition
-* Logic in templates
+避免标签重复的方法: 
 
-## Markup Repetition
+* 抽象接口组件
+* 使用部分视图
 
-Good designers repeat themselves.
+## 程序中逻辑
 
-Good programmers don't.
-
-### Avoiding markup repetition
-
-Abstract interface components.
-
-Use partials.
-
-## Logic in templates
-
-Highly repetitive.
-
-Painful to test.
-
-### Logic in a template
+重复逻辑实例:
 
 ```erb
 <h3>Your Saved Credit Card</h3>
@@ -54,8 +41,6 @@ Painful to test.
 </dl>
 ```
 
-### Repeated logic in another template
-
 ```erb
 <p>
   Thanks for ordering! Your purchase has been billed to your credit card:
@@ -63,20 +48,15 @@ Painful to test.
 </p>
 ```
 
-### Other views with the same logic
+解决方法: 使用 Helpers
 
-...are inevitable.
+## Helper
 
-## Helpers
+> View Helpers位于app/helpers，并提供views的代码片段的重用。
 
-> View Helpers live in app/helpers and provide small snippets of reusable code
-for views.
+<cite>[Rails Guides][http://guides.rubyonrails.org/getting_started.html#view-helpers]</cite>
 
-<cite>[Rails Guides][helper_guide]</cite>
-
-[helper_guide]: http://guides.rubyonrails.org/getting_started.html#view-helpers
-
-### Defining helpers
+helpers的定义: 
 
 ```ruby
 module CreditCardHelper
@@ -86,7 +66,7 @@ module CreditCardHelper
 end
 ```
 
-### Using helpers
+helpers的使用: 
 
 ```erb
 <p>
@@ -95,18 +75,18 @@ end
 </p>
 ```
 
-### Problems with helpers
+helpers可能出现问题
 
-* Big projects end up with *tons*
-* Difficult to organize
-* Complex logic isn't well suited for them
-* Don't *feel* right
+* 大项目中，会出现成**吨**的helper
+* 难于组织
+* 不适合复杂的逻辑
+* 感觉怪怪的
+
+此时，需要介绍另一种清理视图的方法，装饰者模式。
 
 ## Decorator Pattern
 
-> [Decorators] attach additional responsibilities to an object dynamically.
-Decorators provide a flexible alternative to subclassing for extending
-functionality.
+> [Decorators] 动态的给对象附加责任，其提供了比子类化更灵活的扩展功能的方式。
 
 <cite>[Design Patterns: Elements of Reusable Object-Oriented Software][gang_of_four]</cite>
 
