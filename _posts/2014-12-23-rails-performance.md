@@ -121,6 +121,12 @@ Ruby中缓存:
 method, `alias/Module#alias_method`, Object#extend, Module#include, public/private/protected/`module_function`
 * 常量缓存: 不要在运行时重定义常量，少定义新的常量
 
+### 可维护的Rails代码
+
+* 将代码从控制器移入模型中
+* 使用RESTful
+* Model/Controller/View
+
 ### Ruby慢？
 
 语言的微观性能基准 != 复杂系统中的性能
@@ -187,7 +193,6 @@ ORM的问题:
 * 设置Counter cache， :counter_cache
 * 使用cron和rake来存储报表
 * AR缓存插件, cache-money, interlock, cache_fu 。使用这些方案时，需要额外小心
-*
 
 ### 考虑NoSQL存储
 
@@ -240,3 +245,20 @@ Rails Metal : rack 中间件的子集，合并了routes和控制器，比control
 * [RubyInline](https://github.com/seattlerb/rubyinline): Write foreign code within ruby code
 * [Rice](https://github.com/jameskilton/rice): Ruby Interface for C++ Extensions
 * [Ruby-FFI](https://github.com/ffi/ffi): a ruby extension for programmatically loading dynamic libraries
+
+## 参考文献
+
+1. Advanced Rails Chap.6 Performance (O’Reilly)
+2. Rails Rescue Handbook
+3. Writing Efficient Ruby Code (Addison-Wesley)
+4. Ruby on Rails Code Review (Peepcode)
+5. Rails 2 Chap. 13 Security and Performance Enhancements (friendsof)
+6. Deploying Rails Application Chap.9 Performance (Pragmatic)
+7. http://guides.rubyonrails.org/caching_with_rails.html
+8. http://guides.rubyonrails.org/performance_testing.html
+9. http://railslab.newrelic.com/scaling-rails
+10. http://antoniocangiano.com/2007/02/10/top-10-ruby-on-rails-performance-tips/
+11. http://www.engineyard.com/blog/2009/thats-not-a-memory-leak-its-bloat/
+12. http://jstorimer.com/ruby/2009/12/13/essential-rails-plugins-for-your-inner-dba.html
+13. http://asciicasts.com/episodes/161-three-profiling-tools
+14. http://robots.thoughtbot.com/post/163627511/a-grand-piano-for-your-violin
