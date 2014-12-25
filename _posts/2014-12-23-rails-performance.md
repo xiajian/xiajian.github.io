@@ -7,7 +7,7 @@ category: rails
 
 ## 前言
 
-之前，由于觉得网站慢。从而，搜集过来的关于Rails性能的资料。包括，性能实践和rails实践。
+之前，由于觉得网站慢。从而，搜集过来的关于Rails性能的资料，原本是ppt，翻译学习如下:
 
 ## Rails 性能
 
@@ -262,3 +262,16 @@ Rails Metal : rack 中间件的子集，合并了routes和控制器，比control
 12. http://jstorimer.com/ruby/2009/12/13/essential-rails-plugins-for-your-inner-dba.html
 13. http://asciicasts.com/episodes/161-three-profiling-tools
 14. http://robots.thoughtbot.com/post/163627511/a-grand-piano-for-your-violin
+
+## 后记
+
+看过了上述关于Rails性能的描述之后，挑了几个gem包进行后续深入学习和使用: 
+
+* [request-log-analyzer](https://github.com/wvanbergen/request-log-analyzer) - 日志分析的gem包
+* [ruby-prof](https://github.com/ruby-prof/ruby-prof) - Ruby代码性能监控
+* [bullet](https://github.com/flyerhzm/bullet) - 处理SQL查询中的N+1的问题
+* [lol_dba](https://github.com/plentz/lol_dba) - 处理模型中索引的问题
+* [query_reviewer](https://github.com/nesquena/query_reviewer) - SQL查询监视，使用"EXPLAIN"命令
+* [moneta](https://github.com/minad/moneta) - 同一的键值对库的gem
+
+改变做法了，研究gem包，直接fork过来，本地深入学习和了解。
