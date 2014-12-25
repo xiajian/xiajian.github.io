@@ -92,17 +92,17 @@ helpers可能出现问题
 
 [gang_of_four]: http://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612
 
-### Traits of a Decorator
+装饰者模式的特性: 
 
-* Wraps a single object
-* Transparent interface
-* Forwards methods to original object
+* 包装一个对象
+* 透明接口
+* 提取原始对象的方法
 
-In our case:
+使用时机: 表象逻辑与模型的单个实例相关。
 
-* Adds presentational logic to models without affecting the model itself
+这里，可以提供装饰者模式，添加表象的逻辑而不必影响model本身。以下，是其在Ruby中的实现。
 
-### Implementing a Decorator in Ruby
+Decorator类的实现如下: 
 
 ```ruby
 class Decorator
@@ -110,6 +110,7 @@ class Decorator
     @component = component
   end
 
+  # 使用method_missing方法，减低运行速度，用作父类的实现，不错的实践
   def method_missing(method, *arguments, &block)
     if @component.respond_to?(method)
       @component.send(method, *arguments, &block)
@@ -124,7 +125,7 @@ class Decorator
 end
 ```
 
-### Credit Card Decorator
+信用卡类的装饰者类:
 
 ```ruby
 class CreditCardDecorator < Decorator
@@ -136,7 +137,7 @@ class CreditCardDecorator < Decorator
 end
 ```
 
-### Instantiating the decorator
+实例化装饰者，使用装饰者的关键在于，使用装饰者，而不是原始的对象。
 
 ```ruby
 class CreditCardsController < ApplicationController
@@ -148,7 +149,7 @@ class CreditCardsController < ApplicationController
 end
 ```
 
-### Using the decorator
+在视图中，使用装饰者提供的方法: 
 
 ```erb
 <p>
@@ -157,29 +158,25 @@ end
 </p>
 ```
 
-Mmmm, that's nice.
-
-### When to decorate
-
-Presentation logic that relates directly to a single instance of a model.
-
 ### Draper
 
 Implementing basic decorators is easy, but [Draper][draper] adds a few helpful
 features:
 
-* Access to the view context
-* Easily decorate collections
-* Pretends to be decorated object (helpful for `form_for` and such)
-* Easily decorate associations
+实现一个基本的装饰者相当的容易，但是，使用[Draper][draper]可以获得额外的好处: 
+
+* 可在视图上下文访问
+* 很方便的包装集合
+* 假装成被装饰的对象(在`form_for`等方法中非常有用)
+* 很容易的装饰关联
 
 [draper]: https://github.com/drapergem/draper
 
-## Complex views
+## 复杂视图
 
-Unique and/or complex UI behavior will quickly outgrow helpers.
+独特的或复杂的UI行为，将使得helper迅速膨胀。
 
-### Complex view example
+### 复杂视图的例子
 
 ```erb
 <dl class="story-summary">
@@ -196,22 +193,19 @@ Unique and/or complex UI behavior will quickly outgrow helpers.
 </dl>
 ```
 
-### Presentation Model
+### 演示模型(Presentation Model)
 
-> The essence of a Presentation Model is of a fully self-contained class that
-> represents all the data and behavior of the UI window, but without any of the
-> controls used to render that UI on the screen. A view then simply projects the
-> state of the presentation model onto the glass.
+> 演示模型(Presentation Model)的本质是使用独立的类来表示用户界面所有数据和行为，但
+> 不包含如何控制其在界面上的渲染。视图可以简单映射为演示模型的状态(A view then simply
+> projects the state of the presentation model onto the glass.)。
 
 <cite>[Martin Fowler][presentation_model]</cite>
 
 [presentation_model]: http://martinfowler.com/eaaDev/PresentationModel.html
 
-### Learning from JavaScript libraries
+该模式和方法的实现，从[Backbone](http://backbonejs.org/)中偷学了不少。
 
-Thanks, Backbone.
-
-### Designing a view object
+视图对象的设计：
 
 ```ruby
 class StorySummaryView
@@ -245,7 +239,7 @@ class StorySummaryView
 end
 ```
 
-### Story summary template
+Story summary模板:
 
 ```erb
 <dl class="story-summary">
@@ -256,7 +250,7 @@ end
 </dl>
 ```
 
-### Helpers to set up view objects
+设置视图对象的辅助方法: 
 
 ```ruby
 module StoriesHelper
@@ -266,7 +260,7 @@ module StoriesHelper
 end
 ```
 
-In our calling view:
+然后，在视图中调用: 
 
 ```erb
 <%= story_summary(@story) %>
@@ -274,7 +268,9 @@ In our calling view:
 
 ## Form Builders
 
-Rails comes with View Objects.
+Rails自带了一些View对象，比如，`form_for`。
+
+注： 原来`form_for`是视图对象，如何理解Rails中的辅助方法？？ 难道，是要去阅读源代码!
 
 ### `form_for`
 
@@ -292,7 +288,7 @@ Rails comes with View Objects.
 <% end %>
 ```
 
-### Defining a custom FormBuilder
+定制化一个FormBuilder类: 
 
 ```ruby
 class FancyFormBuilder < ActionView::Helpers::FormBuilder
@@ -304,7 +300,7 @@ class FancyFormBuilder < ActionView::Helpers::FormBuilder
 nd
 ```
 
-### Rendering the custom builder
+以定制的builder渲染form: 
 
 ```erb
 <%= form_for @user, builder: FancyFormBuilder do |form| %>
@@ -313,11 +309,10 @@ nd
 <% end %>
 ```
 
-## Other tips
+其他的一些建议: 
 
-* Use i18n
-* Find gems to do this work for you (eg. [simple_form][simple_form],
-  [table_cloth][tables])
+* 使用i18n
+* 使用Gem包来创建Form视图对象(例如 [simple_form][simple_form] , [table_cloth][tables])
 
 [simple_form]: https://github.com/plataformatec/simple_form
 [tables]: https://github.com/bobbytables/table_cloth
