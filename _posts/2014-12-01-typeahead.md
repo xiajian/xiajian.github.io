@@ -522,6 +522,11 @@ $('.typeahead').typeahead(null, {
 
 实践参考tagmanger.js中的例子，使用的整体感觉不是特别的好。
 
+备注: 由于bootstrap 3.x 放弃了typeahead.js，因而，衍生出一些过度的项目: 
+
+* [Bootstrap-3-Typeahead](https://github.com/bassjobsen/Bootstrap-3-Typeahead)
+* [typeahead.js-bootstrap3.less](https://github.com/hyspace/typeahead.js-bootstrap3.less)
+
 ## 小结
 
 看完之后，觉得预输入这种东西，还真是强大的不得了啊，需要监听的事件不少啊。自己曾结合jquery ui的autocomplete的实现实在是太挫了，依赖的东西太多了。但是，怎么将其应用到网站上，貌似还有些距离。
