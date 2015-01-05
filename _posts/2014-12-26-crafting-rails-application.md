@@ -23,3 +23,5 @@ category:  rails
 
 看完简介后，我觉得，整本书其实在讨论如何深入的理解Rails Engine。
 
+> 注: Crafting Rails application 可以翻译成，Rails的艺术。
+
