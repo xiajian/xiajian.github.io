@@ -9,6 +9,7 @@ title: The twelve-Factor App
 
 看来，最近成名的工程师都热衷于写作，比如37Signals的《Reworks》以及这个Heroku的《[The twelve-Factor App](http://12factor.net/)》。以下是其中的内容:
 
+
 ## Introduction
 
 In the modern era, software is commonly delivered as a service: called web apps, or software-as-a-service. The twelve-factor app is a methodology for building software-as-a-service apps that:
@@ -76,3 +77,22 @@ Treat logs as event streams
 ## XII. Admin processes
 
 Run admin/management tasks as one-off processes
+
+## 后记
+
+偶尔，去逛了一下Rei的博客，发现其对The Twelve-Factor App有介绍，简单说，The Twelve-Factor App是用来针对部署相关的问题，
+其中，提出了灵活部署的12个因素: 
+
+* 用版本管理库管理代码，例如用 git。
+* 声明并且隔离依赖，例如用 Bundler。
+* 把应用设置保存在环境变量中。
+* 把后端服务当作附加资源。
+* 明确区分 build 和 run 过程。
+* 应用运行为无状态的单个或多个进程。
+* 通过端口对外提供服务。
+* 通过进程模型水平扩展。
+* 能快速启动和安全关闭，高稳健性。
+* 开发和生产环境尽可能保持一致。
+* 日志通过标准流输出。
+* 管理任务作为一次性流程执行
+
