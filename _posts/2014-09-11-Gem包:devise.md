@@ -114,9 +114,9 @@ Devise 3.0 works with Rails 3.2 onwards. You can add it to your Gemfile with:
 
 Devise和Rails 3.2配套使用。你可以将其添加到你的Gemfile中: 
 
-{% highlight ruby %}
+```ruby
 gem 'devise'
-{% endhighlight %}
+```
 
 Run the bundle command to install it.
 
@@ -146,9 +146,9 @@ Next, you need to set up the default URL options for the Devise mailer in each e
 
 接下来，需要在每种环境中为Devise邮箱启动默认的URL选项。下面是`config/environments/development.rb`中可能的配置选项:
 
-{% highlight ruby %}
+```ruby
 config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-{% endhighlight %}
+```
 
 You should restart your application after changing Devise's configuration options. Otherwise you'll run into strange errors like users being unable to login and route helpers being undefined.
 
@@ -160,9 +160,9 @@ Devise will create some helpers to use inside your controllers and views. To set
 
 Devise将会在控制器和视图中创建一些辅助方法。为了设置带用户权限的控制器，只需要添加如下的before_action(假设devise模型是User):
 
-{% highlight ruby %}
+```ruby
 before_action :authenticate_user!
-{% endhighlight %}
+```
 
 If your devise model is something other than User, replace "_user" with "_yourmodel". The same logic applies to the instructions below.
 
@@ -170,29 +170,29 @@ If your devise model is something other than User, replace "_user" with "_yourmo
 
 为了验证user是否登录，使用如下的辅助方法:
 
-{% highlight ruby %}
+```ruby
 user_signed_in?
-{% endhighlight %}
+```
 
 如果当前存在用户登录，如下的辅助方法可用(这也是为何找不到current_user的定义):
 
-{% highlight ruby %}
+```ruby
 current_user
-{% endhighlight %}
+```
 
 可以通过如下的scope访问会话session: 
 
-{% highlight ruby %}
+```ruby
 user_session
-{% endhighlight %}
+```
 
 After signing in a user, confirming the account or updating the password, Devise will look for a scoped root path to redirect. For instance, for a `:user` resource, the `user_root_path` will be used if it exists, otherwise the default `root_path` will be used. This means that you need to set the root inside your routes:
 
 在用户登录后，验证用户或者修改密码，Devise将寻找scoped的根节点路径来重定向。例如，对于:user资源，如果存在user_root_path则使用该路径。否则，使用默认的`root_path`。这意味着，需要在路由中设置root。
 
-{% highlight ruby %}
+```ruby
 root to: "home#index"
-{% endhighlight %}
+```
 
 You can also override `after_sign_in_path_for` and `after_sign_out_path_for` to customize your redirect hooks.
 
@@ -202,7 +202,7 @@ Notice that if your Devise model is called `Member` instead of `User`, for examp
 
 **注意**:如果你的应用程序为Member而不是User，如下的辅助类将可使用(应用程序中经常可以看到这些变量的身影): 
 
-{% highlight ruby %}
+```ruby
 before_action :authenticate_member!
 
 member_signed_in?
@@ -210,7 +210,7 @@ member_signed_in?
 current_member
 
 member_session
-{% endhighlight %}
+```
 
 ### 配置模型(Configuring Models)
 
@@ -218,9 +218,9 @@ The Devise method in your models also accepts some options to configure its modu
 
 Devise模型中的方法接受选项配置，配置其模块。例如，可以选择加密算法的花费(加密花费的时间越长，密码越难破解)。
 
-{% highlight ruby %}
+```ruby
 devise :database_authenticatable, :registerable, :confirmable, :recoverable, stretches: 20
-{% endhighlight %}
+```
 
 Besides `:stretches`, you can define `:pepper`, `:encryptor`, `:confirm_within`, `:remember_for`, `:timeout_in`, `:unlock_in` among other options. For more details, see the initializer file that was created when you invoked the "devise:install" generator described above.
 
@@ -244,7 +244,7 @@ In case you want to permit additional parameters (the lazy way™) you can do wi
 
 万一想要限制附加的参数，可以通过在`ApplicationController`中设置一个简单的过滤器：
 
-{% highlight ruby %}
+```ruby
 class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -254,7 +254,7 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up) << :username
   end
 end
-{% endhighlight %}
+```
 
 The above works for any additional fields where the parameters are simple scalar types. If you have nested attributes (say you're using `accepts_nested_attributes_for`), then you will need to tell devise about those nestings and types. Devise allows you to completely change Devise defaults or invoke custom behaviour by passing a block:
 
@@ -264,21 +264,21 @@ To permit simple scalar values for username and email, use this
 
 为了允许usename和email的简单标量类型，可以使用如下的方法
 
-{% highlight ruby %}
+```ruby
 def configure_permitted_parameters
   devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username, :email) }
 end
-{% endhighlight %}
+```
 
 If you have some checkboxes that express the roles a user may take on registration, the browser will send those selected checkboxes as an array. An array is not one of Strong Parameters permitted scalars, so we need to configure Devise thusly:
 
 如果在用户注册时有一些表现规则的checkbox，浏览器将会把选择的checkbox作为数组发出。数组并不是强参数限制的标量，因而，需要配置Devise:
 
-{% highlight ruby %}
+```ruby
 def configure_permitted_parameters
   devise_parameter_sanitizer.for(:sign_up) { |u| u.permit({ roles: [] }, :email, :password, :password_confirmation) }
 end
-{% endhighlight %}
+```
 For the list of permitted scalars, and how to declare permitted keys in nested hashes and arrays, see
 
 对标量的列表，如何在嵌套哈希和数组中申明允许键，查看如下的连接:
@@ -289,19 +289,19 @@ If you have multiple Devise models, you may want to set up different parameter s
 
 如果有多个Devise模型，你也许想要对每个模型设置不同的参数限制。在这种情况下，建议从Devise::ParameterSanitizer中继承并添加自己的逻辑:
 
-{% highlight ruby %}
+```ruby
 class User::ParameterSanitizer < Devise::ParameterSanitizer
   def sign_in
     default_params.permit(:username, :email)
   end
 end
-{% endhighlight %}
+```
 
 And then configure your controllers to use it:
 
 然后配置控制器使用它: 
 
-{% highlight ruby %}
+```ruby
 class ApplicationController < ActionController::Base
   protected
 
@@ -313,7 +313,7 @@ class ApplicationController < ActionController::Base
     end
   end
 end
-{% endhighlight %}
+```
 
 The example above overrides the permitted parameters for the user to be both `:username` and `:email`. The non-lazy way to configure parameters would be by defining the before filter above in a custom controller. We detail how to configure and customize controllers in some sections below.
 
@@ -355,10 +355,10 @@ If the customization at the views level is not enough, you can customize each co
 
 1. 创建定制的视图，比如 `Admins::SessionsController`:
 
-{% highlight ruby %}
+```ruby
 class Admins::SessionsController <  Devise::SessionsController
 end 
-{% endhighlight %}
+```
 
 Note that in the above example, the controller needs to be created in the `app/controllers/admins/` directory.
 
@@ -366,23 +366,23 @@ Note that in the above example, the controller needs to be created in the `app/c
 
 2. 告述路由使用该控制器，例如:
 
-{% highlight ruby %}
+```ruby
 devise_for :admins, controllers: { sessions: "admins/sessions" }
-{% endhighlight %}
+```
 
 3. 从`devise/sessions`将视图拷贝到`admins/sessions`中。由于控制器改变了，所以并不使用位于`devise/sessions`的默认视图: 
 
 4. 最后，更改或扩展需要的控制器动作。可以完全覆盖控制器的动作:
 
-{% highlight ruby %}
+```ruby
 class Admins::SessionsController < Devise::SessionsController
   def create
     # custom sign-in code
   end
 end
-{% endhighlight %}
+```
 或者简单的添加的新的行为:
-{% highlight ruby %}
+```ruby
 class Admins::SessionsController < Devise::SessionsController
   def create
     super do |resource|
@@ -390,7 +390,7 @@ class Admins::SessionsController < Devise::SessionsController
     end
   end
 end
-{% endhighlight %}
+```
 
 This is useful for triggering background jobs or logging events during certain actions.
 
@@ -408,9 +408,9 @@ Devise also ships with default routes. If you need to customize them, you should
 
 Devise自带了默认路由。如果想要定制，可以通过devise_for方法，该方法接受诸如:class_name，:path_prefix等等选项，包括可选的I18n路径参数: 
 
-{% highlight ruby %}
+```ruby
 devise_for :users, path: "auth", path_names: { sign_in: 'login', sign_out: 'logout', password: 'secret', confirmation: 'verification', unlock: 'unblock', registration: 'register', sign_up: 'cmon_let_me_in' }
-{% endhighlight %}
+```
 
 Be sure to check `devise_for` documentation for details.
 
@@ -420,11 +420,11 @@ If you have the need for more deep customization, for instance to also allow "/s
 
 如果想要更多的定制，例如，使用"/sign_in"，而不是"/users/sign_in"。所需要做的是创建路由，并将其包装到devise_scope块中:
 
-{% highlight ruby %}
+```ruby
 devise_scope :user do
   get "sign_in", to: "devise/sessions#new"
 end
-{% endhighlight %}
+```
 
 This way you tell Devise to use the scope `:user` when `/sign_in` is accessed. Notice `devise_scope` is also aliased as `as` in your router.
 
@@ -434,18 +434,18 @@ Devise uses flash messages with I18n with the flash keys :notice and :alert. To 
 
 Devise使用带有国际化的flash消息的:notice和:alert等flash键。为了定制应用，需要设置locale文件(locales文件夹下的文件): 
 
-{% highlight yaml %}
+```
 en:
   devise:
     sessions:
       signed_in: 'Signed in successfully.'
-{% endhighlight %}
+```
 
 You can also create distinct messages based on the resource you've configured using the singular name given in routes:
 
 可以创建基于资源的独特的消息，只需使用在路由中给定的单数名称来配置:
 
-{% highlight yaml %}
+```
 en:
   devise:
     sessions:
@@ -453,13 +453,13 @@ en:
         signed_in: 'Welcome user, you are signed in.'
       admin:
         signed_in: 'Hello admin!'
-{% endhighlight %}
+```
 
 The Devise mailer uses a similar pattern to create subject messages:
 
 Devise的mailer使用详细的模式创建对象消息: 
 
-{% highlight yaml %}
+```
 en:
   devise:
     mailer:
@@ -468,7 +468,7 @@ en:
         user_subject: 'Hello User! Please confirm your email'
       reset_password_instructions:
         subject: 'Reset instructions'
-{% endhighlight %}
+```
 
 Take a look at our locale file to check all available messages. You may also be interested in one of the many translations that are available on our wiki:
 
@@ -486,33 +486,33 @@ Devise includes some test helpers for functional specs. In order to use them, yo
 
 Devise为功能描述提供了一些测试辅助类。为了使用他们，需要在功能测试文件`test/test_helper.rb`中包含如下的功能模块。
 
-{% highlight ruby %}
+```ruby
 class ActionController::TestCase
   include Devise::TestHelpers
 end
-{% endhighlight %}
+```
 
 If you are using RSpec, you can put the following inside a file named `spec/support/devise.rb` or in your `spec/spec_helper.rb`:
 
 如果你使用RSpec，需要在`spec/support/devise.rb`或者`spec/spec_helper.rb`放置如下的内容: 
 
-{% highlight ruby %}
+```ruby
 RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
 end
-{% endhighlight %}
+```
 
 Now you are ready to use the `sign_in` and `sign_out` methods. Such methods have the same signature as in controllers:
 
 现在，准备好使用`sign_in`和`sign_out`方法了。这些方法在控制器中拥有如下的相同签名：
 
-{% highlight ruby %}
+```ruby
 sign_in :user, @user   # sign_in(scope, resource)
 sign_in @user          # sign_in(resource)
 
 sign_out :user         # sign_out(scope)
 sign_out @user         # sign_out(resource)
-{% endhighlight %}
+```
 
 There are two things that are important to keep in mind:
 
@@ -525,10 +525,10 @@ There are two things that are important to keep in mind:
 
 - 如果测试Devise的内部控制器或者继承自Devise的控制器，需要告诉Devise在请求之前，设置Devise使用何种映射。由于Devise通过路由获取信息，而功能测试不经过路由，所以需要显式通知。例如，如果测试user scope，操作如下:
 
-{% highlight ruby %}
+```ruby
 @request.env["devise.mapping"] = Devise.mappings[:user]
 get :new
-{% endhighlight %}
+```
 
 ### 授权(Omniauth)
 
@@ -536,9 +536,9 @@ Devise comes with Omniauth support out of the box to authenticate with other pro
 
 Devise带有Omniauth支持，从而通过盒子支持其他提供器。为了使用它，只需要在`config/initializers/devise.rb`中指定授权配置:
 
-{% highlight ruby %}
+```ruby
 config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-{% endhighlight %}
+```
 
 You can read more about Omniauth support in the wiki:
 
@@ -550,7 +550,7 @@ You can read more about Omniauth support in the wiki:
 
 Devise allows you to set up as many Devise models as you want. If you want to have an Admin model with just authentication and timeout features, in addition to the User model above, just run:
 
-{% highlight ruby %}
+```ruby
 # Create a migration with the required fields
 create_table :admins do |t|
   t.string :email
@@ -571,7 +571,7 @@ before_filter :authenticate_admin!
 admin_signed_in?
 current_admin
 admin_session
-{% endhighlight %}
+```
 
 Alternatively, you can simply run the Devise generator.
 
@@ -593,9 +593,9 @@ Devise支持ActiveRecord(默认)以及Mongoid。为了使用其他的ORM，需�
 
 Using Devise on Heroku with Ruby on Rails 3.1 requires setting:
 
-{% highlight ruby %}
+```ruby
 config.assets.initialize_on_precompile = false
-{% endhighlight %}
+```
 
 Read more about the potential issues at http://guides.rubyonrails.org/asset_pipeline.html
 
