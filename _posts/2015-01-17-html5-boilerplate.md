@@ -176,23 +176,24 @@ Touch Icon with your own.
 
 ## html 
 
-默认情况下， 
-By default, HTML5 Boilerplate provides two `html` pages:
+默认情况下， HTML5 Boilerplate提供两个`html`页面: 
 
-* [`index.html`](#indexhtml) - a default HTML skeleton that should form the
-  basis of all pages on your website
-* [`404.html`](#404html) - a placeholder 404 error page
+* [`index.html`](#indexhtml) - 默认的HTML骨架，可以用作站点所有页面的基准
+* [`404.html`](#404html) -  一个预占位的404错误页面
 
-
-## `index.html`
+### `index.html`
 
 
-### The `no-js` class
+**`no-js`类**
 
 The `no-js` class is provided in order to allow you to more easily and
 explicitly add custom styles based on whether JavaScript is disabled
 (`.no-js`) or enabled (`.js`). Using this technique also helps [avoid the
 FOUC](http://paulirish.com/2009/avoiding-the-fouc-v3/).
+
+`no-js`类基于js是否被禁用，从而更加容易且显式的添加特定的样式。使用该技术，可以帮助[避免FOUC](http://paulirish.com/2009/avoiding-the-fouc-v3/)
+
+> 注: FOUC, 是Flash of unstyled content
 
 
 ## Language attribute
