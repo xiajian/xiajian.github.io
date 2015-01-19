@@ -186,20 +186,14 @@ Touch Icon with your own.
 
 **`no-js`类**
 
-The `no-js` class is provided in order to allow you to more easily and
-explicitly add custom styles based on whether JavaScript is disabled
-(`.no-js`) or enabled (`.js`). Using this technique also helps [avoid the
-FOUC](http://paulirish.com/2009/avoiding-the-fouc-v3/).
-
 `no-js`类基于js是否被禁用，从而更加容易且显式的添加特定的样式。使用该技术，可以帮助[避免FOUC](http://paulirish.com/2009/avoiding-the-fouc-v3/)
 
-> 注: FOUC, 是Flash of unstyled content
+> 注: FOUC, 是Flash of unstyled content, 翻译过来，就是未样式化的内容的崩溃。
 
 
 ## Language attribute
 
-Please consider specifying the language of your content by adding the `lang`
-attribute to `<html>` as in this example:
+通过给`<html>`元素添加`lang`属性，从而考虑为内容指定语言属性。
 
 ```html
 <html class="no-js" lang="en">
@@ -209,6 +203,8 @@ attribute to `<html>` as in this example:
 
 The order in which the `<title>` and the `<meta>` tags are specified is
 important because:
+
+`<title>`和`<meta>`标签的顺序非常的重要。
 
 1) the charset declaration (`<meta charset="utf-8">`):
 

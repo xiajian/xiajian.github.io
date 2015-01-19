@@ -17,7 +17,6 @@ The HTML5 Boilerplate (H5BP) is a starting project template that is designed to 
 
 HTML5 Boilerplate (H5BP)是用来启动项目的模板，其被设计成适应你的需求。Bootstrap则是一个专门的，模块化的，HTML/CSS/JS工具箱。
 
-
 H5BP contains a number of best practices or common inclusions for your initial HTML template, which is more like the generic "default" template you would use as server-side global template. Bootstrap does not provide anything like this (nor does it need or aim to). So in this regard, H5BP is perfectly suited to including HTML components from anywhere else (e.g. those from Bootstrap).
 
 H5BP包含了一组最佳实践，以及用来初始化HTML模板的通用指令，其非常适合用作服务器端默认的全局模板。Bootstrap并不提供任何HTML模板相关的功能，其既不需要、也不打算这么做。所以，在这一方面，H5BP特别适合包含其他组件(比如Bootstrap)。
