@@ -183,7 +183,6 @@ Touch Icon with your own.
 
 ### `index.html`
 
-
 **`no-js`类**
 
 `no-js`类基于js是否被禁用，从而更加容易且显式的添加特定的样式。使用该技术，可以帮助[避免FOUC](http://paulirish.com/2009/avoiding-the-fouc-v3/)
@@ -191,7 +190,7 @@ Touch Icon with your own.
 > 注: FOUC, 是Flash of unstyled content, 翻译过来，就是未样式化的内容的崩溃。
 
 
-## Language attribute
+### 语言属性
 
 通过给`<html>`元素添加`lang`属性，从而考虑为内容指定语言属性。
 
@@ -199,178 +198,126 @@ Touch Icon with your own.
 <html class="no-js" lang="en">
 ```
 
-### The order of the `<title>` and `<meta>` tags
+**`<title>`和`<meta>`标签的顺序**
 
-The order in which the `<title>` and the `<meta>` tags are specified is
-important because:
+`<title>`和`<meta>`标签的顺序非常的重要，这是因为: 
 
-`<title>`和`<meta>`标签的顺序非常的重要。
+1) 字符集申明(`<meta charset="utf-8">`):
 
-1) the charset declaration (`<meta charset="utf-8">`):
+   * 必须完整的包含在文档的[前1024个字节前](https://www.whatwg.org/specs/web-apps/current-work/multipage/semantics.html#charset)
+   * 需要尽可能早的指定(在任何可能被攻击者控制的内容之前，比如`<title>`元素)，从而避免IE中潜在的[编码相关的问题](https://code.google.com/p/doctype-mirror/wiki/ArticleUtf7) 
 
-   * must be included completely within the [first 1024 bytes of the
-     document](https://www.whatwg.org/specs/web-apps/current-work/multipage/semantics.html#charset)
+2) 兼容模式meta标签(`<meta http-equiv="X-UA-Compatible" content="IE=edge">`):
 
-   * should be specified as early as possible (before any content that could
-     be controlled by an attacker, such as a `<title>` element) in order to
-     avoid a potential [encoding-related security
-     issue](https://code.google.com/p/doctype-mirror/wiki/ArticleUtf7) in
-     Internet Explorer
-
-2) the meta tag for compatibility mode
-   (`<meta http-equiv="X-UA-Compatible" content="IE=edge">`):
-
-   * [needs to be included before all other tags except for the `<title>` and
-     the other `<meta>`
-     tags](http://msdn.microsoft.com/en-us/library/cc288325.aspx)
+   * [需要被包含在除了`<title>`和其他`<meta>`之前的标签](http://msdn.microsoft.com/en-us/library/cc288325.aspx)
 
 
-### `X-UA-Compatible`
+**`X-UA-Compatible`**
 
-Internet Explorer 8/9/10 support [document compatibility
-modes](http://msdn.microsoft.com/en-us/library/cc288325.aspx) that affect the
-way webpages are interpreted and displayed. Because of this, even if your site's
-visitor is using, let's say, Internet Explorer 9, it's possible that IE will not
-use the latest rendering engine, and instead, decide to render your page using
-the Internet Explorer 5.5 rendering engine.
+IE 8/9/10 支持[文档兼容模式](http://msdn.microsoft.com/en-us/library/cc288325.aspx)，该模式影响页面的解释和显示。
+由于这个原因，即使站点的访问者使用了IE，但他可能不使用最新的渲染引擎。而且，有可能决定使用IE 5.5的渲染引擎渲染页面。
 
-Specifying the `X-UA-Compatible` meta tag:
+指定`X-UA-Compatible`的meta标签: 
 
 ```html
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 ```
 
-or sending the page with the following HTTP response header
+或者，发送页面时，包含如下的HTTP响应头: 
 
 ```
 X-UA-Compatible: IE=edge
 ```
 
-will force Internet Explorer 8/9/10 to render the webpage in the highest
-available mode in [the various cases when it may
-not](https://hsivonen.fi/doctype/#ie8), and therefore, ensure that anyone
-browsing your site is treated to the best possible user experience that
-browser can offer.
+这样，将强迫IE 8/9/10[在大多数情况下](https://hsivonen.fi/doctype/#ie8)以最高可用的模式渲染页面，
+从而迫使每个人浏览器页面时，使用浏览器可提供的最佳用户体验。
 
-If possible, we recommend that you remove the `meta` tag and send only the
-HTTP response header as the `meta` tag will not always work if your site is
-served on a non-standard port, as Internet Explorer's preference option
-`Display intranet sites in Compatibility View` is checked by default.
+如果有可能，推荐使用HTTP响应头，而不是`meta`标签。这是因为`meta`标签在站点不是通过标准接口提供时，
+IE的`在内部网络中使用兼容模式`选项将会被勾选。
 
-If you are using Apache as your webserver, including the
-[`.htaccess`](https://github.com/h5bp/server-configs-apache) file takes care of
-the HTTP header. If you are using a different server, check out our [other
-server config](https://github.com/h5bp/server-configs).
+如果，使用Apache作为web服务器，[`.htaccess`](https://github.com/h5bp/server-configs-apache)文件
+将接管HTTP头部。如果使用了其他的服务器，参考[其他服务器配置](https://github.com/h5bp/server-configs)。
 
-Starting with Internet Explorer 11, [document modes are
-deprecated](http://msdn.microsoft.com/en-us/library/ie/bg182625.aspx#docmode).
-If your business still relies on older web apps and services that were
-designed for older versions of Internet Explorer, you might want to consider
-enabling [Enterprise Mode](http://blogs.msdn.com/b/ie/archive/2014/04/02/stay-up-to-date-with-enterprise-mode-for-internet-explorer-11.aspx) throughout your company.
+自从IE11，[文档模式被遗弃了](http://msdn.microsoft.com/en-us/library/ie/bg182625.aspx#docmode)。如果业务
+依然依赖为老版本的IE开发设计的web app和服务，可能需要考虑使用[企业模式](http://blogs.msdn.com/b/ie/archive/2014/04/02/stay-up-to-date-with-enterprise-mode-for-internet-explorer-11.aspx)
 
+### Mobile viewport
 
-## Mobile viewport
-
-There are a few different options that you can use with the [`viewport` meta
-tag](https://docs.google.com/present/view?id=dkx3qtm_22dxsrgcf4 "Viewport and
-Media Queries - The Complete Idiot's Guide"). You can find out more in [the
-Apple developer docs](https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html).
-HTML5 Boilerplate comes with a simple setup that strikes a good balance for general use cases.
+使用[`viewport`元标签](https://docs.google.com/present/view?id=dkx3qtm_22dxsrgcf4)具有多个不同的选项。更多关于viewport的，
+参考[Apple的开发者文档](https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html)。
+HTML5 Boilerplate使用了一个相对简单的设置，作为针对理论和使用的较好权衡。
 
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1">
 ```
 
-## Favicons and Touch Icon
+**Favicons和Touch Icon**
 
-The shortcut icons should be put in the root directory of your site. HTML5
-Boilerplate comes with a default set of icons (include favicon and one Apple
-Touch Icon) that you can use as a baseline to create your own.
+快捷图标可以放置在站点的根目录处。HTML5 Boilerplate自带了一系列默认的图标(包括favicon以及Apple
+Touch Icon)，可以以此作为基准，从而创建自己的。
 
-Please refer to the more detailed description in the [Extend section](extend.md)
-of these docs.
+更多细节描述参考扩展章节。
 
-## Modernizr
+### Modernizr
 
-HTML5 Boilerplate uses a custom build of Modernizr.
+HTML5 Boilerplate使用了定制化构建的[Modernizr](http://modernizr.com)。
 
-[Modernizr](http://modernizr.com) is a JavaScript library which adds classes to
-the `html` element based on the results of feature test and which ensures that
-all browsers can make use of HTML5 elements (as it includes the HTML5 Shiv).
-This allows you to target parts of your CSS and JavaScript based on the
-features supported by a browser.
+[Modernizr](http://modernizr.com)是一个Javascirpt类库，其基于特性测试的结果给`html`元素添加类，
+并通过使用HTML5 Shiv确保所有的浏览器都可以使用HTML5的元素。该类库允许基于浏览器支持的特性，从而
+使用特定的css或js。
 
-In general, in order to keep page load times to a minimum, it's best to call
-any JavaScript at the end of the page because if a script is slow to load
-from an external server it may cause the whole page to hang. That said, the
-Modernizr script *needs* to run *before* the browser begins rendering the page,
-so that browsers lacking support for some of the new HTML5 elements are able to
-handle them properly. Therefore the Modernizr script is the only JavaScript
-file synchronously loaded at the top of the document.
+一般而言，为了保证加载时间最小化，最好在页面结束时调用javascript。这是因为从外部服务器加载
+脚本，会导致页面加载阻塞。但是，Modernizr**必须**要在**浏览器开始渲染页面之前**运行，从而，使得缺乏
+HTML5元素支持的浏览器可以正常工作。所以，Modernizr的是必须要在文档顶部同步加载的js文件。
 
-## What about polyfills?
+> 需要放在文档顶部的原因，其实和HTML5 Shiv有莫大的关系。HTML5的支持也是Shiv的效果。
 
-If you need to include [polyfills](https://remysharp.com/2010/10/08/what-is-a-polyfill)
-in your project, you must make sure those load before any other JavaScript. If you're
-using some polyfill CDN service, like [cdn.polyfill.io](http://cdn.polyfill.io/),
-just put it before the other scripts in the bottom of the page:
+### polyfills如何？
+
+如果需要在项目中使用[polyfills](https://remysharp.com/2010/10/08/what-is-a-polyfill)，确保其在
+其他js加载之前加载。如果使用诸如[cdn.polyfill.io](http://cdn.polyfill.io/)这样的cdn服务，只需要
+在页面底部，将polyfill的应用放在其他js之前。
 
 ```html
-    <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
-</body>
+<script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
 ```
 
-If you like to just include the polyfills yourself, you could include them in
-`js/plugins.js`. When you have a bunch of polyfills to load in, you could
-also create a `polyfills.js` file in the `js/vendor` directory. Also using
-this technique, make sure the polyfills are all loaded before any other
-Javascript.
+如果，想要包含polyfills，需要在`js/plugins.js`中添加。当你有一打polyfills需要加载时，可在`js/vendor`
+创建一个`polyfills.js`，然后在`js/plugins.js`中包含。注意，确保polyfills在其他js之前加载。
 
-There are some misconceptions about Modernizr and polyfills. It's important
-to understand that Modernizr just handles feature checking, not polyfilling
-itself. The only thing Modernizr does regarding polyfills is that the team
-maintains [a huge list of cross Browser polyfills](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills).
+关于Modernizr和polyfills，存在一些误解。有一点很重要，Modernizr只处理特性检查，而不提供填充特性(polyfilling)的功能。
+Modernizr所做的唯一关于polyfills的是，其团队维护了[跨浏览器的polyfills列表](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills)。
 
-## The content area
+### 内容区域
 
-The central part of the boilerplate template is pretty much empty. This is
-intentional, in order to make the boilerplate suitable for both web page and
-web app development.
+代码库的模板的主要部分都是空白。这是故意的，为了使得代码库适合web页面和web appd的开发。
 
-### Browser Upgrade Prompt
+**浏览器升级提示**
 
 The main content area of the boilerplate includes a prompt to install an up to
 date browser for users of IE 6/7. If you intended to support IE 6/7, then you
 should remove the snippet of code.
 
-### Google CDN for jQuery
+代码库的主要区域包含了包含了提示IE6/7的用户安装新的浏览器的弹出提示框。如果，你想要支持IE 6/7,
+你就需要移除这段代码。
 
-The Google CDN version of the jQuery JavaScript library is referenced towards
-the bottom of the page using a protocol-independent path (read more about this
-in the [FAQ](faq.md)). A local fallback of jQuery is included for rare instances
-when the CDN version might not be available, and to facilitate offline
-development.
+**Google CDN for jQuery**
 
-The Google CDN version is chosen over other [potential candidates (like the
-jQuery CDN](https://jquery.com/download/#using-jquery-with-a-cdn)) because
-it's fast in absolute terms and it has the best overall
-[penetration](http://httparchive.org/trends.php#perGlibs) which increases the
-odds of having a copy of the library in your user's browser cache.
+Google的CDN源在国内不能访问，就不必讨论了。
 
-While the Google CDN is a strong default solution your site or application may
-require a different configuration. Testing your site with services like
-[WebPageTest](http://www.webpagetest.org/) and browser tools like
-[PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/) or
-[YSlow](https://developer.yahoo.com/yslow/) will help you examine the real
-world performance of your site and can show where you can optimize your specific
-site or application.
+可以使用如下的工具对站点进行测试: 
 
+* web服务: [WebPageTest](http://www.webpagetest.org/)
+* 浏览器工具: [PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/)和
+  [YSlow](https://developer.yahoo.com/yslow/)
 
-### Google Universal Analytics Tracking Code
+注： 在无网络时，可以使用本地jQuery库。
+
+**Google全局分析追踪代码**
 
 Finally, an optimized version of the Google Universal Analytics tracking code is
 included. Google recommends that this script be placed at the top of the page.
@@ -394,10 +341,11 @@ However, its usage isn't set in stone, and you SHOULD consider exploring the
 and use whatever suits your needs best!
 
 ## css
-HTML5 Boilerplate's CSS includes:
 
-* [Normalize.css](#normalizecss)
-* [Useful defaults](#useful-defaults)
+HTML5 Boilerplate的CSS包含了: 
+
+* [Normalize.css](#normalizecss) - 重置浏览器样式
+* [Useful defaults](#useful-defaults) - 
 * [Common helpers](#common-helpers)
 * [Placeholder media queries](#media-queries)
 * [Print styles](#print-styles)
@@ -409,7 +357,7 @@ or [Modernizr](http://modernizr.com/), and it is ready to use no matter what
 your development preferences happen to be.
 
 
-## Normalize.css
+### Normalize.css
 
 In order to make browsers render all elements more consistently and in line
 with modern standards, we include
@@ -430,7 +378,7 @@ page](https://necolas.github.com/normalize.css/), as well as this
 [blog post](http://nicolasgallagher.com/about-normalize-css/).
 
 
-## Useful defaults
+### Useful defaults
 
 Several base styles are included that build upon `Normalize.css`. These
 styles:
@@ -445,17 +393,17 @@ You are free and even encouraged to modify or add to these base styles as your
 project requires.
 
 
-## Common helpers
+### Common helpers
 
 Along with the base styles, we also provide some commonly used helper classes.
 
-#### `.hidden`
+**`.hidden`**
 
 The `hidden` class can be added to any element that you want to hide visually
 and from screen readers. It could be an element that will be populated and
 displayed later, or an element you will hide with JavaScript.
 
-#### `.visuallyhidden`
+**`.visuallyhidden`**
 
 The `visuallyhidden` class can be added to any element that you want to hide
 visually, while still have its content accessible to screen readers.
@@ -468,7 +416,7 @@ See also:
   accessibility](http://snook.ca/archives/html_and_css/hiding-content-for-accessibility)
 * [HTML5 Boilerplate - Issue #194](https://github.com/h5bp/html5-boilerplate/issues/194/).
 
-#### `.invisible`
+**`.invisible`**
 
 The `invisible` class can be added to any element that you want to hide
 visually and from screen readers, but without affecting the layout.
@@ -482,7 +430,7 @@ __N.B.__ Try to stay away from, and don't use the classes specified above for
 [keyword stuffing](https://en.wikipedia.org/wiki/Keyword_stuffing) as you will
 harm your site's ranking!
 
-#### `.clearfix`
+**`.clearfix`**
 
 The `clearfix` class can be added to any element to ensure that it always fully
 contains its floated children.
@@ -491,7 +439,7 @@ Over the years there have been many variants of the clearfix hack, but currently
 we use the [micro clearfix](http://nicolasgallagher.com/micro-clearfix-hack/).
 
 
-## Media Queries
+### Media Queries
 
 HTML5 Boilerplate makes it easy for you to get started with a
 [_mobile first_](http://www.lukew.com/presos/preso.asp?26) and [_responsive web
@@ -513,7 +461,7 @@ For more features that can help you in your mobile web development, take a look
 into our [Mobile Boilerplate](https://github.com/h5bp/mobile-boilerplate).
 
 
-## Print styles
+### Print styles
 
 Lastly, we provide some useful print styles that will optimize the printing
 process, as well as make the printed pages easier to read.
@@ -556,14 +504,14 @@ overwritten.
 
 Information about the default JavaScript included in the project.
 
-## main.js
+### main.js
 
 This file can be used to contain or reference your site/app JavaScript code.
 For larger projects, you can make use of a JavaScript module loader, like
 [Require.js](http://requirejs.org/), to load any other scripts you need to
 run.
 
-## plugins.js
+### plugins.js
 
 This file can be used to contain all your plugins, such as jQuery plugins and
 other 3rd party scripts.
@@ -579,7 +527,7 @@ a console method isn't available, that method will have the value of empty
 function, thus, preventing the browser from throwing an error.
 
 
-## vendor
+### vendor
 
 This directory can be used to contain all 3rd party library code.
 
@@ -598,7 +546,7 @@ build](http://www.modernizr.com/download/).
 
 --
 
-## .gitignore
+### .gitignore
 
 HTML5 Boilerplate includes a basic project-level `.gitignore`. This should
 primarily be used to avoid certain project-level files and directories from
@@ -621,7 +569,7 @@ globally ignore:
 * Comprehensive set of ignores on GitHub: https://github.com/github/gitignore
 
 
-## .editorconfig
+### .editorconfig
 
 The `.editorconfig` file is provided in order to encourage and help you and
 your team define and maintain consistent coding styles between different
@@ -645,7 +593,7 @@ For more details, please refer to the [EditorConfig
 project](http://editorconfig.org/).
 
 
-## Server Configuration
+### Server Configuration
 
 H5BP includes a [`.htaccess`](#htaccess) file for the Apache HTTP server. If you are not using
 Apache as your web server, then you are encouraged to download a
@@ -653,7 +601,7 @@ Apache as your web server, then you are encouraged to download a
 to your web server and environment.
 
 
-### Servers and Stacks
+**Servers and Stacks**
 
 A comprehensive list of web servers and stacks are beyond the scope of this
 documentation, but some common ones include:
@@ -673,7 +621,7 @@ is similar to the LAMP stack but uses Nginx
 * [MEAN](http://mean.io/) (MongoDB, Express, AngularJS, Node.js)
 
 
-### .htaccess
+**.htaccess**
 
 A `.htaccess` (hypertext access) file is a
 [Apache HTTP server configuration file](https://github.com/h5bp/server-configs-apache).
@@ -720,7 +668,7 @@ Notice that the original repo for the `.htaccess` file is [this
 one](https://github.com/h5bp/server-configs-apache).
 
 
-## crossdomain.xml
+### crossdomain.xml
 
 The _cross-domain policy file_ is an XML document that gives a web client —
 such as Adobe Flash Player, Adobe Reader, etc. — permission to handle data
@@ -739,7 +687,7 @@ For more in-depth information, please see Adobe's [cross-domain policy file
 specification](https://www.adobe.com/devnet/articles/crossdomain_policy_file_spec.html).
 
 
-## robots.txt
+### robots.txt
 
 The `robots.txt` file is used to give instructions to web robots on what can
 be crawled from the website.
@@ -766,7 +714,7 @@ For more information about `robots.txt`, please see:
   * [How Google handles the `robots.txt` file](https://developers.google.com/webmasters/control-crawl-index/docs/robots_txt)
 
 
-## browserconfig.xml
+### browserconfig.xml
 
 The `browserconfig.xml` file is used to customize the tile displayed when users 
 pin your site to the Windows 8.1 start screen. In there you can define custom 
@@ -785,4 +733,4 @@ see [MSDN](http://msdn.microsoft.com/en-us/library/ie/dn320426%28v=vs.85%29.aspx
 
 ## 后记
 
-发现h5bp好像是相当厉害的开源团队。
+发现h5bp好像是相当厉害的开源团队，此外，也发现一些知名的有趣的项目和网站，感觉，干前端还是挺有趣的。
