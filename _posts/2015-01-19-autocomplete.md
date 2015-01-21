@@ -29,7 +29,7 @@ $(selector).autocomplete(options); //为输入域启动自动补全
 * `serviceUrl`: 服务器端URL，或者返回为服务器端URL的函数，如果提供了本地数据，则该选项是可选的。
 * `ajaxSettings`: 任何可以配置jQuery Ajax请求的附加的[Ajax设置](http://api.jquery.com/jquery.ajax/#jQuery-ajax-settings)
 * `lookup`: 推荐的查询的数据。可以是字符串数组或者`suggestion`字面值对象
-    * `suggestion`: 带有如下格式的对象字面值`{ value: 'string', data: any }`.
+  * `suggestion`: 带有如下格式的对象字面值`{ value: 'string', data: any }`.
 * `lookupFilter`: 本地查询的过滤函数，其格式为`function (suggestion, query, queryLowerCase) {}`。默认实现为部分字符串匹配，区分大小写
 * `lookupLimit`: 本地查询显示的最大结果数，默认情况下没有限制。
 * `onSelect`: 当用户选择推荐项的回调函数`function (suggestion) {}`，回调函数中的`this`指向输入框元素(HtmlElement)
@@ -39,8 +39,7 @@ $(selector).autocomplete(options); //为输入域启动自动补全
 * `width`: 推荐框的最大宽度(单位为像素)，例如: 300. 默认为`auto`，即输入框的宽度。
 * `params`: 传递给请求的附加参数，可选。
 * `formatResult`: 用来格式化推荐容器中的推荐实体的定制化参数，函数原型为`function (suggestion, currentValue) {}`，可选。
-* `delimiter`: 字符串或正则表达式，用来分割输入值，并将最后的部分用作推荐查询。在需要，填充以逗号分隔的输入值时，非常的有用。
-  Useful when for example you need to fill list of  coma separated values.
+* `delimiter`: 字符串或正则表达式，用来分割输入值，并将最后的部分用作推荐查询。在需要填充以逗号分隔的输入值时，非常的有用。
 * `zIndex`: 推荐容器的'z-index'属性，默认为: `9999`.
 * `type`: 获取推荐的Ajax请求类型，默认为: `GET`.
 * `noCache`: 表明是否缓存推荐结果的布尔值，默认为: `false`, 即缓存推荐结果。
@@ -130,8 +129,6 @@ $('#autocomplete').autocomplete({
 
 ## Styling
 
-Generated HTML markup for suggestions is displayed bellow. You may style it any way you'd like.
-
 生成的HTML内容显示如下，可以使用任意喜欢的样式: 
 
 ```html
@@ -171,10 +168,6 @@ Response from the server must be JSON formatted following JavaScript object:
     ]
 }
 ```
-
-Data can be any value or object. Data object is passed to formatResults function 
-and onSelect callback. Alternatively, if there is no data you can
-supply just a string array for suggestions:
 
 Data可以是任何值或者对象。Data对象将会传递给`formatResults`函数，以及`onSelect`回调函数。
 如果，没有任何数据，可简单提供一个字符串的数组。
