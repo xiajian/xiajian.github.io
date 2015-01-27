@@ -147,9 +147,6 @@ Apache服务器的默认配置。更多信息，参考[Apache Server Configs rep
 
 在修改目录结构时，确保更新所有引用的css和js的URL。
 
-If you are using Google Universal Analytics, make sure that you edit the
-corresponding snippet at the bottom to include your analytics ID.
-
 如果，想要使用Google的通用分析，确保将底部的代码片段，修改为自己的分析ID。
 
 **humans.txt**
@@ -165,9 +162,6 @@ corresponding snippet at the bottom to include your analytics ID.
 关于如何处理跨域请求的问题的模板。更多参考misc章节。
 
 **Icons**
-
-Replace the default `favicon.ico`, `tile.png`, `tile-wide.png` and Apple 
-Touch Icon with your own.
 
 将默认的`favicon.ico`, `tile.png`, `tile-wide.png` 以及Apple Touch Icon 替换成自己站点的。
 
@@ -298,10 +292,6 @@ Modernizr所做的唯一关于polyfills的是，其团队维护了[跨浏览器�
 
 **浏览器升级提示**
 
-The main content area of the boilerplate includes a prompt to install an up to
-date browser for users of IE 6/7. If you intended to support IE 6/7, then you
-should remove the snippet of code.
-
 代码库的主要区域包含了包含了提示IE6/7的用户安装新的浏览器的弹出提示框。如果，你想要支持IE 6/7,
 你就需要移除这段代码。
 
@@ -327,10 +317,8 @@ number of simultaneous connections of the browser.
 
 Further information:
 
-* [Optimizing the Google Universal Analytics
-  Snippet](https://mathiasbynens.be/notes/async-analytics-snippet#universal-analytics)
-* [Introduction to
-  Analytics.js](https://developers.google.com/analytics/devguides/collection/analyticsjs/)
+* [Optimizing the Google Universal Analytics Snippet](https://mathiasbynens.be/notes/async-analytics-snippet#universal-analytics)
+* [Introduction to Analytics.js](https://developers.google.com/analytics/devguides/collection/analyticsjs/)
 * [Google Analytics Demos & Tools](https://ga-dev-tools.appspot.com/)
 
 **N.B.** The Google Universal Analytics snippet is included by default mainly
@@ -537,16 +525,15 @@ build](http://www.modernizr.com/download/).
 
 ## 其他
 
-* [.gitignore](#gitignore)
-* [.editorconfig](#editorconfig)
-* [Server Configuration](#server-configuration)
-* [crossdomain.xml](#crossdomainxml)
-* [robots.txt](#robotstxt)
-* [browserconfig.xml](#browserconfigxml)
+* [.gitignore]()
+* [.editorconfig]()
+* [Server Configuration]()
+* [crossdomain.xml]()
+* [robots.txt]()
+* [browserconfig.xml]()
 
---
 
-### .gitignore
+### `.gitignore`
 
 HTML5 Boilerplate includes a basic project-level `.gitignore`. This should
 primarily be used to avoid certain project-level files and directories from
@@ -560,7 +547,7 @@ For example, add the following to your `~/.gitconfig`, where the `.gitignore`
 in your HOME directory contains the files and directories you'd like to
 globally ignore:
 
-```gitignore
+```
 [core]
     excludesfile = ~/.gitignore
 ```
