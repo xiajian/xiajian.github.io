@@ -6,7 +6,10 @@ description: "github"
 
 ## 前言
 
-Github也是使用的Rails的架构，所以，其网站加速的事件非常的值得借鉴。
+Github也是使用的Rails的架构，所以，其网站加速的经验非常的值得借鉴。
+
+文章来源: <https://github.com/blog/530-how-we-made-github-fast>
+
 
 ## 正文
 
@@ -103,5 +106,4 @@ In addition to the primary web application and Git hosting systems, we also run 
 The architecture outlined here has allowed us to properly scale the site and resulted in massive performance increases across the entire site. Our average Rails response time on our previous setup was anywhere from 500ms to several seconds depending on how loaded the slices were. Moving to bare metal and federated storage on Rackspace has brought our average Rails response time to consistently under 100ms. In addition, the job queue now has no problem keeping up with the 280,000 background jobs we process every day. We still have plenty of headroom to grow with the current set of hardware, and when the time comes to add more machines, we can add new servers on any tier with ease. I’m very pleased with how well everything is working, and if you’re like me, you’re enjoying the new and improved GitHub every day!
 
 ## 后记
-
 
