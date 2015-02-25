@@ -10,7 +10,6 @@ Github也是使用的Rails的架构，所以，其网站加速的经验非常的
 
 文章来源: <https://github.com/blog/530-how-we-made-github-fast>
 
-
 ## 正文
 
 Now that things have settled down from the move to Rackspace, I wanted to take some time to go over the architectural changes that we’ve made in order to bring you a speedier, more scalable GitHub.
@@ -19,13 +18,13 @@ In my first draft of this article I spent a lot of time explaining why we made e
 
 There are many ways to scale modern web applications. What I will be describing here is the method that we chose. This should by no means be considered the only way to scale an application. Consider it a case study of what worked for us given our unique requirements.
 
-## Understanding the Protocols
+## 理解协议(Understanding the Protocols)
 
 We expose three primary protocols to end users of GitHub: HTTP, SSH, and Git. When browsing the site with your favorite browser, you’re using HTTP. When you clone, pull, or push to a private URL like git@github.com:mojombo/jekyll.git you’re doing so via SSH. When you clone or pull from a public repository via a URL like git://github.com/mojombo/jekyll.git you’re using the Git protocol.
 
 The easiest way to understand the architecture is by tracing how each of these requests propagates through the system.
 
-## Tracing an HTTP Request
+## 追踪HTTP请求(Tracing an HTTP Request)
 
 For this example I’ll show you how a request for a tree page such as http://github.com/mojombo/jekyll happens.
 
@@ -59,7 +58,7 @@ If you’d rather just check out the spec, head over to http://bert-rpc.org.
 
 For the code hungry, check out my Ruby BERT serialization library BERT, my Ruby BERT-RPC client BERTRPC, and my Erlang/Ruby hybrid BERT-RPC server Ernie. These are the exact libraries we use at GitHub to serve up all repository data.
 
-## Tracing an SSH Request
+## 追踪SSH请求(Tracing an SSH Request)
 
 Git uses SSH for encrypted communications between you and the server. In order to understand how our architecture deals with SSH connections, it is first important to understand how this works in a simpler setup.
 
@@ -83,7 +82,7 @@ I know it sounds crazy but it works great. Gerve simply uses exec(3) to replace 
 
 Think of it this way: after determining permissions and the location of the repository, the frontend becomes a transparent proxy for the rest of the session. The only drawback to this approach is that the internal SSH is unnecessarily encumbered by the overhead of encryption/decryption when none is strictly required. It’s possible we may replace this this internal SSH call with something more efficient, but this approach is just too damn simple (and still very fast) to make me worry about it very much.
 
-## Tracing a Git Request
+## 追踪Git请求(Tracing a Git Request)
 
 Performing public clones and pulls via Git is similar to how the SSH method works. Instead of using SSH for authentication and encryption, however, it relies on a server side Git Daemon. This daemon accepts connections, verifies the command to be run, and then uses fork(2) and exec(3) to spawn a worker that then becomes the command process.
 
@@ -97,7 +96,7 @@ Next, the Git proxy establishes a transparent proxy with the proper file server 
 
 Once your client has all the data, you’ve cloned the repository and can get to work!
 
-## Sub- and Side-Systems
+## 子系统和附加系统(Sub- and Side-Systems)
 
 In addition to the primary web application and Git hosting systems, we also run a variety of other sub-systems and side-systems. Sub-systems include the job queue, archive downloads, billing, mirroring, and the svn importer. Side-systems include GitHub Pages, Gist, gem server, and a bunch of internal tools. You can look forward to explanations of how some of these work within the new architecture, and what new technologies we’ve created to help our application run more smoothly.
 
@@ -107,3 +106,4 @@ The architecture outlined here has allowed us to properly scale the site and res
 
 ## 后记
 
+不管什么样的性能优化，理解原有的数据并针对问题进行优化才是最重要的。
