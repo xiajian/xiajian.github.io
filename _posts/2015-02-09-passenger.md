@@ -87,7 +87,4 @@ http {
 
 ## 后记
 
-passenger好复杂。
-
-
-
+passenger好复杂，真的好复杂，我要放弃它搞passenger，搞Unicorn吧，此外，对应用架构的方式还是心存疑虑。
