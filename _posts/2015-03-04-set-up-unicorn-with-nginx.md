@@ -55,7 +55,7 @@ With Unicorn one can deploy with zero downtime. This is rad stuff:
 
 > You can upgrade Unicorn, your entire application, libraries and even your Ruby interpreter without dropping clients.
 
-The Unicorn master and worker processes respond to Unix signals. Here’s what Github does:
+The Unicorn master and worker processes [respond](http://unicorn.bogomips.org/SIGNALS.html) to Unix signals. Here’s what Github does:
 
 > First we send the existing Unicorn master a USR2 SIGNAL. This tells it to begin starting a new master process, reloading all our app code. When the new master is fully loaded it forks all the workers it needs. The first worker forked notices there is still an old master and sends it a QUIT signal.
 
@@ -67,7 +67,7 @@ Unicorn’s signal handling is described here. Github has shared their init for 
 
 ## Rails on Unicorns
 
-We’re going to set up nginx in front of Unicorn.
+We’re going to set up [nginx](http://nginx.org/) in front of Unicorn.
 
 ### nginx
 
