@@ -107,6 +107,8 @@ passenger好复杂，真的好复杂，我要放弃它搞passenger，搞Unicorn�
 
 选择过多就会造成选择性困难，所以，做选择时，需要考虑从什么角度和方向出发，权衡利弊。
 
+升级一下，就会有更好的体验，看起来更加的容易一点。
+
 ## 参考文献
 
 1. [为什么我们开发的Raptor比Unicorn快4倍，比Puma，Torquebox快2倍](http://ohcoder.com/blog/2014/11/11/raptor-part-1/)

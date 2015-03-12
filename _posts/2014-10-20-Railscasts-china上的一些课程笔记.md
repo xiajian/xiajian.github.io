@@ -122,4 +122,23 @@ NewRelic的第三方监控服务。
 
 > 后记： 提高速度，最重要的就是缓存，关于缓存的数据库，接触了如下的这样一些：memcached和redis，似乎，这两者都存在相应的集群，memcached的集群是membase，redis就不太清楚了。
 
-## 
+## Rails初始化过程
+
+Rails继承了Rack的server，并做了一定的覆盖和重写。
+
+**什么是railtie**
+
+* 单例模式
+* 提供钩子方法扩展Rails或修改启动流程
+* 定义Initializers来添加初始化过程
+* 访问config对象，其配置项是在railties和rails application中共享，修改的都是相同变量
+* 导入rake任务，以及generator
+
+> 查看Railtie，可以通过`Rails::Railtie.subclasses`, subclasses似乎可以常看类的子类的个数。
+
+rails
+
+**engine**
+
+* engine就是一个迷你的Rails app。包裹各种middleware之后，最后就是routes
+* engine的middleware，application中不能访问
