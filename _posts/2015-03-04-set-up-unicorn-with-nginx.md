@@ -6,6 +6,8 @@ description: "unicorn, nginx, web服务器, ruby"
 
 Unicorn is an interesting Unix Ruby HTTP server which makes great use of Unix:
 
+Unicorn是个充分利用Unix且相当有趣的 Ruby HTTP server。
+
 > Unicorn is an HTTP server for Rack applications designed to only serve fast clients on low-latency, high-bandwidth connections and take advantage of features in Unix/Unix-like kernels.
 
 In this post I’ll describe Unicorn’s design then walk you through setting it up.
@@ -14,11 +16,12 @@ In this post I’ll describe Unicorn’s design then walk you through setting it
 
 Unicorn follows the Unix philosophy:
 
-> Do one thing and do it right.
+> Do one thing and do it right.  
+> 做一件事并将其做好。
 
 For instance, load balancing in Unicorn is done by the OS kernel and Unicorn’s processes are controlled by Unix signals.
 
-Unicorn’s design is officially described here. I will list some of the things which I consider core for why Unicorn is an interesting alternative.
+Unicorn’s design is officially described [here](http://unicorn.bogomips.org/PHILOSOPHY.html). I will list some of the things which I consider core for why Unicorn is an interesting alternative.
 
 ### Load balancing
 
@@ -137,3 +140,8 @@ $ unicorn_rails -c /var/www/unicorn/config/unicorn.rb -D
 -D deamonizes it. -c specifies the configuration file. In production you will probably want to pass -E production as well, to run the app in the production Rack environment.
 
 That’s it! Visiting localhost should take you to the Rails default page.
+
+## 进一步阅读
+
+1. [Unicorn官网](http://unicorn.bogomips.org/)
+2. [unicorn设计哲学](http://unicorn.bogomips.org/PHILOSOPHY.html)
