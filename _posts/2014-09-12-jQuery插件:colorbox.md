@@ -6,10 +6,12 @@ category :  jQuery
 
 ## 缘起
 ----
+
 本来想，不去了解Colorbox，也是可以直接使用的。结果遇到一些奇怪的问题，看来果然是没办法绕过这个槛的。
 
 ## 介绍
 -----
+
 Colorbox是一个jQuery的轻量级，可定制的lightbox插件。MIT条约，兼容jQuery 1.3.2+。其特性如下:
 
 * 支持图片，分组，幻灯片播放，Ajax，内连以及iframed内容
@@ -27,6 +29,7 @@ jQuery使用CSS selector在DOM树选择其合适的元素，$('xxx').colorbox()�
 Colorbox接受键值对的对象的设置，并可以被复制给任意HTML元素。
 
 例子: 
+
 ```javascript
 // 样例:
 // Image links displayed as a group
@@ -72,9 +75,7 @@ jQuery Colorbox是一款非常好的内容播放插件。它集弹出层、幻�
 -  Other Content Types （其它类型：外部html, flash和视频，iframe的flash和视频，iframe的外部html，内部html）
 
 
-
 ## 后记
 ----
+
 colorbox中真的提供了对Ajax的支持吗？
-
-
