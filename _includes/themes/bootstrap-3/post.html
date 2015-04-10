@@ -26,22 +26,37 @@
       {% include JB/tags_list %}
     </ul>
   {% endunless %}  
-  
-    <hr>
+
     <ul class="pagination">
     {% if page.previous %}
-      <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&laquo; Previous</a></li>
+      <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&laquo; 前一篇</a></li>
     {% else %}
-      <li class="prev disabled"><a>&larr; Previous</a></li>
+      <li class="prev disabled"><a>&larr; 前一篇</a></li>
     {% endif %}
-      <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
+      <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">归档</a></li>
     {% if page.next %}
-      <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &raquo;</a></li>
+      <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">下一篇 &raquo;</a></li>
     {% else %}
-      <li class="next disabled"><a>Next &rarr;</a>
+      <li class="next disabled"><a>下一篇 &rarr;</a>
     {% endif %}
     </ul>
     <hr>
+
+    <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style_32x32">
+      <a class="jiathis_button_qzone"></a>
+      <a class="jiathis_button_tsina"></a>
+      <a class="jiathis_button_tqq"></a>
+      <a class="jiathis_button_weixin"></a>
+      <a class="jiathis_button_renren"></a>
+      <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+      <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+    <br/>  
+
     {% include JB/comments %}
   </div>
 </div>
