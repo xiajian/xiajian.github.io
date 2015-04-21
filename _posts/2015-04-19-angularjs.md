@@ -14,10 +14,22 @@ description: "angularjs，js框架"
 
 angularjs应用自动接管一切DOM事件。
 
+npm也存在一个类似的国内的淘宝镜像，可以用来加快下载速度。
+
 临末了，体验了一下利用yeoman生成和安装一个js的应用程序，感觉很沮丧，居然比Rails还慢。而且，一上来就安装了一堆莫名奇妙的东西，并卡在莫名奇妙的地方一点反应也没有。
 
 然后就是，发现npm的全局安装对特定的应用程序不可见，这算是什么狗屁情况啊。
 
+遇到的问题: 
+
+1. `http://errors.angularjs.org/1.3.15/$injector/nomod?p0=ngRoute` 。解决，缺少某些模块，使用`bower install`安装即可解决。
+
+## 探索
+
+发现一个不错的资源，利用angular-ui实现的bootstrap，用手机体验了一下，发现交互和响应有明显的延迟。
+
 ## 后记
 
 内功心法和外在招式不可偏废，内外兼修。
+
+将angularjs和Rails结合，不要去折腾那个坑爹的NodeJS。基本上，两者(NodeJS和Rails)工作领域相似。
