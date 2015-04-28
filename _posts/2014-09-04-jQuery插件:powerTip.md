@@ -477,6 +477,98 @@ And there you have it. If you want to enable the hover intent testing then you w
 
 Note that only mouse events (mouseenter, mouseleave, hover, mousemove) have the required properties (pageX, and pageY) to do hover intent testing. Click events and keyboard events will not work (and will likely cause an error).
 
+## 实战
+
+依赖的相关js选项: powertip, highchart。需要在某个控制器中实现两个方法: `stock_info`、`user_info`，其代码实例如下: 
+
+```ruby
+# 浮动显示用户信息,ajax请求，返回为html
+def user_info
+  @user = User.where(locale_id:  params[:id]).first
+  @user_document = @user.user_document
+  @account = @user.bank_accounts.tophold.published.first
+  render layout: false 
+end
+
+# 浮动显示股表信息,ajax请求，返回为html
+def stock_info
+  @stock = Stock.where(id: params[:id]).first
+  @quotes_chart = LazyHighCharts::HighChart.new('graph') do |f|
+    f.options[:chart][:defaultSeriesType] = "line"
+    f.options[:rangeSelector] = {:inputEnabled => false, :enabled => false}
+    f.options[:chart][:height] = 250
+    f.legend({enabled: false})
+    f.scrollbar({enabled: false})
+    f.navigator({enabled: false})
+    f.series(:name=>'股价', :data=> @stock.stock_quotes.y1.map(&:chart_data))
+  end
+  render layout: false
+end
+```
+
+具体的js代码实现: 
+
+```
+/* 功能描述: 浮动提示功能
+ * 参数描述: item-显示提示的id名(float_user_card,float_stock_card)，action-提示Ajax请求对应的动作(user_info,stock_info)
+ * 限制: url中的id依赖浮动元素中提供的id属性和class名, float_user_card表明获取用户的信息，float_stock_card表明获取股表信息
+ * 具体参考: convert_link中组合的字符串(<a class='float_user_card' id=#{u.locale_id}  href='/accounts/#{u.locale_id}'>#{x}</a>)
+ */
+function hoverPopup(item,action){
+  // console.log("Invoke this function");
+  $(item).unbind();
+  $(item).on({
+    powerTipPreRender: function() {
+      if ($("." + action).attr("id") !=  $(this).attr("id")) {
+        $('#card_float').html('<img src="/assets/loading.gif" alt="正在加载..."  class="loading"/>');
+        console.log("action is " + action + ", id is " + $(this).attr("id"));
+        $.ajax({
+                url: "/search_suggestions/"+ action +"?id=" + $(this).attr("id") ,
+                type: 'GET',
+                cache: true,
+                success:(function(data){
+                  $('#card_float').html(data);
+                })
+        })
+      }
+      $(this).data('powertip' , $('#card_float').html());
+    }
+  }).powerTip({
+    popupId: 'card_float',
+    placement: 'e',
+    mouseOnToPopup: true,
+    smartPlacement: true
+  });
+}
+
+// 调用上述的函数
+hoverPopup(".float_stock_card","stock_info");
+hoverPopup(".float_user_card","user_info");
+```
+
+最后，HTML中a链接的插值设置: 
+
+```
+# 功能描述: 将字符串中以@/$开头、:| |"|'结尾的字符串转换成对应的用户主页或股票主页超连接，@表示人，$表示股表
+# 参数描述: 任何字符串包含以并以:| |"|'风格字符串
+# 注意: 因为评论中可以存在多个@/$，需要考虑使用懒惰匹配避免最长匹配
+# 问题：如何避免$和@之后没有分隔符，匹配行末？没想到好的处理方法。
+def convert_link(content)
+  content.gsub(/[@|$].+?[:| |"|'|,|，]/).each do |x|
+    n = x[1, x.length-2]
+    if x[0] == "@"
+      u = User.where(name: n).first
+      u ? "<strong><a class='float_user_card' id=#{u.locale_id}  href='/accounts/#{u.locale_id}'>#{x}</a></strong>" : x
+    else
+      u = Stock.where(ticker: n).first
+      u ?  "<strong><a class='float_stock_card' id=#{u.id}  href=/asset_class/stocks/#{u.slug} >#{x}</a></strong>" : x
+    end
+  end
+end
+```
+
+以上，留个纪念。
+
 ## 后记
 ----
 
