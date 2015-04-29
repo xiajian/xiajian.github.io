@@ -1,6 +1,7 @@
 ---
 layout: post
 title: html5-boilerplate and Bootstrap的关系
+description: "html5, boostrap, web编程相关的知识库"
 ---
 
 ## 前言
