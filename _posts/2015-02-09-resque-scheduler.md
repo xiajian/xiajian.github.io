@@ -18,7 +18,7 @@ description: "ruby, resque-scheduler, 后台任务"
 
 Resque-scheduler是[Resque](http://github.com/defunkt/resque)的扩展，并在将来提供列表查询的功能。
 
-This table explains the version requirements for redis
+下表解释了Redis的版本的需求:
 
 | resque-scheduler version | required redis version|
 |:-------------------------|----------------------:|
@@ -26,12 +26,10 @@ This table explains the version requirements for redis
 | >= 0.0.1                 | >= 1.3                |
 
 
-Job scheduling is supported in two different way: Recurring (scheduled) and
-Delayed.
+Job安排支持两种不同的方式： 经常性(预先安排)和延迟。
 
-Scheduled jobs are like cron jobs, recurring on a regular basis.  Delayed
-jobs are resque jobs that you want to run at some point in the future.
-The syntax is pretty explanatory:
+预先安排的Job很像cron job，在一定基础上安排。 延迟job就是那些可能在将来的某个时间点运行的resque任务。
+job的安排语法具有好的解释性: 
 
     Resque.enqueue_in(5.days, SendFollowupEmail) # run a job in 5 days
     # or
@@ -39,20 +37,19 @@ The syntax is pretty explanatory:
 
 ### Documentation
 
-This README covers what most people need to know.  If you're looking for
-details on individual methods, you might want to try the [rdoc](http://rdoc.info/github/bvandenbos/resque-scheduler/master/frames).
+README中覆盖了大多数人需要知道的，如果想要更多关于特定方法的细节，可以参考[rdoc](http://rdoc.info/github/bvandenbos/resque-scheduler/master/frames)。
 
 ### Installation
 
-To install:
+安装命令: 
 
     gem install resque-scheduler
 
-If you use a Gemfile, you may want to specify the `:require` explicitly:
+Gemfile中需要显式指定`:require`：
 
     gem 'resque-scheduler', :require => 'resque_scheduler'
 
-Adding the resque:scheduler rake task:
+然后，在rake任务中添加`resque:scheduler`：
 
     require 'resque_scheduler/tasks'
 
@@ -63,6 +60,8 @@ easiest way to configure these things is via the rake task.  By default,
 probably already have this task, lets just put our configuration there.
 `resque-scheduler` pretty much needs to know everything `resque` needs
 to know.
+
+对于需要处理的job， `resque-scheduler` 需要了解三件事情: 任务安排表，redis，以及使用的队列。 最简单的方法是通过rake任务进行配置。默认情况下，`resque-scheduler`依赖"resque:setup"的rake任务。 由于可能已经使用了这个任务，这里配置一下即可。`resque-scheduler`完美的知道，`resque`需要知道的一切。
 
 
     # Resque tasks
@@ -75,19 +74,15 @@ to know.
         require 'resque_scheduler'
         require 'resque/scheduler'
 
-        # you probably already have this somewhere
-        Resque.redis = 'localhost:6379'
+        # 配置redis
+        Resque.redis = 'localhost:6379' 
 
-        # If you want to be able to dynamically change the schedule,
-        # uncomment this line.  A dynamic schedule can be updated via the
-        # Resque::Scheduler.set_schedule (and remove_schedule) methods.
-        # When dynamic is set to true, the scheduler process looks for
-        # schedule changes and applies them on the fly.
-        # Note: This feature is only available in >=2.0.0.
+        # 动态的改变任务安排的配置开关。动态任务安排可以通过`Resque::Scheduler.set_schedule`和`remove_schedule`方法
+        # 进行更新。启动动态变化后，任务安排进程将查找schedule的变化，然后即刻应用。
+        # **注意**: 该特性需要2.0以上的`resque-scheduler`版本。
         #Resque::Scheduler.dynamic = true
 
-        # The schedule doesn't need to be stored in a YAML, it just needs to
-        # be a hash.  YAML is usually the easiest.
+        # schedule可以YAML或hash的形式存储，但YAML更为简单。
         Resque.schedule = YAML.load_file('your_resque_schedule.yml')
 
         # If your schedule already has +queue+ set for each job, you don't
@@ -99,10 +94,8 @@ to know.
       end
     end
 
-The scheduler process is just a rake task which is responsible for both
-queueing items from the schedule and polling the delayed queue for items
-ready to be pushed on to the work queues.  For obvious reasons, this process
-never exits.
+scheduler进程仅仅是一个rake任务，其负责从schedule中查询项目，从延迟队列中轮询项目，并将其推送到工作队列中。
+因此，该进程永不退出。
 
     $ rake resque:scheduler
 
@@ -111,11 +104,12 @@ any nonempty value, they will take effect.  `VERBOSE` simply dumps more output
 to stdout.  `MUTE` does the opposite and silences all output. `MUTE`
 supersedes `VERBOSE`.
 
+支持的环境变量是`VERBOSE`和`MUTE`，用来表示输出的信息的详细程度。
+
 
 ### Delayed jobs
 
-Delayed jobs are one-off jobs that you want to be put into a queue at some point
-in the future.  The classic example is sending email:
+延迟jobs是存放在队列中，并在将来某个时间点执行的一次性任务。 典型的例子是发送邮件: 
 
     Resque.enqueue_in(5.days, SendFollowUpEmail, :user_id => current_user.id)
 
@@ -124,13 +118,17 @@ the scheduler process will pull it from the delayed queue and put it in the
 appropriate work queue for the given job and it will be processed as soon as
 a worker is available (just like any other resque job).
 
-NOTE: The job does not fire **exactly** at the time supplied.  Rather, once that
-time is in the past, the job moves from the delayed queue to the actual resque
-work queue and will be completed as workers as free to process it.
+上面代码先将job存放在resque延迟队列中五天，然后scheduler进程从延迟对立中将其取出，并将其放置到
+特定job的相应的工作队列中，并在worker进程可用时立即处理。
+
+
+**注意**: 延迟Job并不会支持在**精确**的时间触发。 而是，在那个时间点之后的某空闲的实现。
 
 Also supported is `Resque.enqueue_at` which takes a timestamp to queue the
 job, and `Resque.enqueue_at_with_queue` which takes both a timestamp and a
 queue name.
+
+`Resque.enqueue_at`方法需要时间戳来安排任务。`Resque.enqueue_at_with_queue`方法继续要时间戳，也需要队列名。
 
 The delayed queue is stored in redis and is persisted in the same way the
 standard resque jobs are persisted (redis writing to disk). Delayed jobs differ
@@ -139,29 +137,34 @@ down when a particular job is supposed to be queue, they will simply "catch up"
 once they are started again.  Jobs are guaranteed to run (provided they make it
 into the delayed queue) after their given queue_at time has passed.
 
+delayed queue存储在Redis中，并以标准的resque job的方式持久化(redis写入磁盘中)。 Delayed jobs不同与scheduled jobs的一点是，前者
+肯定会执行，即使scheduler进程和worker进程挂了，再次启动时，也一定会执行。scheduled jobs过了时间点，大概就不会再执行了。
+
+
 One other thing to note is that insertion into the delayed queue is O(log(n))
 since the jobs are stored in a redis sorted set (zset).  I can't imagine this
 being an issue for someone since redis is stupidly fast even at log(n), but full
 disclosure is always best.
 
+另一件需要注意的事情是，delayed queue的存储结构是redis有序集合，其插入操作的时间复杂度是O(log(n))。原作者
+不想别人问起是否redis会比log(n)更快，过量提示总是好的。
+
 #### Removing Delayed jobs
 
 If you have the need to cancel a delayed job, you can do like so:
 
-    # after you've enqueued a job like:
+如果想要取消延迟任务，可以这样做: 
+
+    # 安排一个任务
     Resque.enqueue_at(5.days.from_now, SendFollowUpEmail, :user_id => current_user.id)
-    # remove the job with exactly the same parameters:
+    # 使用相同的参数移除任务
     Resque.remove_delayed(SendFollowUpEmail, :user_id => current_user.id)
 
 ### Scheduled Jobs (Recurring Jobs)
 
-Scheduled (or recurring) jobs are logically no different than a standard cron
-job.  They are jobs that run based on a fixed schedule which is set at
-startup.
+Scheduled (or recurring) jobs和标准的cron job没什么不同，其以启动时设置的精确的安排表执行任务。
 
-The schedule is a list of Resque worker classes with arguments and a
-schedule frequency (in crontab syntax).  The schedule is just a hash, but
-is most likely stored in a YAML like so:
+安排表是一组带有参数、安排频度(cron语法)。 schedule是hash，但通常以YAML文件存储。
 
     CancelAbandonedOrders:
       cron: "*/5 * * * *"
@@ -190,7 +193,10 @@ defined.  If you're getting "uninitialized constant" errors, you probably
 need to either set the queue in the schedule or require your jobs in your
 "resque:setup" rake task.
 
-You can provide options to "every" or "cron" via Array:
+队列的值是可选的。不指定队列时，resque-scheduler将尝试从job类中获取队列，这意味着，队列必须要定义。如果遇到了
+"uninitialized constant"错误，则需要在schedule中设置队列，或在"resque:setup"rake任务中require 相应的job。
+
+可以通过数组提供"every"或"cron"的选项:
 
     clear_leaderboards_moderator:
       every: ["30s", :first_in => '120s']
@@ -204,16 +210,20 @@ rufus-scheduler which powers the resque-scheduler process).  This allows you
 to schedule jobs per second (ie: "30 * * * * *" would fire a job every 30
 seconds past the minute).
 
-A big shout out to [rufus-scheduler](http://github.com/jmettraux/rufus-scheduler)
-for handling the heavy lifting of the actual scheduling engine.
+**注意**: cron的6个参数的形式由resque-scheduler进程中rufus-scheduler支持。这使得可以在秒级安排jobs。(例如："30 * * * * *"将会在每30秒启动一个job )。
 
+[rufus-scheduler](http://github.com/jmettraux/rufus-scheduler) 是实际的处理调度引擎。
 
 #### Time zones
 
 Note that if you use the cron syntax, this will be interpreted as in the server time zone
 rather than the `config.time_zone` specified in Rails.
 
+如果使用cron语法，任务将会以服务器的时区执行，而不是Rails中`config.time_zone`指定的时区。
+
 You can explicitly specify the time zone that rufus-scheduler will use:
+
+当然，可以使用如下的语法显式指定时区:
 
     cron: "30 6 * * 1 Europe/Stockholm"
 
@@ -225,21 +235,20 @@ from the `config.time_zone` value, make sure it's the right format, e.g. with:
 
 A future version of resque-scheduler may do this for you.
 
-#### Hooks
+#### 钩子方法(Hooks)
 
-Similar to the `before_enqueue`- and `after_enqueue`-hooks provided in Resque
-(>= 1.19.1), your jobs can specify one or more of the following hooks:
+与Resque(>= 1.19.1)中提供的`before_enqueue`和`after_enqueue`钩子方法类似:
 
 * `before_schedule`: Called with the job args before a job is placed on
   the delayed queue. If the hook returns `false`, the job will not be placed on
   the queue.
+* `before_schedule`: 在job被放置到延迟队列中之前，包含job的参数进行调用。如果hook方法返回为`false`，job将不会被放置到队列中。
 * `after_schedule`: Called with the job args after a job is placed on the
   delayed queue. Any exception raised propagates up to the code with queued the
   job.
-* `before_delayed_enqueue`: Called with the job args after the job has been
-  removed from the delayed queue, but not yet put on a normal queue. It is
-  called before `before_enqueue`-hooks, and on the same job instance as the
-  `before_enqueue`-hooks will be invoked on. Return values are ignored.
+* `after_schedule`: 在任务被放置到延迟队列之后，带job参数进行调用。 任何异常将会传播到安排队列的job中。
+* `before_delayed_enqueue`: 在job已经从延迟队列中移除之后还未放置通常的队列之前，带参调用。其在`before_enqueue`钩子之前，但在
+  某些job实例中，可能和`before_enqueue`一起调用。返回值将会被忽略。
 
 #### Support for resque-status (and other custom jobs)
 
@@ -250,7 +259,12 @@ trying to support all existing and future custom job classes, instead it
 supports a schedule flag so you can extend your custom class and make it
 support scheduled job.
 
+一些Resque扩展，比如[resque-status](http://github.com/quirkey/resque-status)，使用带有轻微不同的API签名的特定的job类。
+Resque-scheduler不尝试支持所有现存的或将来的定制化job类，而是通过schedule标识扩展特定类，从而使其支持scheduled job。
+
 Let's pretend we have a JobWithStatus class called FakeLeaderboard
+
+假设有个称为FakeLeaderboard的JobWithStatus的类: 
 
     class FakeLeaderboard < Resque::JobWithStatus
       def perform
@@ -258,7 +272,7 @@ Let's pretend we have a JobWithStatus class called FakeLeaderboard
       end
     end
 
-And then a schedule:
+然后，添加schedule: 
 
     create_fake_leaderboards:
       cron: "30 6 * * 1"
@@ -268,8 +282,7 @@ And then a schedule:
       rails_env: demo
       description: "This job will auto-create leaderboards for our online demo and the status will update as the worker makes progress"
 
-If your extension doesn't support scheduled job, you would need to extend the
-custom job class to support the #scheduled method:
+如果扩展不支持安排job，需要扩展特定的job，从而支持 #scheduled 方法: 
 
     module Resque
       class JobWithStatus
@@ -281,7 +294,7 @@ custom job class to support the #scheduled method:
       end
     end
 
-### Redundancy and Fail-Over
+### 冗余和失效转移(Redundancy and Fail-Over)
 
 *>= 2.0.1 only.  Prior to 2.0.1, it is not recommended to run multiple resque-scheduler processes and will result in duplicate jobs.*
 
@@ -348,7 +361,6 @@ Now make sure you're passing that file to resque-web like so:
 
     resque-web ~/yourapp/config/resque_config.rb
 
-
 ### Running in the background
 
 (Only supported with ruby >= 1.9). There are scenarios where it's helpful for
@@ -359,16 +371,13 @@ worker is started.
     $ PIDFILE=./resque-scheduler.pid BACKGROUND=yes \
         rake resque:scheduler
 
-### Plagiarism alert
+### 抄袭警告(Plagiarism alert)
 
 This was intended to be an extension to resque and so resulted in a lot of the
 code looking very similar to resque, particularly in resque-web and the views. I
 wanted it to be similar enough that someone familiar with resque could easily
 work on resque-scheduler.
 
+## 后记
 
-### Contributing
-
-For bugs or suggestions, please just open an issue in github.
-
-Patches are always welcome.
+最近，开始重新学习Redis，虽然以前页没开始认真学习过。
