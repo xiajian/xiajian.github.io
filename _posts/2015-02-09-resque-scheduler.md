@@ -296,7 +296,7 @@ Let's pretend we have a JobWithStatus class called FakeLeaderboard
 
 ### 冗余和失效转移(Redundancy and Fail-Over)
 
-*>= 2.0.1 only.  Prior to 2.0.1, it is not recommended to run multiple resque-scheduler processes and will result in duplicate jobs.*
+> 仅限 2.0.1以上的版本，2.0.1之前的版本，不推荐在多个机器上运行resque-scheduler进程，会导致重复jobs。
 
 You may want to have resque-scheduler running on multiple machines for 
 redudancy.  Electing a master and failover is built in and default.  Simply
@@ -307,6 +307,11 @@ taken to prevent jobs from potentially being queued twice during failover even
 when the clocks of the scheduler machines are slightly out of sync (or load affects
 scheduled job firing time).  If you want the gory details, look at Resque::SchedulerLocking.
 
+出于冗余考虑，可能在需要在多台机器上运行resque-scheduler。仲裁master和失效转移是内建支持且默认的。
+使用相同的Redis实例和任务安排(schedule)，然后简单的在多个机器上运行resque-scheduler。 调度进程(scheduler processes)
+会使用redis选出主进程，并在主进程挂了后进行失效转移。在失效转移期间，通过一些防范措施确保jobs不会被安排两次。更多细节，
+参考 Resque::SchedulerLocking。
+
 If the scheduler process(es) goes down for whatever reason, the delayed items
 that should have fired during the outage will fire once the scheduler process
 is started back up again (regardless of it being on a new machine).  Missed
@@ -314,6 +319,8 @@ scheduled jobs, however, will not fire upon recovery of the scheduler process.
 Think of scheduled (recurring) jobs as cron jobs - if you stop cron, it doesn't fire
 missed jobs once it starts back up.
 
+如果scheduler进程不小心挂了，在其重新启动(可能在一台新机器上)之后，那些延迟jobs都会被触发执行。
+而错过的scheduled jobs，就不会再触发执行了，这和cron job的逻辑类似。
 
 ### resque-web Additions
 
@@ -321,13 +328,9 @@ Resque-scheduler also adds to tabs to the resque-web UI.  One is for viewing
 (and manually queueing) the schedule and one is for viewing pending jobs in
 the delayed queue.
 
-The Schedule tab:
+Resque-scheduler向resque-web UI中添加了两个新的tabs。 一个用来查看(手动排序)schedule，另一个用来查看
+未决定的延迟队列。
 
-![The Schedule Tab](http://img.skitch.com/20100111-km2f5gmtpbq23enpujbruj6mgk.png)
-
-The Delayed tab:
-
-![The Delayed Tab](http://img.skitch.com/20100111-ne4fcqtc5emkcuwc5qtais2kwx.jpg)
 
 #### How do I get the schedule tabs to show up???
 
@@ -335,6 +338,8 @@ To get these to show up you need to pass a file to `resque-web` to tell it to
 include the `resque-scheduler` plugin and the resque-schedule server extension
 to the resque-web sinatra app.  Unless you're running redis on localhost, you
 probably already have this file.  It probably looks something like this:
+
+
 
     require 'resque' # include resque so we can configure it
     Resque.redis = "redis_server:6379" # tell Resque where redis lives
@@ -380,4 +385,4 @@ work on resque-scheduler.
 
 ## 后记
 
-最近，开始重新学习Redis，虽然以前页没开始认真学习过。
+最近，开始重新学习Redis，虽然以前没开始认真学习过。
