@@ -75,13 +75,25 @@ set :workers, {
 
 在Rails，Resque需要加载整个Rails环境的task，从而获得访问模型的权限，例如: (e.g. QUEUE=* rake environment resque:work). However, Resque is often used without Rails (and even if you are using Rails, you may not need/want to load the Rails environment). As such, the environment task is not automatically included.
 
-If you would like to load the environment task automatically, add this to your deploy.rb:
+但是，Resque通常可以不合Rails配套使用(即使你用着Rails，也不想加载整个Rails环境)。所以，环境任务不是自动包含的。
 
-set :resque_environment_task, true
+> 这里，理解了一下，想到在`lib/tasks/resque.rake`中的几行代码，特地摘录下来，用作参考: 
 
-If you would like your workers to use a different Rails environment than your actual Rails app:
+```ruby
+require 'resque/tasks'
+require 'resque_scheduler/tasks'
+task "resque:setup" => :environment  # 这里的`:environment`指的就是Rails的环境。
 
-set :resque_rails_env, "my_resque_env"
+task "month_login"  => :environment do ... end 
+```
+
+如果想要自动加载environment任务，可以在`deploy.rb`添加如下代码: 
+
+    set :resque_environment_task, true
+
+如果想要让worker进程使用一个稍微不同一点的Rails环境，而不是真实的Rails App，可以进行如下设置: 
+
+    set :resque_rails_env, "my_resque_env"
 
 ## 工作任务
 
@@ -100,7 +112,7 @@ cap resque:scheduler:stop    # Stops Resque Scheduler
 
 > `cap -T`不会列出没有描述，或仅在其他任务内部使用的任务。
 
-## Restart on deployment
+## 部署后重启(Restart on deployment)
 
 如果想要在`cap deploy:restart`执行之后，重启worker，可以添加如下内容: 
 
@@ -126,13 +138,13 @@ Resque.logger = Logger.new("new_resque_log_file")
 
 ## Redirecting output
 
-Due to issues in the way Resque 1.x handles background processes, we automatically redirect stderr and stdout to /dev/null.
+由于Resque 1.x处理后台任务进程的方式所引发的问题，capistrano-resque自动将stderr和stdout重定向到/dev/null。
 
-If you'd like to capture this output instead, just specify a log file:
+如果想要捕获输出内容，可以指定一个日志文件: 
 
     set :resque_log_file, "log/resque.log"
 
-You can also disable the VERBOSE option to reduce the amount of log output:
+可以禁用VERBOSE选项，从而减少日志的输出：
 
     set :resque_verbose, false
 
@@ -140,6 +152,13 @@ You can also disable the VERBOSE option to reduce the amount of log output:
 
 Starting workers is done concurently via capistrano and you are limited by ssh connections limit on your server (default limit is 10)
 
-in order to use more workers please change your sshd configurtion (/etc/ssh/sshd_config)
+worker的启动是通过capistrano通知执行的，所以可能会受到服务器ssh链接的限制，默认为10。为了使用更多workers，可以在sshd配置文件(/etc/ssh/sshd_config)，加入如下
+配置: 
 
-    MaxStartups 100
+    MaxStartups 100   # 设置并发连接数为100
+
+> 突然，发现，其实SSH并不是特别的熟，知识了解的不多，然后去买了本《ssh权威指南》，这下不知道什么时候会去看了。主要，我觉得SSH还是相当的强大的。
+
+## 后记
+
+看完之后，又理解了一个东西。

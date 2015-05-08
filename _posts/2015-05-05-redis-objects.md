@@ -44,15 +44,21 @@ This gem originally arose out of a need for high-concurrency atomic operations;
 for a fun rant on the topic, see [An Atomic Rant](http://nateware.com/2010/02/18/an-atomic-rant),
 or scroll down to [Atomic Counters and Locks](#atomicity) in this README.
 
-gem起源于高并发的原子操作的需求; 
+gem起源于高并发的原子操作的需求; 关于该话题的有趣咆哮 - [An Atomic Rant](http://nateware.com/2010/02/18/an-atomic-rant), 或者滚动到
+[Atomic Counters and Locks](#atomicity)的章节处。
 
 There are two ways to use Redis::Objects, either as an include in a model class (to
 tightly integrate with ORMs or other classes), or standalone by using classes such
 as `Redis::List` and `Redis::SortedSet`.
 
-## Installation and Setup
+存在两种使用`Redis::Objects`的方式: 
 
-Add it to your Gemfile as:
+* 在model类中使用，即与ORM或其他类紧密集合
+* 单独使用诸如`Redis::List`和`Redis::SortedSet`这样的类
+
+## 安装和设置(Installation and Setup)
+
+在Gemfile中添加如下内容: 
 
 ```ruby
 gem 'redis-objects'
@@ -60,9 +66,13 @@ gem 'redis-objects'
 
 Redis::Objects needs a handle created by `Redis.new` or a [ConnectionPool](https://github.com/mperham/connection_pool):
 
+Redis::Objects需要由`Redis.new`创建的句柄，或者一个[连接池(ConnectionPool)](https://github.com/mperham/connection_pool):
+
 The recommended approach is to use a `ConnectionPool` since this guarantees that most timeouts in the `redis` client
 do not pollute your existing connection. However, you need to make sure that both `:timeout` and `:size` are set appropriately
 in a multithreaded environment.
+
+推荐使用`ConnectionPool`，这样能够保证`redis`客户端不会污染现有的连接。但是，在多线程的环境中，需要确保正确的设置`:timeout`和`:size`。
 
 ```ruby
 require 'connection_pool'
@@ -71,21 +81,30 @@ Redis::Objects.redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(:host
 
 Redis::Objects can also default to `Redis.current` if `Redis::Objects.redis` is not set.
 
+如果`Redis::Objects.redis`没有设置，Redis::Objects将会默认使用`Redis.current`。
+
 ```ruby
 Redis.current = Redis.new(:host => '127.0.0.1', :port => 6379)
 ```
 
-(If you're on Rails, `config/initializers/redis.rb` is a good place for this.)
+> 如果在Rails中，这些配置可以放在`config/initializers/redis.rb`
+
 Remember you can use Redis::Objects in any Ruby code.  There are **no** dependencies
 on Rails.  Standalone, Sinatra, Resque - no problem.
 
+记住，可以在任意的Ruby代码中使用Redis::Objects，其并不依赖Rails。单独使用，在Sinatra或Resque中，都没有问题。
+
 Alternatively, you can set the `redis` handle directly:
+
+当然，也可直接是设置`redis`句柄: 
 
 ```ruby
 Redis::Objects.redis = Redis.new(...)
 ```
 
 Finally, you can even set different handles for different classes:
+
+最后，可以为不同的类设置不同的句柄: 
 
 ```ruby
 class User
@@ -104,16 +123,24 @@ As of `0.7.0`, `redis-objects` now autoloads the appropriate `Redis::Whatever`
 classes on demand.  Previous strategies of individually requiring `redis/list`
 or `redis/set` are no longer required.
 
-## Option 1: Model Class Include
+在`0.7.0`，`redis-objects`可以在恰当的时候，自动加载`Redis::Whatever`类。先前需要单独引入`redis/list`或`redis/set`的方式不再需要。
+
+## 场景1：在Model类中包含Redis::Objects
 
 Including Redis::Objects in a model class makes it trivial to integrate Redis types
 with an existing ActiveRecord, DataMapper, Mongoid, or similar class.  **Redis::Objects
 will work with _any_ class that provides an `id` method that returns a unique value.**
 Redis::Objects automatically creates keys that are unique to each object, in the format:
 
+在模型类中包含Redis::Objects，从而将Redis类型整合进现存的ActiveRecord，DataMapper，Mongoid，或单个类中。
+**Redis::Objects可以在任何提供了id方法(返回独一无二的值)的类中工作**. Redis::Objects将自动创建针对每个对象创建独特的键，
+以如下的格式: 
+
     model_name:id:field_name
 
 For illustration purposes, consider this stub class:
+
+为了演示处理，考虑如下的桩类: 
 
 ```ruby
 class User
@@ -138,6 +165,8 @@ puts user.my_posts.value # 5
 
 Here's an example that integrates several data types with an ActiveRecord model:
 
+如下，是将一些Redis数据类型集成到ActiveRecord 模型中的例子:
+
 ```ruby
 class Team < ActiveRecord::Base
   include Redis::Objects
@@ -156,7 +185,7 @@ class Team < ActiveRecord::Base
 end
 ```
 
-Familiar Ruby array operations Just Work (TM):
+列表类型与Ruby的数组操作类似: 
 
 ```ruby
 @team = Team.find_by_name('New York Yankees')
@@ -170,7 +199,7 @@ Familiar Ruby array operations Just Work (TM):
 @team.on_base.delete('player2')
 ```
 
-Sets work too:
+集合的操作也类似: 
 
 ```ruby
 @team.outfielders << 'outfielder1'
@@ -183,7 +212,7 @@ end
 player = @team.outfielders.detect{|of| of == 'outfielder2'}
 ```
 
-And you can do unions and intersections between objects (kinda cool):
+可以在对象之间取交集和并集操作，非常酷: 
 
 ```ruby
 @team1.outfielders | @team2.outfielders   # outfielders on both teams
@@ -192,6 +221,8 @@ And you can do unions and intersections between objects (kinda cool):
 
 Counters can be atomically incremented/decremented (but not assigned):
 
+计数器可以原子的增加或减少，但不能赋值:
+
 ```ruby
 @team.hits.increment  # or incr
 @team.hits.decrement  # or decr
@@ -199,7 +230,7 @@ Counters can be atomically incremented/decremented (but not assigned):
 @team.runs = 4        # exception
 ```
 
-Defining a different method as the `id` field is easy
+定义一个像`id`变量那样的方法非常的容易: 
 
 ```ruby
 class User
@@ -214,6 +245,8 @@ user.my_posts.increment # 1
 
 Finally, for free, you get a `redis` method that points directly to a Redis connection:
 
+最后，将免费的得到一个指向Redis连接的`redis`方法: 
+
 ```ruby
 Team.redis.get('somekey')
 @team = Team.new
@@ -221,19 +254,27 @@ Team.redis.get('somekey')
 @team.redis.smembers('someset')
 ```
 
-You can use the `redis` handle to directly call any [Redis API command](http://redis.io/commands).
+可以使用`redis`直接调用任何[Redis API command](http://redis.io/commands)。
 
 ## Option 2: Standalone Usage
 
 There is a Ruby class that maps to each Redis type, with methods for each
 [Redis API command](http://redis.io/commands).
+
+有一些将Ruby类直接映射成Redis类型，并提供了针对[Redis API command](http://redis.io/commands)的相应方法。
+
 Note that calling `new` does not imply it's actually a "new" value - it just
 creates a mapping between that Ruby object and the corresponding Redis data
 structure, which may already exist on the `redis-server`.
 
-Counters
 
-The `counter_name` is the key stored in Redis.
+注意，这里调用`new`方法，并不意味创建一个"新"的值 - 它只是创建了一个从Redis数据结构到Ruby对象之间的映射，
+而前者已经在`redis-server`中存在。
+
+
+**Counters**
+
+`counter_name`是Redis中存储的键。
 
 ```ruby
 @counter = Redis::Counter.new('counter_name')
@@ -243,7 +284,7 @@ The `counter_name` is the key stored in Redis.
 puts @counter.value
 ```
 
-This gem provides a clean way to do atomic blocks as well:
+gem也提供了干净的方法去处理原子性的块: 
 
 ```ruby
 @counter.increment do |val|
@@ -253,9 +294,13 @@ end
 
 See the section on [Atomic Counters and Locks](#atomicity) for cool uses of atomic counter blocks.
 
-Locks
------
+查看[Atomic Counters and Locks](#atomicity)章节，找到更多很酷的原子计数块。
+
+**Locks**
+
 A convenience class that wraps the pattern of [using setnx to perform locking](http://redis.io/commands/setnx).
+
+Lock是包装了[using setnx to perform locking](http://redis.io/commands/setnx)模式的极其方便的类：
 
 ```ruby
 @lock = Redis::Lock.new('serialize_stuff', :expiration => 15, :timeout => 0.1)
@@ -266,9 +311,11 @@ end
 
 This can be especially useful if you're running batch jobs spread across multiple hosts.
 
-Values
-------
-Simple values are easy as well:
+这在运行分散在多台主机上的批量job时，非常有用。
+
+**Values**
+
+Value对象中，简单对象很好处理:
 
 ```ruby
 @value = Redis::Value.new('value_name')
@@ -276,7 +323,7 @@ Simple values are easy as well:
 @value.delete
 ```
 
-Complex data is no problem with :marshal => true:
+复杂的对象使用`:marshal => true`也没多大问题: 
 
 ```ruby
 @account = Account.create!(params[:account])
@@ -285,9 +332,9 @@ Complex data is no problem with :marshal => true:
 puts @newest.value['username']
 ```
 
-Lists
------
-Lists work just like Ruby arrays:
+**Lists**
+
+列表的操作与Ruby数组类似: 
 
 ```ruby
 @list = Redis::List.new('list_name')
@@ -306,7 +353,7 @@ Lists work just like Ruby arrays:
 # etc
 ```
 
-You can bound the size of the list to only hold N elements like so:
+可以限定列表的大小，使其仅存放N个元素: 
 
 ```ruby
 # Only holds 10 elements, throws out old ones when you reach :maxlength.
@@ -314,6 +361,8 @@ You can bound the size of the list to only hold N elements like so:
 ```
 
 Complex data types are now handled with :marshal => true:
+
+复杂的数据可以通过设置`:marshal => true`: 
 
 ```ruby
 @list = Redis::List.new('list_name', :marshal => true)
@@ -324,8 +373,8 @@ Complex data types are now handled with :marshal => true:
 end
 ```
 
-Hashes
-------
+**Hashes**
+
 Hashes work like a Ruby [Hash](http://ruby-doc.org/core/classes/Hash.html), with
 a few Redis-specific additions.  (The class name is "HashKey" not just "Hash", due to
 conflicts with the Ruby core Hash class in other gems.)
@@ -354,8 +403,8 @@ Remember that numbers become strings in Redis.  Unlike with other Redis data typ
 `redis-objects` can't guess at your data type in this situation, since you may
 actually mean to store "1.5".
 
-Sets
-----
+**Sets**
+
 Sets work like the Ruby [Set](http://ruby-doc.org/core/classes/Set.html) class.
 They are unordered, but guarantee uniqueness of members.
 
@@ -416,8 +465,8 @@ And use complex data types too, with :marshal => true:
 @set1 | @set2  # all 3 people
 ```
 
-Sorted Sets
------------
+**Sorted Sets**
+
 Due to their unique properties, Sorted Sets work like a hybrid between
 a Hash and an Array.  You assign like a Hash, but retrieve like an Array:
 
@@ -459,8 +508,8 @@ The other Redis Sorted Set commands are supported as well; see [Sorted Sets API]
 
 <a name="atomicity"></a>
 
-Atomic Counters and Locks
--------------------------
+**Atomic Counters and Locks**
+
 You are probably not handling atomicity correctly in your app.  For a fun rant
 on the topic, see [An Atomic Rant](http://nateware.com/an-atomic-rant.html).
 
@@ -518,7 +567,7 @@ Team.increment_counter(:drafted_players, team_id) do |val|
 end
 ```
 
-### Locks ###
+## Locks
 
 Locks work similarly. On completion or exception the lock is released:
 
@@ -555,7 +604,7 @@ end
 Keep in mind that true locks serialize your entire application at that point.  As
 such, atomic counters are strongly preferred.
 
-### Expiration ###
+## Expiration
 
 Use :expiration and :expireat options to set default expiration.
 
@@ -564,7 +613,11 @@ value :value_with_expiration, :expiration => 1.hour
 value :value_with_expireat, :expireat => Time.now + 1.hour
 ```
 
-Author
-=======
+## 作者Author
+
 Copyright (c) 2009-2013 [Nate Wiger](http://nateware.com).  All Rights Reserved.
 Released under the [Artistic License](http://www.opensource.org/licenses/artistic-license-2.0.php).
+
+## 后记
+
+又收藏了一项能力，如果不能立马使用，看完有个屁用啊，看完就忘记了。
