@@ -18,11 +18,17 @@ In my first draft of this article I spent a lot of time explaining why we made e
 
 There are many ways to scale modern web applications. What I will be describing here is the method that we chose. This should by no means be considered the only way to scale an application. Consider it a case study of what worked for us given our unique requirements.
 
+有很多方法可以规模化一个现代的web应用，这里使用的只是其中的一种而已。
+
 ## 理解协议(Understanding the Protocols)
 
 We expose three primary protocols to end users of GitHub: HTTP, SSH, and Git. When browsing the site with your favorite browser, you’re using HTTP. When you clone, pull, or push to a private URL like git@github.com:mojombo/jekyll.git you’re doing so via SSH. When you clone or pull from a public repository via a URL like git://github.com/mojombo/jekyll.git you’re using the Git protocol.
 
+Github暴露了三个主要的协议给用户: GitHub: HTTP, SSH。用web浏览器浏览站点时，使用HTTP。使用clone，pull，push操作一个私有库(git@github.com:mojombo/jekyll.git)时，使用SSH协议。 操作公共库时，使用Git协议。
+
 The easiest way to understand the architecture is by tracing how each of these requests propagates through the system.
+
+理解架构的最简单的方法是，在整个系统中追踪这些请求的传播。
 
 ## 追踪HTTP请求(Tracing an HTTP Request)
 
@@ -53,6 +59,8 @@ The above flow is what happens when there are no cache hits. In many cases the R
 ## BERT and BERT-RPC
 
 For our data serialization and RPC protocol we are using BERT and BERT-RPC. You haven’t heard of them before because they’re brand new. I invented them because I was not satisfied with any of the available options that I evaluated, and I wanted to experiment with an idea that I’ve had for a while. Before you freak out about NIH syndrome (or to help you refine your freak out), please read my accompanying article Introducing BERT and BERT-RPC about how these technologies came to be and what I intend for them to solve.
+
+数据序列化和RPC协议是用的BERT和BERT-RPC。 从来没听说过？ 这是个新品种。使用这个是因为，评估之后不满意其他的任何可用的方案，而且作者想要实践一个新的想法。
 
 If you’d rather just check out the spec, head over to http://bert-rpc.org.
 
@@ -100,10 +108,12 @@ Once your client has all the data, you’ve cloned the repository and can get to
 
 In addition to the primary web application and Git hosting systems, we also run a variety of other sub-systems and side-systems. Sub-systems include the job queue, archive downloads, billing, mirroring, and the svn importer. Side-systems include GitHub Pages, Gist, gem server, and a bunch of internal tools. You can look forward to explanations of how some of these work within the new architecture, and what new technologies we’ve created to help our application run more smoothly.
 
+除了主要的web应用和Git hosting系统，也运行了一大堆子系统和附加系统。子系统包含: 任务队列，归档包下载，计费，镜像，以及svn导入器。附加系统包括: GitHub Pages, Gist, gem server, 以及一堆中间工具。想知道这些系统如何与新架构协同工作，以及使用新创造的新技术使应用运行的更加平滑。
+
 ## Conclusion
 
 The architecture outlined here has allowed us to properly scale the site and resulted in massive performance increases across the entire site. Our average Rails response time on our previous setup was anywhere from 500ms to several seconds depending on how loaded the slices were. Moving to bare metal and federated storage on Rackspace has brought our average Rails response time to consistently under 100ms. In addition, the job queue now has no problem keeping up with the 280,000 background jobs we process every day. We still have plenty of headroom to grow with the current set of hardware, and when the time comes to add more machines, we can add new servers on any tier with ease. I’m very pleased with how well everything is working, and if you’re like me, you’re enjoying the new and improved GitHub every day!
 
 ## 后记
 
-不管什么样的性能优化，理解原有的数据并针对问题进行优化才是最重要的。
+不管什么样的性能优化，理解原有的数据并针对问题进行优化才是最重要的。 有了数据，不能理解问题，也是白搭。

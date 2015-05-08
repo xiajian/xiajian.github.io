@@ -332,56 +332,44 @@ Resque-scheduler向resque-web UI中添加了两个新的tabs。 一个用来查�
 未决定的延迟队列。
 
 
-#### How do I get the schedule tabs to show up???
+**如何让schedule标签页显示(How do I get the schedule tabs to show up???)**
 
-To get these to show up you need to pass a file to `resque-web` to tell it to
-include the `resque-scheduler` plugin and the resque-schedule server extension
-to the resque-web sinatra app.  Unless you're running redis on localhost, you
-probably already have this file.  It probably looks something like this:
-
-
+为了让`resque-web`显示schedule标签页，需要向其传递包含`resque-scheduler`插件和resque-schedule服务器扩展的文件。
+除非你想在本地运行redis，否则可能已经有了这个文件，其内容大体如下:
 
     require 'resque' # include resque so we can configure it
     Resque.redis = "redis_server:6379" # tell Resque where redis lives
-
-Now, you want to add the following:
 
     # This will make the tabs show up.
     require 'resque_scheduler'
     require 'resque_scheduler/server'
 
-That should make the scheduler tabs show up in `resque-web`.
-
+然后，就能在`resque-web`中看到scheduler标签页了。
 
 #### Changes as of 2.0.0
 
-As of resque-scheduler 2.0.0, it's no longer necessary to have the resque-web
-process aware of the schedule because it reads it from redis.  But prior to
-2.0, you'll want to make sure you load the schedule in this file as well.
-Something like this:
+resque-scheduler的2.0.0不再需要resque-web进程感知schedule，因为resque-scheduler直接从redis中读取。但在2.0之前，
+需要在确保在初始化文件加载schedule文件。代码类似: 
+
 
     Resque.schedule = YAML.load_file(File.join(RAILS_ROOT, 'config/resque_schedule.yml')) # load the schedule
 
-Now make sure you're passing that file to resque-web like so:
+然后，确保将文件传递给resque-web: 
 
     resque-web ~/yourapp/config/resque_config.rb
 
-### Running in the background
+### 后台运行(Running in the background)
 
-(Only supported with ruby >= 1.9). There are scenarios where it's helpful for
-the resque worker to run itself in the background (usually in combination with
-PIDFILE).  Use the BACKGROUND option so that rake will return as soon as the
-worker is started.
+(只支持ruby 1.9 )，有时需要resque worker进程在后台运行，通常结合PIDFILE。 使用BACKGROUND选项可以让rake
+在worker启动时立即返回。
 
     $ PIDFILE=./resque-scheduler.pid BACKGROUND=yes \
         rake resque:scheduler
 
-### 抄袭警告(Plagiarism alert)
+### 抄袭公告(Plagiarism alert)
 
-This was intended to be an extension to resque and so resulted in a lot of the
-code looking very similar to resque, particularly in resque-web and the views. I
-wanted it to be similar enough that someone familiar with resque could easily
-work on resque-scheduler.
+本项目的目的是作为resque的扩展，所以，很多代码看起来和resque很像，尤其是在resque-web和视图中。
+这是刻意的，是为了让熟悉resque的人同样熟悉 resque-scheduler。
 
 ## 后记
 

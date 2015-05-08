@@ -14,23 +14,37 @@ Redis::Objects - Map Redis types directly to Ruby objects , 将Redis类型直接
 
 This is **not** an ORM. People that are wrapping ORM’s around Redis are missing the point.
 
+这并不是ORM，想要在Redis上包装ORM的人未得要领。
+
 The killer feature of Redis is that it allows you to perform _atomic_ operations
 on _individual_ data structures, like counters, lists, and sets.  The **atomic** part is HUGE.
 Using an ORM wrapper that retrieves a "record", updates values, then sends those values back,
 _removes_ the atomicity, cutting the nuts off the major advantage of Redis.  Just use MySQL, k?
 
+Redis的杀手级特性是：可以在单独的数据结构(比如计数器，列表，集合)上执行原子性的操作，其中原子性部分作用是巨大的。
+使用ORM层来检索记录，更新值，回送值，删除值将会抵消原子性的作用，从而不能发挥Redis的巨大优势。要ORM，直接用MySQL就好了。
+
 This gem provides a Rubyish interface to Redis, by mapping [Redis data types](http://redis.io/commands)
 to Ruby objects, via a thin layer over the `redis` gem.  It offers several advantages
 over the lower-level redis-rb API:
 
+该gem提供了Redis的Rubyish接口，将[Redis data types](http://redis.io/commands)映射为Ruby对象。通过对`redis`gem的薄封装，相对redis-rb API，
+redis-objects提供如下的一些优势: 
+
 1. Easy to integrate directly with existing ORMs - ActiveRecord, DataMapper, etc.  Add counters to your model!
+1. 很容易集成到现有的ORM中，诸如ActiveRecord, DataMapper之类。并向模型中添加计数器。
 2. Complex data structures are automatically Marshaled (if you set :marshal => true)
+2. 复杂的数据结构将自动序列化(设置`:marshal => true` )
 3. Integers are returned as integers, rather than '17'
+3. 整数就按整数返回，而不是'17'
 4. Higher-level types are provided, such as Locks, that wrap multiple calls
+4. 提供高层次的类型，比如Locks(锁) - 包装了多个调用
 
 This gem originally arose out of a need for high-concurrency atomic operations;
 for a fun rant on the topic, see [An Atomic Rant](http://nateware.com/2010/02/18/an-atomic-rant),
 or scroll down to [Atomic Counters and Locks](#atomicity) in this README.
+
+gem起源于高并发的原子操作的需求; 
 
 There are two ways to use Redis::Objects, either as an include in a model class (to
 tightly integrate with ORMs or other classes), or standalone by using classes such
