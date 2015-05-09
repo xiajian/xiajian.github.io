@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Javascript异步编程的笔记
-category :  javascript
+category :  [javascript,note]
 ---
 
 JavaScript是多媒体、多任务、多内核网络世中的单线程的语言。

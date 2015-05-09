@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Scaling Rails笔记
+description: "规模化Rails应用程序，提高Rails的性能和吞吐量"
+category : [rails, note]
 ---
 
 ## 前言

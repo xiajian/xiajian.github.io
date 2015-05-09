@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Railscasts-china上的一些课程笔记
+category :  note
 ---
 
 ## How Gitlab works

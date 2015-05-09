@@ -1,14 +1,15 @@
 ---
 layout: post
-title: Maintainable Rails View
-category: rails, view
+title: 可维护的Rails视图(Maintainable Rails View)
+description: "编写可维护的Rails视图，视图中要少逻辑"
+category: [rails, view]
 ---
 
 ## 前言
 
 昨天，看到一本书上说: `地位越高的人越容易忘记自己姓什么`。 我想把网站变的快一点，但是，知识的掌握也很匮乏，工作时又不是特别的尽心，偶尔还跑去看动漫，所谓漫漫长路的人生烦恼。以下是，在推酷上看到了，复制过来，学习一下。原作者[xdite](http://blog.xdite.net)大概有6年RoR经验，是个不错的"导师"。
 
-文章来源: <http://segmentfault.com/blog/ytwman/1190000000507093>的参考链接
+文章来源: <http://segmentfault.com/blog/ytwman/1190000000507093>
 
 ## 正文
 

@@ -379,6 +379,9 @@ Hashes work like a Ruby [Hash](http://ruby-doc.org/core/classes/Hash.html), with
 a few Redis-specific additions.  (The class name is "HashKey" not just "Hash", due to
 conflicts with the Ruby core Hash class in other gems.)
 
+Hash与Ruby的Ruby [Hash](http://ruby-doc.org/core/classes/Hash.html)作用类似，并带有一些Redis特定的附加特性。类名为
+HashKey，而不是Hash，是为了避免与Ruby core的冲突。
+
 ```ruby
 @hash = Redis::HashKey.new('hash_name')
 @hash['a'] = 1
@@ -391,7 +394,8 @@ puts @hash.all  # {"a"=>"1","b"=>"2","c"=>"3"}
 @hash.clear
 ```
 
-Redis also adds incrementing and bulk operations:
+Redis也添加了自增以及bulk的操作(??): 
+
 
 ```ruby
 @hash.incr('c', 6)  # 9
@@ -403,10 +407,15 @@ Remember that numbers become strings in Redis.  Unlike with other Redis data typ
 `redis-objects` can't guess at your data type in this situation, since you may
 actually mean to store "1.5".
 
+注意: Redis中将字符存作数字。与其他Redis数据类型不同，`redis-objects`并在这种情况下，猜测数据类型，因为你有可能想
+存的是"1.5"。
+
 **Sets**
 
 Sets work like the Ruby [Set](http://ruby-doc.org/core/classes/Set.html) class.
 They are unordered, but guarantee uniqueness of members.
+
+Set类型与Ruby的[Set](http://ruby-doc.org/core/classes/Set.html)类型相似，其是无序且不重复的。
 
 ```ruby
 @set = Redis::Set.new('set_name')
@@ -423,7 +432,7 @@ end
 # etc
 ```
 
-You can perform Redis intersections/unions/diffs easily:
+可以很方便的执行交并补差等运算：
 
 ```ruby
 @set1 = Redis::Set.new('set1')
@@ -439,7 +448,7 @@ members = @set1.union(@set2, @set3)         # multiple
 members = @set1.difference(@set2, @set3)    # multiple
 ```
 
-Or store them in Redis:
+或者，将其存到Redis中: 
 
 ```ruby
 @set1.interstore('intername', @set2, @set3)
@@ -450,7 +459,7 @@ members = @set1.redis.get('unionname')
 members = @set1.redis.get('diffname')
 ```
 
-And use complex data types too, with :marshal => true:
+同上，复杂的数据类型可以使用:marshal => true : 
 
 ```ruby
 @set1 = Redis::Set.new('set1', :marshal => true)
@@ -470,8 +479,10 @@ And use complex data types too, with :marshal => true:
 Due to their unique properties, Sorted Sets work like a hybrid between
 a Hash and an Array.  You assign like a Hash, but retrieve like an Array:
 
+由于有序集合独特的特性，其更像哈希(Hash)和数组的混合体 - 即像Hash那样赋值，像数组那样检索:
+
 ```ruby
-@sorted_set = Redis::SortedSet.new('number_of_posts')
+@sorted_set = Redis::SortedSet.new('number_of_posts') # 建立键名为`number_of_posts`的有序集合
 @sorted_set['Nate']  = 15
 @sorted_set['Peter'] = 75
 @sorted_set['Jeff']  = 24
@@ -482,7 +493,7 @@ a Hash and an Array.  You assign like a Hash, but retrieve like an Array:
 
 @sorted_set['Peter']        # => 75
 @sorted_set['Jeff']         # => 24
-@sorted_set.score('Jeff')   # same thing (24)
+@sorted_set.score('Jeff')   # same thing (24)，这里说，score与[]方法作用相同
 
 @sorted_set.rank('Peter')   # => 2
 @sorted_set.rank('Jeff')    # => 1
@@ -506,14 +517,18 @@ a Hash and an Array.  You assign like a Hash, but retrieve like an Array:
 
 The other Redis Sorted Set commands are supported as well; see [Sorted Sets API](http://redis.io/commands#sorted_set).
 
-<a name="atomicity"></a>
+其他的Redis有序集合的命令也支持，具体参考[Sorted Sets API](http://redis.io/commands#sorted_set)。
 
 **Atomic Counters and Locks**
 
 You are probably not handling atomicity correctly in your app.  For a fun rant
 on the topic, see [An Atomic Rant](http://nateware.com/an-atomic-rant.html).
 
+你可能不能在应用中正确的处理原子性。正如那个有趣的咆哮所言: [An Atomic Rant](http://nateware.com/an-atomic-rant.html)
+
 Atomic counters are a good way to handle concurrency:
+
+原子计数是处理并发的好方法，例如，下面代码中增加活跃玩家的代码: 
 
 ```ruby
 @team = Team.find(1)
@@ -530,6 +545,8 @@ end
 An _atomic block_ gives you a cleaner way to do the above. Exceptions or returning nil
 will rewind the counter back to its previous state:
 
+使用 _原子块_ 可以更加简洁的处理上述情况。异常或返回为nil会将计数器回滚到先前的状态: 
+
 ```ruby
 @team.drafted_players.increment do |val|
   raise Team::TeamFullError if val > @team.max_players  # rewind
@@ -539,6 +556,8 @@ end
 ```
 
 Here's a similar approach, using an if block (failure rewinds counter):
+
+下面有个类似的方法，使用了if块来在失效时回滚计数器: 
 
 ```ruby
 @team.drafted_players.increment do |val|
@@ -551,6 +570,8 @@ end
 
 Class methods work too, using the familiar ActiveRecord counter syntax:
 
+类方法使用了类似ActiveRecord的计数语法，来保证原子递增: 
+
 ```ruby
 Team.increment_counter :drafted_players, team_id
 Team.decrement_counter :drafted_players, team_id, 2
@@ -559,6 +580,8 @@ Team.increment_counter :total_online_players  # no ID on global counter
 
 Class-level atomic blocks can also be used.  This may save a DB fetch, if you have
 a record ID and don't need any other attributes from the DB table:
+
+类层次的原子块也能很有用。如果有一条记录ID，并且不需要从数据获取其他的属性，这将节省从DB中的读取数据: 
 
 ```ruby
 Team.increment_counter(:drafted_players, team_id) do |val|
@@ -571,9 +594,11 @@ end
 
 Locks work similarly. On completion or exception the lock is released:
 
+锁的工作机制很相似，在完成或异常发生时，锁将会被释放: 
+
 ```ruby
 class Team < ActiveRecord::Base
-  lock :reorder # declare a lock
+  lock :reorder # 申明一个锁
 end
 
 @team.reorder_lock.lock do
@@ -581,7 +606,7 @@ end
 end
 ```
 
-Class-level lock (same concept)
+类层次的锁，概念相似: 
 
 ```ruby
 Team.obtain_lock(:reorder, team_id) do
@@ -595,6 +620,8 @@ this.  Expired locks are released by the next process to attempt lock.  Just
 make sure you expiration value is sufficiently large compared to your expected
 lock time.
 
+锁过期失效。 有时，需要确保在发生不可预测的事情(服务器故障)时，锁会自动的清除。这可以通过设置锁的过期。失效的锁将会在下一个进程尝试锁时，自动释放。 确保失效值大于你所期待的锁的时间。
+
 ```ruby
 class Team < ActiveRecord::Base
   lock :reorder, :expiration => 15.minutes
@@ -604,9 +631,13 @@ end
 Keep in mind that true locks serialize your entire application at that point.  As
 such, atomic counters are strongly preferred.
 
-## Expiration
+谨记，锁会在某个点序列化整个应用程序。所以，更加推荐原子操作。
+
+## 过期(Expiration)
 
 Use :expiration and :expireat options to set default expiration.
+
+可以使用`:expiration`和`:expireat`来设置默认的过期时间：
 
 ```ruby
 value :value_with_expiration, :expiration => 1.hour
@@ -620,4 +651,4 @@ Released under the [Artistic License](http://www.opensource.org/licenses/artisti
 
 ## 后记
 
-又收藏了一项能力，如果不能立马使用，看完有个屁用啊，看完就忘记了。
+又收藏了一项能力，如果不能立马使用，看完有个屁用啊，看完就忘记了。针对Redis的浅封装还是很有用的，这样不会分离关注力。

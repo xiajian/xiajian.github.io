@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Maintainable Templates
-category: rails, templates
+category: rails
 ---
 
 ## 前言

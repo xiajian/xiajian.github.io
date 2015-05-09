@@ -1,7 +1,7 @@
 ---
 layout: post
 title: javascript标准参考教程学习笔记
-category : web
+category : [javascript, note]
 ---
 
 ## 前言
