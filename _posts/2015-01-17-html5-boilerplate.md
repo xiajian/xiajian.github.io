@@ -333,10 +333,10 @@ and use whatever suits your needs best!
 HTML5 Boilerplate的CSS包含了: 
 
 * [Normalize.css](#normalizecss) - 重置浏览器样式
-* [Useful defaults](#useful-defaults) - 
-* [Common helpers](#common-helpers)
-* [Placeholder media queries](#media-queries)
-* [Print styles](#print-styles)
+* [Useful defaults](#useful-defaults) -  有用的默认设置
+* [Common helpers](#common-helpers) - 公共辅助方法
+* [Placeholder media queries](#media-queries) 媒体查询
+* [Print styles](#print-styles) - 打印样式
 
 This starting CSS does not rely on the presence of
 [conditional class names](http://www.paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/),
