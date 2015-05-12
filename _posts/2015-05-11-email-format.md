@@ -58,6 +58,40 @@ github上看到的邮箱验证: /^([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-
 
 由于正则表达式是使用状态机进行匹配的，正则表达式太越长，耗时越多，效率越慢。
 
+## 实践
+
+综合上面的这些讨论，实现了一个简单的数据库模型: 
+
+```
+class InvalidEmail
+  
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  field :email
+
+  validates :email , :presence => true, :uniqueness => true
+
+  # 验证邮箱是否为无效邮箱
+  # 如果邮箱无效，返回为false。由于这是用来发送邮件的验证，严格点没问题。
+  def self.verify_email(email)
+    return false unless email =~ /^[a-z0-9]([\w\.\-]+)@([\w\-]+\.)+([\w]{2,4})$/i      # 验证是否是邮件
+    return false if email =~ /@example.com/i                                           # 去掉各种第三方授权链接
+    return false if email =~ /^www\./i                                                 # 去掉以www.开头的邮箱
+    return false unless email =~ /\.(com|net|uk|cn|sg|my|hk|ca|tw|top|jp|edu|cc|es|ru|de|info|org|au|om|cm|gr|be)$/
+    return false if email =~ Regexp.new(get_invalid_email)                             # 去掉其他已知的无效邮箱
+    return true
+  end
+
+  # 觉得直接访问数据库性能不好，可以用redis缓存。
+  def self.get_invalid_email
+    invalid_array = []
+    InvalidEmail.each { |x| invalid_array  << Regexp.escape(x.email) }
+    invalid_array.join('|')
+  end
+end
+```
+
 ## 后记
 
 早上过来，思路清晰多了。
