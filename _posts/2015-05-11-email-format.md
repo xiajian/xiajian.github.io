@@ -36,7 +36,11 @@ category: note
 > 尝试使用ex命令，来删除不需要的行。`:%/{pattern}/d` ，结果发现遇到一个坑爹问题。VIM所谓的坑爹的匹配模式( magic, nomagic, very magic, very nomagic )。其中，
 > very nomagic 模式才是自己所熟悉的Perl正则表达式类型，所有正则表达式前要加`\v`。
 
-无效的后缀名的正则表达式: `/\.(cpm|con|co|xom|vom|ocm|qq|nom|cim|eee|jq|coom|gj|come|pp|cmo|cdw|conm|copm|on|gom|cxom|eom|xing|th|cow|ppt|coo|col|cft|ccom|ea|som|comn|mop|cam|cnm|ciom|cao|kang|ki)$` ，ex命令为: 
+无效的后缀名的正则表达式: 
+
+    `/\.(cpm|con|co|xom|vom|ocm|qq|nom|cim|eee|jq|coom|gj|come|pp|cmo|cdw|conm|copm|on|gom|cxom|eom|xing|th|cow|ppt|coo|col|cft|ccom|ea|som|comn|mop|cam|cnm|ciom|cao|kang|ki)$` ，
+
+ex命令为: 
 
     %global/\v\.(cpm|con|co|xom|vom|ocm|qq|nom|cim|eee|jq|coom|gj|come|pp|cmo|cdw|conm|copm|on|gom|cxom|eom|xing|th|cow|ppt|coo|col|cft|ccom|ea|som|comn|mop|cam|cnm|ciom|cao|kang|ki)$/d
 
