@@ -89,15 +89,19 @@ bower.json以及bower工具，似乎主要是用来处理浏览器相关的包�
 * requirejs - amd 加载工具
 * underscore - 类似Ruby的工具函数语法的web框架
 
-> 备注: 了解了一下bower和npm这两个包管理器的区别。npm是node模块的包管理器，bower是前端包管理器，两者之间有些重合的地方。
+> 备注: 了解了一下bower和npm这两个包管理器的区别。npm是node模块的包管理器，bower是前端包管理器，两者之间有些重合的地方。npm是树状的依赖关系，和原生支持`commonJS`。bower是tiwtter出品，比较灵活。
 
 此外，遇到一个问题，Ng前端项目中左侧的导航栏，使用 http://localhost/ 就不能显示，而使用 http://127.0.0.1/ 就能显示。咨询了一下说，这是
 因为把cookie直接写到了ip下的原因。具体的就不太了解，以后，有机会多学习学习。
-
-## 
 
 ## 后记
 
 内功心法和外在招式不可偏废，内外兼修。
 
 将angularjs和Rails结合，不要去折腾那个坑爹的NodeJS。基本上，两者(NodeJS和Rails)工作领域相似。
+
+知乎真心挺不错的。
+
+## 参考文献
+
+1. [npm spm bower这三个包管理器，哪个比较好用？](http://www.zhihu.com/question/24414899)
