@@ -22,3 +22,5 @@ package.json
 .ruby-version
 .ruby-gemset
 
+find_fattest_objects.sh
+purge_objects.sh

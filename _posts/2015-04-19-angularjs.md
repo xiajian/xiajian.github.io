@@ -116,7 +116,7 @@ RequireJS的核心API: define, require, config。
 requirejs.config的支持的配置项: 
 
 1. baseUrl - 模块所在的前置地址
-1. paths - 各个模块的地址
+1. paths - 各个模块的地址, 这里可以使用cdn指定
 1. shim - 未使用requirejs的定义方式，需要暴露的全局对象
 1. map - 模块全局暴露相关，有主模块和无主模块
 1. waitSeconds - 加载文件等待的时间
@@ -191,7 +191,7 @@ ng中相关目录的含义:
 
 ## gulp
 
-在构建工具方面，在Grunt和Gulp之间，选择了Gulp
+在构建工具方面，在Grunt和Gulp之间，选择了Gulp。为此
 
 ## 问题
 
