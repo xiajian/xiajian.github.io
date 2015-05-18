@@ -77,7 +77,7 @@ rvm use 1.9.3@x     #使用当前的gemset，可通过`--default`选项将该项
 "local user setting "
 syntax enable                " 启动语法高亮
 syntax on                    " 开启文件类型侦测
-" common configure {{
+" common configure 
 set autoindent               " 自动缩进
 set history=200              " 设置vim记录的历史命令数
 set bs=2                     " 在insert模式下用退格键删除
@@ -104,7 +104,7 @@ set nocompatible             " vi不兼容模式
 "set formatoptions+=ro        " 设置注释
 set mouse=a                  " 设置鼠标选择
 set fileencodings=ucs-bom,utf-8,gb2312,gbk " 设置文件加载的编码
-" }}
+" 
 
 " conf for tabs,配置通过ctrl h/l切换标签
 nnoremap <C-l> gt 
@@ -128,11 +128,11 @@ inoremap <C-B> <Esc><C-B>
 " <C-l>清除重绘先前的模式
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
-" gui configure {{
+" gui configure 
 set guifont=Monospace\ 12
-"}}
+"
 
-" configure for plugins {{
+" configure for plugins 
 " disable powerline just because I hate muti-colour gui status bar
 "powerline{ 
 "set guifont=PowerlineSymbols\ for\ Powerline 
@@ -184,7 +184,7 @@ hi IndentGuidesEven guibg=green ctermbg=4
 let g:vim_markdown_folding_disabled=1   " disable folding
 let g:vim_markdown_initial_foldlevel=1
 " }
-"}}
+"
 filetype indent on           " 针对不同的文件类型采用不同的缩进格式
 filetype plugin on           " 针对不同的文件类型加载对应的插件
 filetype plugin indent on    " 启用自动补全
