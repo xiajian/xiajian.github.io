@@ -152,7 +152,19 @@ yeoman的命令为:  `yo angular test_ng`， 然后就是漫长的等待，注�
 存放他生成的那些狗屎文件，而且，生成个文件，执行了一段莫名奇妙的东西，在同一个shell终端，居然记住了上次安装的路径，一遍又一遍的忘错误的地方安装那些模块。
 
 一会儿让你选这个，一会儿又莫名奇妙的卡在哪里，一动不动。每次，卡的地方还不一样。我他妈就不明白，老子生成一下项目和文件，你丫的预编译测试个毛啊。真是狗屎一般的`yo angular`生成器。
+发泄归发泄，自己写了简单的包装命令，如下。仔细想想，虽然没给自动生成目录，但，把整个流程走了一遍，还是很有用的。我现在觉得，流程比功能更重要。
 
+```
+function yeoman() {
+  if [ $# == 0 ] ; then
+    echo "[usage]: yeoman project_name"
+  else
+    mkdir $1 && cd $1 
+    echo "Now ,we are in $1, and yeoman will generate $1 project"
+    yo angular $1
+  fi
+}
+```
 
 ```
 ▾ app/
