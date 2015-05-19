@@ -1,31 +1,84 @@
----
-layout: post
-title:  学习zsh
-description: "用上人类最强的shell - zsh了"
-category: note
----
+# Path to your oh-my-zsh installation.
+export ZSH=/home/xiajian/.oh-my-zsh
 
-## 缘起
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+ZSH_THEME="robbyrussell"
 
-终于受不了bash了，换到更为强大的zsh([on-my-zsh](https://github.com/robbyrussell/oh-my-zsh))。
+# Uncomment the following line to use case-sensitive completion.
+CASE_SENSITIVE="true"
 
-## 安装
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
 
-zsh: `apt-get install zsh`
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
 
-on-my-zsh: `wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh`
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
 
-切换: `sudo chsh -s /bin/zsh username` , 注意，一定要提供username，然后重启一下。
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
 
-> 重启了几次，发现，chsh根本不起作用，除了对tty下的。 需要设置gome-termial下的某个选项，让其启动时，运行zsh。结果，gome-termial的菜单没了。坑爹啊
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
 
-修改配色: `PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[black]%}%d %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'`
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
 
-## 迁移命令
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-bashrc中的命令配置: 
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
 
-```
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git bundler rake ruby coffee rails rvm)
+
+# User configuration
+
+# export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/xiajian/.rvm/bin:/home/xiajian/.rvm/bin:/home/xiajian/software/zed:/home/xiajian/software/sublime:/home/xiajian/.rvm/bin"
+# export MANPATH="/usr/local/man:$MANPATH"
+
+source $ZSH/oh-my-zsh.sh
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='mvim'
+fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+alias zshconfig="vi ~/.zshrc"
+alias ohmyzsh="cd ~/.oh-my-zsh && vi "
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -43,23 +96,30 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# rvm与zsh集成
+[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 # Nodejs环境变量
 export NVM_DIR="/home/xiajian/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-eval "$(grunt --completion=bash)"
+
+[[ -s ~/.autojump/etc/profile.d/autojump.zsh ]] && . ~/.autojump/etc/profile.d/autojump.zsh  
+eval "$(grunt --completion=zsh)"
 # set ssh alias ssh
 export LD_LIBRARY_PATH='/usr/local/instantclient'
 alias s99='ssh root@192.168.1.99'
 alias s88='ssh root@192.168.1.88'
+alias sweb='ssh deploy@114.80.67.240'
+alias scalc='ssh deploy@114.80.67.207'
+alias s115='ssh root@115.28.165.58'
+alias s93='ssh root@115.29.52.93'
 alias shutdown='sudo shutdown -h now '
 alias ack='ack-grep'
 
 # Just for fun
 echo "Did you know that:" ; whatis $(ls /bin | shuf -n 1 )
 
-#Handle some warming about gvim
 function ngrok() { /home/xiajian/software/ngrok -authtoken 30YEx/1xB5S9UN/rTRFk $@ ; }
 
 # 全功能的css和js替换函数
@@ -183,6 +243,17 @@ function db() {
   mysql -ulodestone  -ptophold_3306 -h192.168.1.88
 }
 
+# 简单的包装 yeoman 
+function yeoman() {
+  if [ $# == 0 ] ; then
+    echo "[usage]: yeoman project_name"
+  else
+    mkdir $1 && cd $1 
+    echo "Now ,we are in $1, and yeoman will generate $1 project"
+    yo angular $1
+  fi
+}
+
 # 编写YUI的辅助函数
 function yui() {
   yui_dir=/home/xiajian/software/yuicompressor/build/yuicompressor-2.4.8.jar
@@ -191,7 +262,7 @@ function yui() {
 
 # add path for zed
 #export PATH= ${PATH}:$HOME/software/zed
-#写了几个别名，这样可以少敲点字 - 别名控
+#写了几个别名，这样可以少敲点字
 work_space=/home/xiajian/works/
 alias web='cd ${work_space}web'
 alias engine='cd ${work_space}engine'
@@ -215,18 +286,17 @@ alias rack='cd ${work_space}rack'
 alias h5bp='cd ${work_space}h5bp'
 alias githuber='cd ${work_space}githuber'
 alias amazeui='cd ${work_space}amazeui'
-alias disc='cd ${work_space}discourse'
 alias emapi='cd /home/xiajian/works/EMAPI'
 alias emf='cd /home/xiajian/works/EMFramework'
 alias rguide='cd /home/xiajian/works/rails_guides'
 alias vbundle='cd /home/xiajian/.vim/bundle'
 alias down='cd /home/xiajian/Downloads'
-alias brc='vi ~/.bashrc'
+alias brc='vi ~/.zshrc'
 alias vrc='vi ~/.vimrc'
 alias rc='rails c'
 alias rs='rails s'
 alias redis='redis-cli'
-alias sb='source ~/.bashrc'
+alias sb='source ~/.zshrc'
 alias ggrep='git grep'
 alias gdiff='git diff'
 alias img='sshfs root@192.168.1.99:/web/staging/th/current/public/uploads/ ${web}/public/uploads'
@@ -235,34 +305,18 @@ alias unimg='fusermount -u ${web}/public/uploads'
 alias mlog='tail -f /var/log/mongodb/mongodb.log'
 alias mdata='cd /var/lib/mongodb/'
 alias mdb='mongo --host 192.168.1.88'
-```
+alias disc='cd /home/xiajian/works/discourse'
 
-## 使用
-
-支持: `ls **/*.sh` ，据说matz就是因为这个去用zsh的。
-
-使用zsh的理由: 
-
-1. 兼容bash
-2. 补全模式方便: 强大的命令补全 - ctrl-n/ctrl-p , 命令参数补全 , 目录补全和切换，
-3. 全局和后缀alias
-4. 语法优雅
-5. 插件体系： autojump, git之流
-
-对于这种日用软件，我觉得，慢慢来，一口吃不下。
-
-对rvm的支持，需要在`.zshrc`文件中，添加如下的两行文件: 
-
-```
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
-export PATH="$PATH:$HOME/.rvm/bin"
-```
-
-## 后记
-
-折腾了几个小时(将近一个上午)，终于搞好了。
-
-## 参考资料
-
-1. [终极 Shell——ZSH](http://zhuanlan.zhihu.com/mactalk/19556676)
-1. [使用 Zsh 的九个理由](http://blog.jobbole.com/28829/)
+# 关连文件名后缀与编辑器
+alias -s html=vi   # 在命令行直接输入后缀为 html 的文件名，会在 TextMate 中打开
+alias -s rb=vi     # 在命令行直接输入 ruby 文件，会在 TextMate 中打开
+alias -s py=vi       # 在命令行直接输入 python 文件，会用 vim 中打开，以下类似
+alias -s js=vi
+alias -s c=vi
+alias -s java=vi
+alias -s txt=vi
+alias -s log=less
+alias -s gz='tar -xzvf'
+alias -s tgz='tar -xzvf'
+alias -s zip='unzip'
+alias -s bz2='tar -xjvf'

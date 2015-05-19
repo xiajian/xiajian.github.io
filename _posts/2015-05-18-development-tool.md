@@ -45,7 +45,9 @@ ssh-keygen -t rsa -C "jhqy2011@gmail.com"           # 如果不设-C选项，默
 
 多个Ruby和Rails版本的问题，使用RVM。RVM的安装，参考 <http://rvm.io/> 。
 
-更改RVM的源: `sed -i 's/cache.ruby-lang.org/pub/ruby!ruby.taobao.org/mirrors/ruby/' ~/.rvm/config/db` 
+更改RVM的源: `sed -i 's!cache.ruby-lang.org/pub/ruby!ruby.taobao.org/mirrors/ruby!' ~/.rvm/config/db` 
+
+> 备注，这里sed用`!`分隔，可以避免转义/。否则就是这样的: sed -i 's/cache.ruby-lang.org\/pub\/ruby/ruby.taobao.org\/mirrors\/ruby!' ~/.rvm/config/db` 
 
 配置gem安装的源，也可直接编辑`.gemrc`文件: 
 
@@ -59,13 +61,16 @@ rvm的简单使用:
 ```
 rvm install 1.9.3   # 安装1.9.3的ruby 
 rvm current         # 输出当前使用的ruby的版本， 输出结果:ruby-1.9.3-p547 
-rvm use 1.9.3       #使用1.9.3版本的Ruby。
-rvm gemset create x #创建该项目的gemset
+rvm use 1.9.3       # 使用1.9.3版本的Ruby。
+rvm gemset create x # 创建该项目的gemset
 rvm gemset empty    # 清空当前的gemset
-rvm use 1.9.3@x     #使用当前的gemset，可通过`--default`选项将该项目设置为默认，每次系统启动时都会使用该环境 
+rvm use 1.9.3@x     # 使用当前的gemset，可通过`--default`选项将该项目设置为默认，每次系统启动时都会使用该环境 
+rvm remove 1.9.3    # 移除1.9.3所有相关的gem包
 ```
 
 开发相关的库的安装: `sudo apt-get install redis-tools redis-server ImageMagick `
+
+> 备注: 仔细想想，其实rvm也是相当复杂的一个工具。
 
 ## VIM
 
@@ -197,13 +202,12 @@ runtime! macros/matchit.vim
 安装的插件: 
 
 ```
-▸ ack/
-▸ ctrlp/
-▸ delimitMate/
-▸ emmet-vim/
-▸ mustache/
-▸ nerdtree/
-▸ tcomment_vim/
+▸ ack/  -  ack-grep 程序的VIM插件，可以在整个目录中查找特定的内容
+▸ ctrlp/ - 在项目中快速寻找特定名字的文件
+▸ delimitMate/ - 成对出现的符号工具
+▸ emmet-vim/ - html的相关的辅助插件
+▸ nerdtree/ - 目录树
+▸ tcomment_vim/ - 注释插件
 ▸ tlib_vim/
 ▸ vim-addon-mw-utils/
 ▸ vim-angular/
@@ -213,9 +217,9 @@ runtime! macros/matchit.vim
 ▸ vim-indent-guides/
 ▸ vim-javascript/
 ▸ vim-markdown/
-▸ vim-powerline/
-▸ vim-rails/
-▸ vim-ruby/
+▸ vim-powerline/ - 强大的状态信息栏
+▸ vim-rails/ - rails.vim插件
+▸ vim-ruby/ - ruby.vim插件
 ▸ vim-snipmate/
 ▸ vim-snippets/
 ▸ vim-surround/
@@ -236,6 +240,12 @@ Rails开发必备的gem包:
 * rack-mini-profiler - 很好用的页面代码执行时间工具
 * thin - Ruby的web应用服务器，基于强大的EventMachine工具
 * capistrano - 部署代码使用的工具
+
+代码度量的gem工具包: 
+
+* [rubocop](https://github.com/bbatsov/rubocop):
+* [hound](https://github.com/thoughtbot/hound):
+* [rails_best_practices](https://github.com/xinminlabs/rails-bestpractices.com)
 
 几种不同的xxxfile
 

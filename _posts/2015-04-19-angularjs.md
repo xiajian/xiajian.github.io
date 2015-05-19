@@ -196,8 +196,12 @@ function yeoman() {
   * `grunt build` - 构建发布版本(dist目录)
 * 部署: 用capistrano脑补即可。
 
+> 觉得npm和bower这种将依赖特定项目中的做法也挺不错的。
+
 创建合适的工作流涉及的软件: Node, NPM, Bower, Yeoman, Grunt，Compass(css相关)。寻找一个套合适的工作流，
 也是人生奋斗的目标之一。
+
+Yeoman的目标: 通过grunt和bower建立易用的工作流。
 
 ng中相关目录的含义: 
 
