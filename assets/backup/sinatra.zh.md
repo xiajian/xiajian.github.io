@@ -378,8 +378,7 @@ end
 
 这里调用的是 `./views/stylesheet.sass`。
 
-[Sass
-的选项](http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html#options)
+[Sass的选项](http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html#options)
 可以通过Sinatra选项全局设定， 参考
 [选项和配置（英文）](http://www.sinatrarb.com/configuration.html),
 也可以在个体的基础上覆盖。
@@ -1197,8 +1196,7 @@ get '/article/:id' do
 end
 ```
 
-使用 [weak
-ETag](http://en.wikipedia.org/wiki/HTTP_ETag#Strong_and_weak_validation)
+使用 [weak ETag](http://en.wikipedia.org/wiki/HTTP_ETag#Strong_and_weak_validation)
 也是有可能的:
 
 ``` ruby
@@ -1987,8 +1985,7 @@ end
 
 -   在扩展了 \`Sinatra::Delegator\` mixin的对象
 
-自己在这里看一下代码: [Sinatra::Delegator
-mixin](http://github.com/sinatra/sinatra/blob/ceac46f0bc129a6e994a06100aa854f606fe5992/lib/sinatra/base.rb#L1128)
+自己在这里看一下代码: [Sinatra::Delegator mixin](http://github.com/sinatra/sinatra/blob/ceac46f0bc129a6e994a06100aa854f606fe5992/lib/sinatra/base.rb#L1128)
 已经
 [被包含进了主命名空间](http://github.com/sinatra/sinatra/blob/ceac46f0bc129a6e994a06100aa854f606fe5992/lib/sinatra/main.rb#L28)。
 

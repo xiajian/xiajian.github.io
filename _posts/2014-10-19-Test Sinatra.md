@@ -1,32 +1,25 @@
 ---
 layout: post
 title: Taste Sinatra
+description: "基于Rack的简单包装的web MVC框架，Sinatra"
+category: note
 ---
 
-关于Sinatra的资料的收集
+## 前言
+
+**注：本文档是英文版的翻译，结合<http://www.sinatrarb.com/intro-zh.html>，以及自己更新翻译了原中文文档一部分。如有不一致的地方，请以英文版为准。**
+
+**注：绝大部分翻译归原翻译者(<http://www.sinatrarb.com/intro-zh.html>)所有，其中参杂了部分个人的观点。**
+
+英文文档地址: <http://www.sinatrarb.com/intro.html>
+中文文档地址: <http://www.sinatrarb.com/intro-zh.html>
+
+Sinatra的资料的收集: 
 
 * Github上的源代码：<https://github.com/sinatra/sinatra>
 * 项目的官方网站: <http://www.sinatrarb.com>
 
-<http://www.sinatrarb.com>中介绍sinatra的使用如下: 
-
-```ruby
-require 'sinatra'
-
-get '/hi' do
-  "Hello World!"
-end
-```
-
-然后，运行`ruby app.rb`
-
-以下，是官方文档的中文版介绍: 
-
-- 路由(route)是web应用程序的URL的映射，是整个应用程序的中转中心，具备如下的这些方面:  条件, 返回值, 自定义路由匹配器
-- 静态文件: 网站中静态文件和资源文件的使用是同等重要的
-- 模板：真没想到这个世界上存在这么多的模板,  Haml, Erubis, Erb, Builder, Nokogiri, Sass, Scss, Less, Liquid, Markdown, Textile, RDoc, Markaby, Slim, Creole, CoffeeScript。模板的变现形式：嵌入字符串，访问变量，内联，具名，模板引擎等。
-
->  在漫长的4个月中，个人接触的模板语言有: Haml,Erb,Liquid,Markdown, CoffeeScript 以及 Textile。
+## 目录 
 
 - 过滤器
 - 辅助方法: 使用Sessions, 挂起, 让路, 触发另一个路由, 设定, 消息体，状态码和消息头, 媒体(MIME)类型, 生成URL, 浏览器重定向, 缓存控制, 发送文件, 访问请求对象, 附件, 查找模板文件
@@ -47,9 +40,14 @@ end
 
 ## 简介
 
-注：本文档是英文版的翻译，内容更新有可能不及时。 如有不一致的地方，请以英文版为准。
+Sinatra是一个基于Ruby语言的DSL（ 领域专属语言），可以轻松、快速的创建web应用。 其大概提供了如下功能: 
 
-Sinatra是一个基于Ruby语言的DSL（ 领域专属语言），可以轻松、快速的创建web应用。
+- 路由(route)是web应用程序的URL的映射，是整个应用程序的中转中心，具备如下的这些方面:  条件, 返回值, 自定义路由匹配器
+- 静态文件: 网站中静态文件和资源文件的使用是同等重要的
+- 模板：真没想到这个世界上存在这么多的模板,  Haml, Erubis, Erb, Builder, Nokogiri, Sass, Scss, Less, Liquid, Markdown, Textile, RDoc, Markaby, Slim, Creole, CoffeeScript。模板的变现形式：嵌入字符串，访问变量，内联，具名，模板引擎等。
+
+>  在漫长的4个月中，个人接触的模板语言有: Haml,Erb,Liquid,Markdown, CoffeeScript 以及 Textile。
+
 
 ```ruby
 # myapp.rb
@@ -69,13 +67,17 @@ ruby myapp.rb
 
 在该地址查看： <http://localhost:4567>
 
-备注： 第一次执行sinatra程序的时候，感觉有点奇怪，感觉像是在进行冒烟测试，难道和自己的执行的程序有关。
+这个时候访问地址将绑定到 127.0.0.1 和 localhost ，如果使用 [vagrant](https://github.com/mitchellh/vagrant) 进行开发，访问会失败，此时就需要进行 ip 绑定了：
+
+> 关于vagrant，网上资料一坨，不介意的话，可以参考我自己写的 [学习vagrant](http://xiajian.github.io/2015/04/28/%E5%AD%A6%E4%B9%A0vagrant/)
+
+> 备注： 第一次执行sinatra程序的时候，感觉有点奇怪，感觉像是在进行冒烟测试，难道和自己的执行的程序有关。
 
 安装Sintra后，最好再运行`gem install thin`安装Thin。这样，Sinatra会优先选择Thin作为服务器。找不到thin时，使用WEBRick作为服务器。
 
-## 1. 路由(route)
+## 路由(route)
 
-在Sinatra中，一个路由分为两部分：HTTP方法(GET, POST等)和URL匹配范式。 每个路由都有一个要执行的代码块：
+在Sinatra中，一个路由分为两部分：HTTP方法(GET, POST等)和URL匹配范式(pattern)。 每个路由都有一个要执行的代码块：
 
 ```ruby
 get '/' do
@@ -109,7 +111,7 @@ end
 
 路由按照它们被定义的顺序进行匹配，这一点和Rails中的routes文件的定义类似。 第一个与请求匹配的路由会被调用。
 
-路由范式可以包括具名参数，参数的值可通过params哈希表获得：
+路由范式(pattern)可以包括具名参数，参数的值可通过`params['name']`哈希表获得：
 
 ```ruby
 get '/hello/:name' do
@@ -119,15 +121,18 @@ get '/hello/:name' do
 end
 ```
 
-也可以通过代码块参数获得具名参数，代码块中的|n|变量是路由模式中的：
+也可以通过代码块参数获得具名参数：
 
 ```ruby
 get '/hello/:name' do |n|
+  # 匹配"GET /hello/foo" 和 "GET /hello/bar"
+  # params[:name] 的值是 'foo' 或者 'bar'
+  # n 中存储了 params['name']
   "Hello #{n}!"
 end
 ```
 
-路由范式也可以包含通配符参数， 可以通过`params[:splat]`数组获得。
+路由范式(pattern)也可以包含通配符参数(splat parameter)， 可以通过`params[:splat]`数组获得。
 
 ```ruby
 get '/say/*/to/*' do
@@ -149,14 +154,39 @@ get %r{/hello/([\w]+)} do
 end
 ```
 
-或者使用代码块参数：
+`%r{}`表示字符串是正则表达式，这里需要注意的就是，将正则表达式匹配的变量捕获到`params['captures']`中了。
+
+或者使用块参数：
 
 ```ruby
 get %r{/hello/([\w]+)} do |c|
   "Hello, #{c}!"
 end
 ```
-`%r{}`表示字符串是正则表达式，这里需要注意的就是，将正则表达式匹配的变量发到params哈希的哪个键中了。
+
+路由范式也可包含可选的参数: 
+
+```
+get '/posts.?:format?' do
+  # matches "GET /posts" and any extension "GET /posts.json", "GET /posts.xml" etc.
+  # 匹配 "GET /posts" 以及带任何扩展名的  "GET /posts.json" , "GET /posts.xml" 等
+end
+```
+
+路由也可使用查询参数: 
+
+```
+get '/posts' do
+  # matches "GET /posts?title=foo&author=bar"
+  # 匹配  "GET /posts?title=foo&author=bar"
+  title = params['title']
+  author = params['author']
+  # 使用title和 author 变量，对于 /posts 路由，查询参数是可选的
+end
+```
+By the way, unless you disable the path traversal attack protection (see below), the request path might be modified before matching against your routes.
+
+顺便说一下，除非想要禁用 路径遍历攻击保护(path traversal attack protection) , 请求路径可在匹配路由之前修改。
 
 ### 条件
 
@@ -188,6 +218,8 @@ get '/', :provides => ['rss', 'atom', 'xml'] do
 end
 ```
 
+> provides 查找请求的 Accpet 头部信息
+
 你也可以使用`set`方法自定义条件：
 
 ```ruby
@@ -199,6 +231,26 @@ end
 
 get '/win_a_car' do
   "Sorry, you lost."
+end
+```
+
+如果某条件需要多个值作为输入，可以使用 通配符 参数 : 
+
+```ruby
+set(:auth) do |*roles|   # <- notice the splat here
+  condition do
+    unless logged_in? && roles.any? {|role| current_user.in_role? role }
+      redirect "/login/", 303
+    end
+  end
+end
+
+get "/my/account/", :auth => [:user, :admin] do
+  "Your Account Details"
+end
+
+get "/only/admin/", :auth => :admin do
+  "Only admins are allowed here!"
 end
 ```
 
@@ -226,7 +278,10 @@ end
 
 get('/') { Stream.new }
 ```
-所以，学习技术果然还是要基础牢固，从底层开始，自下而上的构建技术体系。所以，Rack到底是什么，其本身是如何模块化的web编程，很多事情都需要从概念上去把握。
+
+可以使用`stream`辅助函数来减少boiler plate(？？) , 并在路径中内嵌流逻辑。
+
+> 所以，学习技术果然还是要基础牢固，从底层开始，自下而上的构建技术体系。所以，Rack到底是什么，其本身是如何模块化的web编程，很多事情都需要从概念上去把握。
 
 ### 自定义路由匹配器
 
@@ -264,7 +319,7 @@ get // do
 end
 ```
 
-或者，使用消极向前查找:
+或者，使用反向查找模式:
 
 ```ruby
 get %r{^(?!/index$)} do
@@ -272,7 +327,7 @@ get %r{^(?!/index$)} do
 end
 ```
 
-## 2. 静态文件
+## 静态文件
 
 静态文件是从 `./public` 目录提供服务。你可以通过设置:public_folder 选项设定一个不同的位置：
 
@@ -282,7 +337,7 @@ end
 
 ## 视图 / 模板
 
-模板被假定直接位于./views目录。 要使用不同的视图目录：
+模板被假定直接位于`./views`目录。 使用不同的视图目录，可以这样设置:
 
     set :views, File.dirname(__FILE__) + '/templates'
 
@@ -419,6 +474,8 @@ Example 	liquid :index, :locals => { :key => 'value' }
 
 Liquid模板中逻辑非常的弱，所以，其强制将逻辑放置到控制器中，从而严格遵寻MVC框架。Liquid模板中不用调用Ruby的方法，总是需要将局部变量传递给模板。
 
+> Github Pages 就是利用Liquid的模板来设置页面布局，从而保证了页面的安全性。简单说，给你把软刀，能用且安全。
+
 **Markdown Templates**
 
 Dependency 	Anyone of: [RDiscount](https://github.com/rtomayko/rdiscount), [RedCarpet](https://github.com/vmg/redcarpet), [BlueCloth](http://deveiate.org/projects/BlueCloth), [kramdown](http://kramdown.rubyforge.org/), [maruku](http://maruku.rubyforge.org/)  
@@ -496,12 +553,485 @@ end
 
 **RDoc 模板** : [RDoc]
 
-以及其他诸多模板:AsciiDoc ,Radius ,Markaby ,RABL ,Slim ,Creole ,MediaWiki ,CoffeeScript ,Stylus ,Yajl ,WLang。
+以及其他诸多模板:AsciiDoc ,Radius ,Markaby ,RABL ,Slim ,Creole ,MediaWiki ,CoffeeScript ,Stylus ,Yajl ,WLang。不再一一列举。
 
+> 注: 老版的中文翻译，对模板部分介绍的比较详细，这里摘录如下:
+ 
+### Haml模板
+
+需要引入 `haml` gem/library以填充 HAML 模板：
+
+``` ruby
+# 你需要在你的应用中引入 haml
+require 'haml'
+
+get '/' do
+  haml :index
+end
+```
+
+填充 `./views/index.haml`。
+
+[Haml的选项](http://haml.info/docs/yardoc/file.HAML_REFERENCE.html#options)
+可以通过Sinatra的配置全局设定， 参见
+[选项和配置](http://www.sinatrarb.com/configuration.html)，
+也可以个别的被覆盖。
+
+``` ruby
+set :haml, {:format => :html5 } # 默认的Haml输出格式是 :xhtml
+
+get '/' do
+  haml :index, :haml_options => {:format => :html4 } # 被覆盖，变成:html4
+end
+```
+
+### Erb模板
+
+``` ruby
+# 你需要在你的应用中引入 erb
+require 'erb'
+
+get '/' do
+  erb :index
+end
+```
+
+这里调用的是 `./views/index.erb`
+
+### Erubis
+
+需要引入 `erubis` gem/library以填充 erubis 模板：
+
+``` ruby
+# 你需要在你的应用中引入 erubis
+require 'erubis'
+
+get '/' do
+  erubis :index
+end
+```
+
+这里调用的是 `./views/index.erubis`
+
+使用Erubis代替Erb也是可能的:
+
+``` ruby
+require 'erubis'
+Tilt.register :erb, Tilt[:erubis]
+
+get '/' do
+  erb :index
+end
+```
+
+使用Erubis来填充 `./views/index.erb`。
+
+### Builder 模板
+
+需要引入 `builder` gem/library 以填充 builder templates：
+
+``` ruby
+# 需要在你的应用中引入builder
+require 'builder'
+
+get '/' do
+  builder :index
+end
+```
+
+这里调用的是 `./views/index.builder`。
+
+### Nokogiri 模板
+
+需要引入 `nokogiri` gem/library 以填充 nokogiri 模板：
+
+``` ruby
+# 需要在你的应用中引入 nokogiri
+require 'nokogiri'
+
+get '/' do
+  nokogiri :index
+end
+```
+
+这里调用的是 `./views/index.nokogiri`。
+
+### Sass 模板
+
+需要引入 `haml` 或者 `sass` gem/library 以填充 Sass 模板：
+
+``` ruby
+# 需要在你的应用中引入 haml 或者 sass
+require 'sass'
+
+get '/stylesheet.css' do
+  sass :stylesheet
+end
+```
+
+这里调用的是 `./views/stylesheet.sass`。
+
+[Sass的选项](http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html#options)
+可以通过Sinatra选项全局设定， 参考
+[选项和配置（英文）](http://www.sinatrarb.com/configuration.html),
+也可以在个体的基础上覆盖。
+
+``` ruby
+set :sass, {:style => :compact } # 默认的 Sass 样式是 :nested
+
+get '/stylesheet.css' do
+  sass :stylesheet, :style => :expanded # 覆盖
+end
+```
+
+### Scss 模板
+
+需要引入 `haml` 或者 `sass` gem/library 来填充 Scss templates：
+
+``` ruby
+# 需要在你的应用中引入 haml 或者 sass
+require 'sass'
+
+get '/stylesheet.css' do
+  scss :stylesheet
+end
+```
+
+这里调用的是 `./views/stylesheet.scss`。
+
+[Scss的选项](http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html#options)
+可以通过Sinatra选项全局设定， 参考
+[选项和配置（英文）](http://www.sinatrarb.com/configuration.html),
+也可以在个体的基础上覆盖。
+
+``` ruby
+set :scss, :style => :compact # default Scss style is :nested
+
+get '/stylesheet.css' do
+  scss :stylesheet, :style => :expanded # overridden
+end
+```
+
+### Less 模板
+
+需要引入 `less` gem/library 以填充 Less 模板：
+
+``` ruby
+# 需要在你的应用中引入 less
+require 'less'
+
+get '/stylesheet.css' do
+  less :stylesheet
+end
+```
+
+这里调用的是 `./views/stylesheet.less`。
+
+### Liquid 模板
+
+需要引入 `liquid` gem/library 来填充 Liquid 模板：
+
+``` ruby
+# 需要在你的应用中引入 liquid
+require 'liquid'
+
+get '/' do
+  liquid :index
+end
+```
+
+这里调用的是 `./views/index.liquid`。
+
+因为你不能在Liquid 模板中调用 Ruby 方法 (除了 `yield`) ，
+你几乎总是需要传递locals给它：
+
+``` ruby
+liquid :index, :locals => { :key => 'value' }
+```
+
+### Markdown 模板
+
+需要引入 `rdiscount` gem/library 以填充 Markdown 模板：
+
+``` ruby
+# 需要在你的应用中引入rdiscount
+require "rdiscount"
+
+get '/' do
+  markdown :index
+end
+```
+
+这里调用的是 `./views/index.markdown` (`md` 和 `mkd` 也是合理的文件扩展名)。
+
+在markdown中是不可以调用方法的，也不可以传递 locals给它。
+你因此一般会结合其他的填充引擎来使用它：
+
+``` ruby
+erb :overview, :locals => { :text => markdown(:introduction) }
+```
+
+请注意你也可以从其他模板中调用 markdown 方法：
+
+``` ruby
+%h1 Hello From Haml!
+%p= markdown(:greetings)
+```
+
+既然你不能在Markdown中调用Ruby，你不能使用Markdown编写的布局。
+不过，使用其他填充引擎作为模版的布局是可能的，
+通过传递`:layout_engine`选项:
+
+``` ruby
+get '/' do
+  markdown :index, :layout_engine => :erb
+end
+```
+
+这将会调用 `./views/index.md` 并使用 `./views/layout.erb` 作为布局。
+
+请记住你可以全局设定这个选项:
+
+``` ruby
+set :markdown, :layout_engine => :haml, :layout => :post
+
+get '/' do
+  markdown :index
+end
+```
+
+这将会调用 `./views/index.markdown` (和任何其他的 Markdown 模版) 并使用
+`./views/post.haml` 作为布局.
+
+也可能使用BlueCloth而不是RDiscount来解析Markdown文件:
+
+``` ruby
+require 'bluecloth'
+
+Tilt.register 'markdown', BlueClothTemplate
+Tilt.register 'mkd',      BlueClothTemplate
+Tilt.register 'md',       BlueClothTemplate
+
+get '/' do
+  markdown :index
+end
+```
+
+使用BlueCloth来填充 `./views/index.md` 。
+
+### Textile 模板
+
+需要引入 `RedCloth` gem/library 以填充 Textile 模板：
+
+``` ruby
+# 在你的应用中引入redcloth
+require "redcloth"
+
+get '/' do
+  textile :index
+end
+```
+
+这里调用的是 `./views/index.textile`。
+
+在textile中是不可以调用方法的，也不可以传递 locals给它。
+你因此一般会结合其他的填充引擎来使用它：
+
+``` ruby
+erb :overview, :locals => { :text => textile(:introduction) }
+```
+
+请注意你也可以从其他模板中调用`textile`方法：
+
+``` ruby
+%h1 Hello From Haml!
+%p= textile(:greetings)
+```
+
+既然你不能在Textile中调用Ruby，你不能使用Textile编写的布局。
+不过，使用其他填充引擎作为模版的布局是可能的，
+通过传递`:layout_engine`选项:
+
+``` ruby
+get '/' do
+  textile :index, :layout_engine => :erb
+end
+```
+
+这将会填充 `./views/index.textile` 并使用 `./views/layout.erb`
+作为布局。
+
+请记住你可以全局设定这个选项:
+
+``` ruby
+set :textile, :layout_engine => :haml, :layout => :post
+
+get '/' do
+  textile :index
+end
+```
+
+这将会调用 `./views/index.textile` (和任何其他的 Textile 模版) 并使用
+`./views/post.haml` 作为布局.
+
+### RDoc 模板
+
+需要引入 `RDoc` gem/library 以填充RDoc模板：
+
+``` ruby
+# 需要在你的应用中引入rdoc/markup/to_html
+require "rdoc"
+require "rdoc/markup/to_html"
+
+get '/' do
+  rdoc :index
+end
+```
+
+这里调用的是 `./views/index.rdoc`。
+
+在rdoc中是不可以调用方法的，也不可以传递locals给它。
+你因此一般会结合其他的填充引擎来使用它：
+
+``` ruby
+erb :overview, :locals => { :text => rdoc(:introduction) }
+```
+
+请注意你也可以从其他模板中调用`rdoc`方法：
+
+``` ruby
+%h1 Hello From Haml!
+%p= rdoc(:greetings)
+```
+
+既然你不能在RDoc中调用Ruby，你不能使用RDoc编写的布局。
+不过，使用其他填充引擎作为模版的布局是可能的，
+通过传递`:layout_engine`选项:
+
+``` ruby
+get '/' do
+  rdoc :index, :layout_engine => :erb
+end
+```
+
+这将会调用 `./views/index.rdoc` 并使用 `./views/layout.erb` 作为布局。
+
+请记住你可以全局设定这个选项:
+
+``` ruby
+set :rdoc, :layout_engine => :haml, :layout => :post
+
+get '/' do
+  rdoc :index
+end
+```
+
+这将会调用 `./views/index.rdoc` (和任何其他的 RDoc 模版) 并使用
+`./views/post.haml` 作为布局.
+
+### Radius 模板
+
+需要引入 `radius` gem/library 以填充 Radius 模板：
+
+``` ruby
+# 需要在你的应用中引入radius
+require 'radius'
+
+get '/' do
+  radius :index
+end
+```
+
+这里调用的是 `./views/index.radius`。
+
+因为你不能在Radius 模板中调用 Ruby 方法 (除了 `yield`) ，
+你几乎总是需要传递locals给它：
+
+``` ruby
+radius :index, :locals => { :key => 'value' }
+```
+
+### Markaby 模板
+
+需要引入`markaby` gem/library以填充Markaby模板：
+
+``` ruby
+#需要在你的应用中引入 markaby
+require 'markaby'
+
+get '/' do
+  markaby :index
+end
+```
+
+这里调用的是 `./views/index.mab`。
+
+你也可以使用嵌入的 Markaby:
+
+``` ruby
+get '/' do
+  markaby { h1 "Welcome!" }
+end
+```
+
+### Slim 模板
+
+需要引入 `slim` gem/library 来填充 Slim 模板：
+
+``` ruby
+# 需要在你的应用中引入 slim
+require 'slim'
+
+get '/' do
+  slim :index
+end
+```
+
+这里调用的是 `./views/index.slim`。
+
+### Creole 模板
+
+需要引入 `creole` gem/library 来填充 Creole 模板：
+
+``` ruby
+# 需要在你的应用中引入 creole
+require 'creole'
+
+get '/' do
+  creole :index
+end
+```
+
+这里调用的是 `./views/index.creole`。
+
+### CoffeeScript 模板
+
+需要引入 `coffee-script` gem/library 并至少满足下面条件一项
+以执行Javascript:
+
+-  `node` (来自 Node.js) 在你的路径中
+-   你正在运行 OSX
+-   `therubyracer` gem/library
+
+请察看[github.com/josh/ruby-coffee-script](http://github.com/josh/ruby-coffee-script)
+获取更新的选项。
+
+现在你可以调用 CoffeeScript 模版了:
+
+``` ruby
+# 需要在你的应用中引入coffee-script
+require 'coffee-script'
+
+get '/application.js' do
+  coffee :application
+end
+```
+
+这里调用的是 `./views/application.coffee`。
 
 ### 在模板中访问变量
 
-模板和路由执行器在同样的上下文求值,  在路由执行器中赋值的实例变量可以直接被模板访问。路由就是控制器+动作，这里免去了Rails中控制器和工作的分层。
+模板和路由执行器在同样的上下文求值,  在路由执行器中赋值的实例变量可以直接被模板访问。路由就是控制器+动作，这里免去了Rails中控制器和视图的分层(避免的控制器到视图中对象的复制):
 
 ```ruby
 get '/:id' do
@@ -551,7 +1081,6 @@ end
 ```
 
 当前，可以接受块的渲染方法有: erb, haml, liquid, slim , wlang以及通用的render方法。
-
 
 ### 内联模板
 
@@ -628,7 +1157,7 @@ end
 
 这里调用的是 ./views/index.myat。察看 <https://github.com/rtomayko/tilt> 来更多了解Tilt.
 
-## 4. 过滤器
+## 过滤器
 
 前置过滤器(before)在每个请求前，在请求的上下文环境中被执行， 而且可以修改请求和响应。 在过滤器中设定的实例变量可以被路由和模板访问：
 
@@ -654,7 +1183,7 @@ end
 
 请注意：除非你显式使用 body 方法，而不是在路由中直接返回字符串， 消息体在后置过滤器是不可用的， 因为它在之后才会生成。
 
-过滤器可以可选地带有范式， 只有请求路径满足该范式时才会执行：
+过滤器可以可选地带有范式(pattern)， 只有请求路径满足该范式(pattern)时才会执行：
 
 ```ruby
 before '/protected/*' do
@@ -678,7 +1207,7 @@ after '/blog/*', :host_name => 'example.com' do
 end
 ```
 
-## 5. 辅助方法
+## 辅助方法
 
 使用顶层的 helpers 方法来定义辅助方法， 以便在路由处理器和模板中使用：
 
@@ -694,7 +1223,8 @@ get '/:name' do
 end
 ```
 
-> 疑问： Sinatra和区分模块和分组的，都写在同一个文件中不会导致单个文件膨胀，而不可组织吗？
+> 疑问： Sinatra和区分模块和分组的，都写在同一个文件中不会导致单个文件膨胀，而不可组织吗？ 
+> 答: 单独是用sinatra构建中型应用太痛苦，可以考虑使用[padrino-framework](https://github.com/padrino/padrino-framework)
 
 ### 使用 Sessions
 
@@ -892,7 +1422,7 @@ class MyApp < Sinatra::Base
 end
 ```
 
-To avoid any logging middleware to be set up, set the logging setting to nil. However, keep in mind that logger will in that case return nil. A common use case is when you want to set your own logger. Sinatra will use whatever it will find in env['rack.logger'].
+想要避免启动日志中间件，可以将 `logging` 设置为 nil 。记住，此时logger换回为 nil 。 通用的使用情况是，如果，想要设置自己的logger，Sinatra 将会使用 `env['rack.logger']` 中指定的日志对象。
 
 ### 媒体(MIME)类型
 
@@ -993,7 +1523,7 @@ before do
 end
 ```
 
-为了合适地使用缓存，你应该考虑使用 etag 和 last_modified方法。 推荐在执行繁重任务*之前*使用这些helpers，这样一来， 如果客户端在缓存中已经有相关内容，就会立即得到显示。
+为了合适地使用缓存，你应该考虑使用 `etag` 和 `last_modified` 方法。 推荐在执行繁重任务**之前**使用这些helpers，这样一来， 如果客户端在缓存中已经有相关内容，就会立即得到显示。
 
 ```ruby
 get '/article/:id' do
@@ -1003,11 +1533,14 @@ get '/article/:id' do
   erb :article
 end
 ```
-使用 weak ETag 也是有可能的:
+
+使用 [weak ETag](http://en.wikipedia.org/wiki/HTTP_ETag#Strong_and_weak_validation)
+也是有可能的:
+
 
     etag @article.sha1, :weak
 
-这些辅助方法并不会为你做任何缓存，而是将必要的信息传送给你的缓存 如果你在寻找缓存的快速解决方案，试试 rack-cache:
+这些辅助方法并不会为你做任何缓存，而是将必要的信息传送给你的缓存 如果你在寻找缓存的快速解决方案，试试 [rack-cache](https://github.com/rtomayko/rack-cache):
 
 ```ruby
 require "rack/cache"
@@ -1117,6 +1650,37 @@ get '/' do
 end
 ```
 
+### 处理时间和日期
+
+sinatra 提供一个 `time_for` 的辅助方法，用从给定的值中来生成 Time 对象。 其也可用来转换  DateTime ，Date 以及相似的类:
+
+```ruby
+get '/' do
+  pass if Time.now > time_for('Dec 23, 2012')
+  "still time"
+end
+```
+
+该方法在`expires` ，`last_modified` 和 `akin` 内部使用。通过覆盖 `time_for` 方法 ，可在应用成很容易的扩展这些方法的行为: 
+
+```ruby
+helpers do
+  def time_for(value)
+    case value
+    when :yesterday then Time.now - 24*60*60
+    when :tomorrow  then Time.now + 24*60*60
+    else super
+    end
+  end
+end
+
+get '/' do
+  last_modified :yesterday
+  expires :tomorrow
+  "hello"
+end
+```
+
 ### 查找模板文件
 
 find_template 辅助方法被用于在渲染时查找模板文件:
@@ -1155,9 +1719,9 @@ end
 
 你可以很容易地包装成一个扩展然后与他人分享！
 
-请注意 find_template 并不会检查文件真的存在， 而是对任何可能的路径调用给入的代码块。这并不会带来性能问题， 因为 render 会在找到文件的时候马上使用 break 。 同样的，模板的路径（和内容）会在除development mode以外的场合 被缓存。你应该时刻提醒自己这一点， 如果你真的想写一个非常疯狂的方法。
+请注意 `find_template` 并不会检查文件真的存在， 而是对任何可能的路径调用给入的代码块。这并不会带来性能问题， 因为 render 会在找到文件的时候马上使用 break 。 同样的，模板的路径（和内容）会在除development mode以外的场合 被缓存。你应该时刻提醒自己这一点， 如果你真的想写一个非常疯狂的方法。
 
-## 6. 配置
+## 配置
 
 运行一次，在启动的时候，在任何环境下：
 
@@ -1232,10 +1796,36 @@ end
 - server：服务器，或用于内置服务器的列表。 默认是 [‘thin’, ‘mongrel’, ‘webrick’], 顺序表明了 优先级。 
 - sessions： 开启基于cookie的sesson。 
 - show_exceptions：在浏览器中显示一个stack trace。 
-- static Sinatra是否处理静态文件。 当服务器能够处理则禁用。 禁用会增强性能。 默认开启。 
-- views views 文件夹。 
+- static:  Sinatra是否处理静态文件。 当服务器能够处理则禁用。 禁用会增强性能。 默认开启。 
+- `static_cache_control`： 但Sinatra 处理静态文件时，设置该选项会在响应头信心中添加 `Cache-Control` 头信息，并且可以使用 `cache_control` 辅助方法(默认禁用)。 设置多个值时，使用显式数组: ` set :static_cache_control, [:public, :max_age => 300]`
+- threaded: 设置为 `true` ，则通知 `EventMachine.defer` 处理请求
+- traps： 是否处理系统信号
+- views:  views 文件夹。 如果没有设置，则根据`app_file`中的设置。
+- `x_cascade`： 如果没有匹配路由，是否设置`X-Cascade`。
 
-## 7.  错误处理
+## 环境
+
+有三个预定义的环境: "development", "production" 和 "test"。 环境可通过 `RACK_ENV`  变量设置。默认为开发环境。在开发环境中，所有的模板在请求之前，都会重新加载，特殊的`not_found`和错误处理器将在浏览器中显示堆栈跟踪。 在"production" 和 "test"环境中，模板被预先缓存。
+
+To run different environments, set the RACK_ENV environment variable:
+
+为了运行不同的环境，需要设置`RACK_ENV`变量: 
+
+    RACK_ENV=production ruby my_app.rb
+
+可通过 development?, test? 和 production? 这些预定义方法 检查当前的环境设置: 
+
+```ruby
+get '/' do
+  if settings.development?
+    "development!"
+  else
+    "not development!"
+  end
+end
+```
+
+##  错误处理
 
 错误处理在与路由和前置过滤器相同的上下文中运行， 这意味着你可以使用许多好东西，比如 haml, erb, halt，等等。
 
@@ -1301,7 +1891,7 @@ end
 
 在运行在development环境下时，Sinatra会安装特殊的 not_found 和 error 处理器。
 
-## 8. Rack 中间件
+## Rack 中间件
 
 Sinatra 依靠 Rack, 一个面向Ruby web框架的最小标准接口。 Rack的一个最有趣的面向应用开发者的能力是支持“中间件”——坐落在服务器和你的应用之间， 监视 并/或 操作HTTP请求/响应以 提供多样类型的常用功能。
 
@@ -1319,7 +1909,7 @@ get '/hello' do
 end
 ```
 
-use 的语义和在 Rack::Builder DSL(在rack文件中最频繁使用)中定义的完全一样。例如，use 方法接受 多个/可变 参数，包括代码块：
+use 的语义和在 [Rack::Builder](http://rubydoc.info/github/rack/rack/master/Rack/Builder) DSL(在rack文件中最频繁使用)中定义的完全一样。例如，use 方法接受 多个/可变 参数，包括代码块：
 
 ```ruby
 use Rack::Auth::Basic do |username, password|
@@ -1329,7 +1919,7 @@ end
 
 Rack中分布有多样的标准中间件，针对日志， 调试，URL路由，认证和session处理。 Sinatra会自动使用这里面的大部分组件， 所以你一般不需要显示地 use 他们。
 
-## 9. 测试
+## 测试
 
 Sinatra的测试可以使用任何基于Rack的测试程序库或者框架来编写。 Rack::Test 是推荐候选：
 
@@ -1364,7 +1954,7 @@ end
 
 请注意: 内置的 Sinatra::Test 模块和 Sinatra::TestHarness 类 在 0.9.2 版本已废弃。
 
-## 10. Sinatra::Base - 中间件，程序库和模块化应用
+## Sinatra::Base - 中间件，程序库和模块化应用
 
 把你的应用定义在顶层，对于微型应用这会工作得很好， 但是在构建可复用的组件时候会带来客观的不利， 比如构建Rack中间件，Rails metal，带有服务器组件的简单程序库， 或者甚至是Sinatra扩展。顶层的DSL污染了Object命名空间， 并假定了一个微型应用风格的配置 (例如, 单一的应用文件， ./public 和 ./views 目录，日志，异常细节页面，等等）。 这时应该让 Sinatra::Base 走到台前了：
 
@@ -1440,7 +2030,7 @@ run MyApp
 
 运行:
 
-rackup -p 4567
+    rackup -p 4567
 
 使用config.ru运行传统方式的应用
 
@@ -1506,7 +2096,7 @@ class MyApp < Sinatra::Base
 end
 ```
 
-## 11. 变量域和绑定
+## 变量域和绑定
 
 当前所在的变量域决定了哪些方法和变量是可用的。
 
@@ -1570,16 +2160,18 @@ end
 
 ### 代理变量域
 
-代理变量域只是把方法转送到类变量域。可是， 他并非表现得100%类似于类变量域, 因为你并不能获得类的绑定: 只有显式地标记为供代理使用的方法才是可用的， 而且你不能和类变量域共享变量/状态。(解释：你有了一个不同的 `self`)。 你可以显式地增加方法代理，通过调用 Sinatra::Delegator.delegate :method_name。
+代理变量域只是把方法转送到类变量域。可是， 他并非表现得100%类似于类变量域, 因为你并不能获得类的绑定: 只有显式地标记为供代理使用的方法才是可用的， 而且你不能和类变量域共享变量/状态。(解释：你有了一个不同的 `self`)。 你可以显式地增加方法代理，通过调用 `Sinatra::Delegator.delegate :method_name`。
 
 在以下情况将获得代理变量域：
 
 - 顶层的绑定，如果你做过 require "sinatra"
 - 在扩展了 `Sinatra::Delegator` mixin的对象
 
-自己在这里看一下代码: Sinatra::Delegator mixin 已经 被包含进了主命名空间。
+自己在这里看一下代码: [Sinatra::Delegator mixin](http://github.com/sinatra/sinatra/blob/ceac46f0bc129a6e994a06100aa854f606fe5992/lib/sinatra/base.rb#L1128)
+已经
+[被包含进了主命名空间](http://github.com/sinatra/sinatra/blob/ceac46f0bc129a6e994a06100aa854f606fe5992/lib/sinatra/main.rb#L28)。
 
-## 12. 命令行
+## 命令行
 
 Sinatra 应用可以被直接运行：
 
@@ -1594,7 +2186,7 @@ ruby myapp.rb [-h] [-x] [-e ENVIRONMENT] [-p PORT] [-o HOST] [-s HANDLER]
 - -s # 限定 rack 服务器/处理器 (默认是 thin)
 - -x # 打开互斥锁 (默认是 off)
 
-## 13. 必要条件
+## 必要条件
 
 推荐在 Ruby 1.8.7, 1.9.2, JRuby 或者 Rubinius 上安装Sinatra。
 
@@ -1620,7 +2212,7 @@ ruby myapp.rb [-h] [-x] [-e ENVIRONMENT] [-p PORT] [-o HOST] [-s HANDLER]
 
 Sinatra应该会运行在任何支持上述Ruby实现的操作系统。
 
-## 14. 紧追前沿
+## 紧追前沿
 
 如果你喜欢使用 Sinatra 的最新鲜的代码，请放心的使用 master 分支来运行你的程序，它会非常的稳定。
 
@@ -1644,12 +2236,14 @@ Sinatra应该会运行在任何支持上述Ruby实现的操作系统。
 
 然后，在你的项目目录下，创建一个 Gemfile:
 
-    source :rubygems
-    gem 'sinatra', :git => "git://github.com/sinatra/sinatra.git"
-    
-    # 其他的依赖关系
-    gem 'haml'                    # 举例，如果你想用haml
-    gem 'activerecord', '~> 3.0'  # 也许你还需要 ActiveRecord 3.x
+``` ruby
+source :rubygems
+gem 'sinatra', :git => "git://github.com/sinatra/sinatra.git"
+
+# 其他的依赖关系
+gem 'haml'                    # 举例，如果你想用haml
+gem 'activerecord', '~> 3.0'  # 也许你还需要 ActiveRecord 3.x
+```
 
 请注意在这里你需要列出你的应用的所有依赖关系。 Sinatra的直接依赖关系 (Rack and Tilt) 将会， 自动被Bundler获取和添加。
 
@@ -1659,7 +2253,7 @@ Sinatra应该会运行在任何支持上述Ruby实现的操作系统。
 
 ### 使用自己的
 
-创建一个本地克隆并通过 sinatra/lib 目录运行你的应用， 通过 $LOAD_PATH:
+创建一个本地克隆并通过 sinatra/lib 目录运行你的应用， 通过 `$LOAD_PATH`:
 
     cd myapp
     git clone git://github.com/sinatra/sinatra.git
@@ -1682,3 +2276,19 @@ Sinatra应该会运行在任何支持上述Ruby实现的操作系统。
 如果你以root身份安装 gems，最后一步应该是
 
     sudo rake install
+
+## 更多
+
+-   [项目主页（英文）](http://www.sinatrarb.com/) - 更多的文档，
+    新闻，和其他资源的链接。
+-   [贡献](http://www.sinatrarb.com/contributing) - 找到了一个bug？
+    需要帮助？有了一个 patch?
+-   [问题追踪](http://github.com/sinatra/sinatra/issues)
+-   [Twitter](http://twitter.com/sinatra)
+-   [邮件列表](http://groups.google.com/group/sinatrarb/topics)
+-   [IRC: \#sinatra](irc://chat.freenode.net/#sinatra) on
+    [freenode.net](http://freenode.net)
+-   [Sinatra宝典](https://github.com/sinatra/sinatra-book/) Cookbook教程
+-   [Sinatra使用技巧](http://recipes.sinatrarb.com/) 网友贡献的实用技巧
+-   [最新版本](http://rubydoc.info/gems/sinatra)API文档；[http://rubydoc.info](http://rubydoc.info)的[当前HEAD](http://rubydoc.info/github/sinatra/sinatra)
+-   [CI服务器](http://travis-ci.org/sinatra/sinatra)
