@@ -14,6 +14,8 @@ tags : [intro, beginner, jekyll, tutorial]
 
 Jekyll是封装为ruby的gem的解析引擎，用来从诸如模板，部分视图，liquid代码，markdown的。Jekyll是"a simple, blog aware, static site generator"。
 
+Jekyll是一个前端开发框架。
+
 ### Examples
 
 This website is created with Jekyll. [Other Jekyll websites](https://github.com/mojombo/jekyll/wiki/Sites).
