@@ -9,6 +9,8 @@ category: note
 
 工作之后，对环境有所挑剔，以及不间断的搜集一些常用工具软件。
 
+第一原则： 懒且避免重复，DRY。
+
 ## 基本系统
 
 ubuntu 14.04 64位系统。
@@ -18,8 +20,6 @@ ubuntu 14.04 64位系统。
 1. 软件源安装: `apt-get install  build-essential mysql-client vim curl redis zsh tmux nginx libmysql-ruby libmysqlclient-dev  -y`
 
 2. 常用软件: Firefox ，Chrome ，VirtualBox ，KSysGuard，GIMP，WPS for Linux，Fcitx输入法，金山快盘
-
-3. 
 
 ## 开发环境
 
@@ -243,8 +243,9 @@ Rails开发必备的gem包:
 
 代码度量的gem工具包: 
 
-* [rubocop](https://github.com/bbatsov/rubocop):
-* [hound](https://github.com/thoughtbot/hound):
+* [rubocop](https://github.com/bbatsov/rubocop): 静态代码检查工具
+* [hound](https://github.com/thoughtbot/hound): 某持续集成工具
+* [RubyBench](http://rubybench.org/): 基准测试工具
 * [rails_best_practices](https://github.com/xinminlabs/rails-bestpractices.com)
 
 几种不同的xxxfile
@@ -266,3 +267,5 @@ nnoremap h <C-p>
 nnoremap  j  5j
 nnoremap  k  5k
 ```
+
+最近，发现，自己越来越蠢了，简直愚不可及。
