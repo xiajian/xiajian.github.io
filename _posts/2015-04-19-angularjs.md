@@ -36,7 +36,15 @@ npm也存在一个类似的国内的淘宝镜像，可以用来加快下载速�
 
 ## package.json
 
-首先是package.json，后端API部分，依赖如下的这些包: 
+首先是package.json， package.json中还有一些比较有用的配置:
+
+* name : 项目的名字
+* dependencies ： 项目的依赖
+* devdependencies : 开发中的项目依赖
+* engines : node的执行引擎的版本
+* scripts : 需要执行的shell命令
+
+后端API部分，依赖如下的这些包: 
 
 * express - 基于nodejs的轻量级、快速的web框架
 * underscore - 类似Ruby的工具函数语法的web框架
@@ -51,13 +59,19 @@ npm也存在一个类似的国内的淘宝镜像，可以用来加快下载速�
 * q - 就是嵌套方法调用的流式调用版
 * uuid - 生成RFC4122版本的UUID
 
+
 前端部分的package.json，基本无依赖，只有对执行引擎(nodejs)有些依赖。
 
 package.json的依赖可通过`npm install`进行安装，不过，这样如何理解bower的作用？？
 
 ## bower.json
 
-bower.json以及bower工具，似乎主要是用来处理浏览器相关的包的依赖的。
+bower.json以及bower工具，似乎主要是用来处理浏览器相关的包的依赖的。 bower安装依赖主要通过github来安装, `bower init`可在当前目录下
+安装 `bower.json` 文件，其可选项比较多。
+
+> bower.json 和 package.json 两者的结构和key名很相似。 `bower install angualr --save-dev`将包安装到项目依赖中。 bower和npm的使用也很相似。
+
+bower 的安装配置可以通过 `.bowerrc` 文件进行配置.
 
 前端的bower.json给出的依赖内容: 
 
@@ -90,6 +104,8 @@ bower.json以及bower工具，似乎主要是用来处理浏览器相关的包�
 > 备注: 了解了一下bower和npm这两个包管理器的区别。npm是node模块的包管理器，bower是前端包管理器，两者之间有些重合的地方。npm是树状的依赖关系，和原生支持`commonJS`。bower是tiwtter出品，比较灵活。
 
 > 关于浏览器的包管理器，存在这样的几个类似功能的工具: [component](https://github.com/componentjs/component), [browserify](https://github.com/substack/node-browserify), [spm](https://github.com/spmjs/spm)。
+
+> 备注: 单独使用bower非常的麻烦，可以配合 grunt 进行开发。
 
 ## requirejs
 
@@ -148,13 +164,15 @@ define(['angular', 'controllers/controllers',
 
 书本上，推荐使用yeoman的angular生成器生成目录结构，这样的目录结构是标准的。
 
+> yeoman 是一个应用程序脚手架程序，其官方网站上提供了1000多种生成器。
+
 yeoman的命令为:  `yo angular test_ng`， 然后就是漫长的等待，注意，yeoman的生成器，会在当前目录中生成文件，也就是这个自动化流程工具都不给你创建一个文件，
 存放他生成的那些狗屎文件，而且，生成个文件，执行了一段莫名奇妙的东西，在同一个shell终端，居然记住了上次安装的路径，一遍又一遍的忘错误的地方安装那些模块。
 
 一会儿让你选这个，一会儿又莫名奇妙的卡在哪里，一动不动。每次，卡的地方还不一样。我他妈就不明白，老子生成一下项目和文件，你丫的预编译测试个毛啊。真是狗屎一般的`yo angular`生成器。
 发泄归发泄，自己写了简单的包装命令，如下。仔细想想，虽然没给自动生成目录，但，把整个流程走了一遍，还是很有用的。我现在觉得，流程比功能更重要。
 
-```
+```shell
 function yeoman() {
   if [ $# == 0 ] ; then
     echo "[usage]: yeoman project_name"
