@@ -86,7 +86,7 @@ Backport：
 
     def f a, b=1, *c, d: 1, **e, &block
 
-to_h: 转换为hash, to_ary
+`to_h`: 转换为hash, `to_ary`
 
 **Refinements**
 
@@ -143,3 +143,21 @@ rails
 
 * engine就是一个迷你的Rails app。包裹各种middleware之后，最后就是routes
 * engine的middleware，application中不能访问
+
+## Rails 源码分析 Arel 
+
+Rails 中的 AR 使用的 [Arel](https://github.com/rails/arel) 将 DSL 装换成 SQL。 
+
+Arel 是 一个关系代数，涉及 AST ，语言解析和生成相关的。
+
+类的结构子图： 
+
+* TreeManager: DeleteManger, SelectManger, UpdateManger, InsertManger。
+* Node: DeleteStatement,SelectStatement, UpdateStatement, InsertStatement
+* Binary: 二元谓词，2个参数 - as, between, join, less than, or, union, except
+* Unary: 一元谓词 ，1个参数 - bin,group, having, limit, not, offset, on, ordering, top
+* Function: 数据库函数
+* Visitor: 观察者模式， DepthFirst, ToSQL(Mysql的适配器, WhereSql, OrderClause), Dot
+* Table: 抽象数据库的表结构
+
+通过`scope`进行链式的查询。
