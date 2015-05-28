@@ -40,18 +40,19 @@ Git： pull-request。Gitlab CI - 持续继承的服务器。
 
 Middle-scale Application: 前端比较重的程序，大量的css和js。
 
-* Loader-加载: LABjs, headjs, yepnodejs
+* Loader-加载: LABjs, headjs, yepnodejs(modernizr.load)
 * NameSpace： Single global variables, object literal notation, Nested namespacing, IIFE, Namespace injection，或这 coffescript的方法。
-* Dependency： requirejs(AMD，异步)
-* Component/widgets(Html&javascript&css)
+* Dependency： requirejs(AMD，异步) - 组件很多，考虑依赖关系。兼容浏览器比较多 - 模块化
+* Component/widgets(Html&javascript&css) - 组件化
 * Unit/Component test(Fixture)，前端测试，新颖的领域。
-* Build(Strategy): r.js, sprockets等，将所有的东西和在一起
-* UX(Speed & LiveReload & ) 
+* Build(Strategy): r.js, sprockets等，将所有的东西和在一起，像Assatpipeline那样的。
+* UX(Speed & LiveReload & ) - 监控文件加载
 
 Javascript在语言的层面，没有命名空间和模块这种玩意，全局的命令空间，然后各路大神各种方法模拟命名空间。
 
 Crossroad选择： 
-* chef or puppet
+
+* chef or puppet - 部署工具
 * gitlab or github
 * AMD & UMD & CMD, 同步，异步或真混合。
 
@@ -160,4 +161,60 @@ Arel 是 一个关系代数，涉及 AST ，语言解析和生成相关的。
 * Visitor: 观察者模式， DepthFirst, ToSQL(Mysql的适配器, WhereSql, OrderClause), Dot
 * Table: 抽象数据库的表结构
 
-通过`scope`进行链式的查询。
+通过`scope`进行链式的查询。 pry 可以这么使用: `pry -r ./arel.rb`，从而来探索类库中的各种各样的结构，这种尝试探索的方式很适合我。
+
+源码阅读，从父类到子类，然后，从子类到父类，再从父类到子类。 方法/节点装换为语法片段，最后语法片段拼接起来。类名映射为方法名。
+
+`to_sql`将方法转换为sql语句。
+
+分析源码的，以后，有机会在看。。 **待续**
+
+## Beyond `rails server`
+
+部署，监控，架构演进 - 适合小团队。
+
+Rails的编程模型: 基于HTTP的curd - rest。 
+
+域名非常的重要: 
+
+* www.domain.com 
+* *.domain.com
+* MX记录
+* TXT记录 - DNSonp 服务
+
+> 万网中第一种快，第2-3种都很慢。备案过程是非常坑爹，阿里云备案还是很方便的。
+
+* Nginx + Unicorn -> Unicorn运行更加的稳定。
+* 分支模型: master/dev - feature分支。
+* resque + god: 发送邮件的配置
+* cronjob + whenever: 定时任务的处理
+* 持续部署: DEV, UAT, Prod - 一天4-5次
+* 监控: Nagios, NewRelic
+
+> 监控什么? 硬盘，CPU， 内存，带宽 == www/db服务状态，页面响应时间，4xx/5xx页面，邮件队列 == GA，微博，用户行为。
+
+架构演进: **在rails社区很少提及**。代码不要超过xxx行代码。
+
+将单进程模式 -> 多进程进程，关于进程的考虑如下: 
+
+* 前台进程，后台进程，cronjob
+* 前台进程保持响应时间在 (`<200ms`)
+* 将耗时的进程放到后台( delay_job, resque, sidekiq)
+* 善用cronjob(whenever) - 大型的，复杂的任务
+
+3000行代码阈值: 分离gem，剥离应用(2级域名 - 支付，用户管理)
+
+总结: 
+
+* 随时进行架构演进
+* 警惕代码行数 - 简单，好用
+* 随机剥离，进程分离
+* 为新技术做好准备
+
+赠送:
+ 
+* 不做B2B，做B2C
+* 紧跟 rubygems.org
+* 如何做，为何做，而不是做什么
+
+

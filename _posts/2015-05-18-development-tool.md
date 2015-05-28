@@ -214,6 +214,7 @@ runtime! macros/matchit.vim
 ▸ vim-bundler/
 ▸ vim-coffee-script/
 ▸ vim-haml/
+▸ vim-fugitive/ - 显示文件的分支名
 ▸ vim-indent-guides/
 ▸ vim-javascript/
 ▸ vim-markdown/
