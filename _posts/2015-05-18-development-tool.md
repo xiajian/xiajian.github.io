@@ -70,7 +70,7 @@ rvm remove 1.9.3    # 移除1.9.3所有相关的gem包
 
 开发相关的库的安装: `sudo apt-get install redis-tools redis-server ImageMagick `
 
-> 备注: 仔细想想，其实rvm也是相当复杂的一个工具。
+> 备注: 仔细想想，其实rvm也是相当复杂的一个工具。相关知识，够用即可。看到rvm其依赖 chruby 这个项目。
 
 ## VIM
 
@@ -207,30 +207,33 @@ runtime! macros/matchit.vim
 ▸ delimitMate/ - 成对出现的符号工具
 ▸ emmet-vim/ - html的相关的辅助插件
 ▸ nerdtree/ - 目录树
-▸ tcomment_vim/ - 注释插件
+▸ tcomment_vim/ - 注释插件，gcc命令
 ▸ tlib_vim/
 ▸ vim-addon-mw-utils/
 ▸ vim-angular/
-▸ vim-bundler/
-▸ vim-coffee-script/
-▸ vim-haml/
-▸ vim-fugitive/ - 显示文件的分支名
-▸ vim-indent-guides/
+▸ vim-coffee-script/ - coffee的vim集成
+▸ vim-haml/ 
+▸ vim-markdown/ 
 ▸ vim-javascript/
-▸ vim-markdown/
-▸ vim-powerline/ - 强大的状态信息栏
+▸ vim-fugitive/ - vim和git的集成
+▸ vim-indent-guides/ - 处理缩进
+▸ vim-powerline/ - 强大的状态信息栏，色彩太多了，不太喜欢太多的颜色，没用多色配置
 ▸ vim-rails/ - rails.vim插件
 ▸ vim-ruby/ - ruby.vim插件
-▸ vim-snipmate/
-▸ vim-snippets/
-▸ vim-surround/
+▸ vim-bundler/ - vim和bundle的集成
+▸ vim-snipmate/ - textmate 中强大的语法片段补全功能
+▸ vim-snippets/ - 语法片段，可以查看和编辑，非常好用，时常查看有好处
+▸ vim-surround/ - 在选中区域添加首尾字符
 ```
+
+> 我最近，也在看sublminetext，看看subl提供了怎样独一无二的功能，想着，如果是VIM，怎样实现相同的功能。他山之石，可以攻玉。
+> 提高效率，必须要重自己日用的工具开始，不知为何，最近，才想起来练习自己的vim相关的技能。 之前都太过急躁了。
 
 ## Rails开发环境
 
 Rails开发必备的gem包: 
 
-* quiet_assets - 关闭开发环境下，静态资源的log的显示，可能比较罗嗦
+* quiet_assets - 关闭开发环境下静态资源的log的显示，可能比较罗嗦
 * annotate -  注释 AR 的模型 
 * `better_errors` - 和 `binding_of_caller` 提供web界面的错误调试
 * meta_request - 与 chrome 插件 RailsPanel 相结合，可以在chrome想看相关的日志信息
@@ -253,7 +256,7 @@ Rails开发必备的gem包:
 
 * Gemfile - [bundle](https://github.com/bundler/bundler)
 * Rakefile - Rake相关的，用来加载一些内置的Rake任务
-* Guardfile(与Guard有关) - 用来省去按F5的次数
+* Guardfile(与Guard有关) - 用来省去按F5的次数， guard，guard-liveload gem 
 * Procfile - [foreman](https://github.com/ddollar/foreman)
 
 ## 后记
