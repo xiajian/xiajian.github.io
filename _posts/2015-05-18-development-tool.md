@@ -201,6 +201,8 @@ runtime! macros/matchit.vim
 
 安装的插件: 
 
+Rails开发必备插件: NERDtree, CtrlP, Rails.vim, snipMate, ctags, ack.vim，以及其他一些辅助的插件。
+
 ```
 ▸ ack/  -  ack-grep 程序的VIM插件，可以在整个目录中查找特定的内容
 ▸ ctrlp/ - 在项目中快速寻找特定名字的文件
@@ -211,10 +213,10 @@ runtime! macros/matchit.vim
 ▸ tlib_vim/
 ▸ vim-addon-mw-utils/
 ▸ vim-angular/
-▸ vim-coffee-script/ - coffee的vim集成
-▸ vim-haml/ 
-▸ vim-markdown/ 
-▸ vim-javascript/
+▸ vim-coffee-script/ - coffee的vim插件
+▸ vim-haml/ - haml的vim插件
+▸ vim-markdown/ - 
+▸ vim-javascript/ - 
 ▸ vim-fugitive/ - vim和git的集成
 ▸ vim-indent-guides/ - 处理缩进
 ▸ vim-powerline/ - 强大的状态信息栏，色彩太多了，不太喜欢太多的颜色，没用多色配置
@@ -229,11 +231,13 @@ runtime! macros/matchit.vim
 > 我最近，也在看sublminetext，看看subl提供了怎样独一无二的功能，想着，如果是VIM，怎样实现相同的功能。他山之石，可以攻玉。
 > 提高效率，必须要重自己日用的工具开始，不知为何，最近，才想起来练习自己的vim相关的技能。 之前都太过急躁了。
 
+vim结合ctags使用，可以极快的加速编码的效率。其命令行为: `ctags -R --exclude=.git --exclude=log`
+
 ## Rails开发环境
 
 Rails开发必备的gem包: 
 
-* quiet_assets - 关闭开发环境下静态资源的log的显示，可能比较罗嗦
+* `quiet_assets` - 关闭开发环境下静态资源的log的显示，可能比较罗嗦
 * annotate -  注释 AR 的模型 
 * `better_errors` - 和 `binding_of_caller` 提供web界面的错误调试
 * meta_request - 与 chrome 插件 RailsPanel 相结合，可以在chrome想看相关的日志信息

@@ -8,6 +8,8 @@ description: "rack，web，ruby，性能监控"
 
 出于界定基准线的目的，对Benchmark很迷恋，这样才会有改进的方向。
 
+这里有个关于性能探索的综合项目节点: <https://github.com/ruby-bench>
+
 ## 后记
 
 希望，新的一年里，要做到自己想要做到的事情，即使固执一点也是没有问题的。

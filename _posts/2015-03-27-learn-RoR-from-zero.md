@@ -2,6 +2,7 @@
 layout: post
 title: "从零开始学习RoR"
 description: "ruby, Rails，web框架"
+category: note
 ---
 
 ## 前言

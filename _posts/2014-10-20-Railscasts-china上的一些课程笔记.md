@@ -4,6 +4,10 @@ title: Railscasts-china上的一些课程笔记
 category :  note
 ---
 
+## 前言
+
+看书看累了，看看视频也挺不错的。
+
 ## How Gitlab works
 
 Gitlab的分层结构: backend -- repo access -- presetation layer
@@ -217,4 +221,6 @@ Rails的编程模型: 基于HTTP的curd - rest。
 * 紧跟 rubygems.org
 * 如何做，为何做，而不是做什么
 
+## 后记
 
+RailsCast的视频提供服务有的好，有的差，就像抓彩票似的，永远不知道哪个能中。
