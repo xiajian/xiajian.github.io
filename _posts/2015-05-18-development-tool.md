@@ -21,6 +21,10 @@ ubuntu 14.04 64位系统。
 
 2. 常用软件: Firefox ，Chrome ，VirtualBox ，KSysGuard，GIMP，WPS for Linux，Fcitx输入法，金山快盘
 
+firefox的插件: jquery, clearly, evernote, firebug, vimperator, yslow
+
+chrome的插件: angularjs batarang, railspanel, seo(woorank), vimium, 有道词典
+
 ## 开发环境
 
 ### 版本控制工具 - git

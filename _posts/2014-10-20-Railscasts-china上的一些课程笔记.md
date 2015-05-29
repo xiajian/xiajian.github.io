@@ -217,9 +217,65 @@ Rails的编程模型: 基于HTTP的curd - rest。
 
 赠送:
  
-* 不做B2B，做B2C
+* 不做B2B，做B2C 和 B2b
 * 紧跟 rubygems.org
 * 如何做，为何做，而不是做什么
+* [架构腐化之谜](http://www.infoq.com/cn/articles/cjz-architecture-corruption/)
+
+## Rails Starter-Models
+
+Rails相关，多看看文档。
+
+model相关的有四个大概念: Migration, Validate, Callback, Association
+
+学习model，最关心关系。从项目的模型画表，然后，理解其中的关系。
+
+## 构建异步API服务
+
+Rails的优势: 开发快， 开发者多，社区大
+
+劣势: 学习成本高，运行速度慢，惯环程序员
+
+后端渲染HTML慢，JSON API服务快。
+
+API服务: 对外提供接口，单页面面应用，客户端应用。
+
+任何基于hello world的测试都是耍流氓。
+
+几种常见的模式: 
+
+* 阻塞IO: Rails/rails-api , sinatra/grape
+* 非阻塞IO: sinatra + sinatra-synchrony , grape + goliath
+
+Ruby可以做到: 性能好，并发高，维护好，效率高。响应时间，吞吐量。
+
+## 基于web的Ruby实时应用
+
+UX-driven evolution of Web: 越来月接近人们的生活。
+
+实用应用: 即时聊天，推送服务，网络游戏
+
+长连接: Persistent Connection - client 和 web server。
+
+HTTP: 短链接， 无状态。
+
+实时应用的解决方法: 
+
+* XHR Polling: 信息滞后，和无用请求
+* Long Polling: 适合大多数的网站，不适合数据更新频繁的server
+* HTTP Streaming: 从音频/视频的方式
+* Flash Socket: 在Tcp层次上，建立的长连接
+* websocket: 由google主推，集成速度快
+
+如何选择方案，实时需求性。
+
+使用pusher服务，pusher的开源的实现: slanger - 本地开发。纯的websocket，em-websocket。
+
+[Hipchat](https://www.hipchat.com)，实时聊天的工具。BOSH协议使用XMPP协议 - 为了聊天而用的协议，具有很多扩展，其本质使用的ajax。需要后端服务器: openfire/ejabberd。
+
+Twitter web，实时是sugar，使用XHR Polling。Simple。
+
+Twitter Streaming API，大数据流的处理，支持cli从命令行请求。使用Stream必须使用EventMachine，可以使用Rainbow，Thin，Rack::Stream。
 
 ## 后记
 
