@@ -58,4 +58,4 @@ rsync -rv --delete mydir root@aliyun:  # 操作时，提示信息
 rsync -rv --dry-run --delete mydir root@aliyun:  # 不操作，仅提示信息
 ```
 
-使用scp ，直接使用命令行，使用rsync，倾向编写脚本。
+使用scp ，直接使用命令行，使用rsync，倾向编写脚本。 具体脚本参考<https://gist.github.com/4248241>。
