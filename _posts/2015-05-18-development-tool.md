@@ -27,6 +27,8 @@ chrome的插件: angularjs batarang, railspanel, seo(woorank), vimium, 有道词
 
 ## 开发环境
 
+开发环境所用的工具，需要让工具组合，从而形成一套工作流程。从开发到部署的workflow。
+
 ### 版本控制工具 - git
 
 使用git，以及使用git相关的版本托管工具 - gitlab, gitcafe, coding.net 
@@ -44,6 +46,8 @@ ssh-keygen -t rsa -C "jhqy2011@gmail.com"           # 如果不设-C选项，默
 根据邮箱生成key可以跨机器使用，但是，使用默认的方式方式生成的key是机器相关的，不能跨机器使用。
 
 > 备注: 公钥私钥可以映射为现实的钥匙，只不过是二进制数字串。
+
+看到一款不错的git相关的命令行工具 - tig( sudo apt-get install tig)
 
 ## RVM
 
@@ -236,6 +240,8 @@ Rails开发必备插件: NERDtree, CtrlP, Rails.vim, snipMate, ctags, ack.vim，
 > 提高效率，必须要重自己日用的工具开始，不知为何，最近，才想起来练习自己的vim相关的技能。 之前都太过急躁了。
 
 vim结合ctags使用，可以极快的加速编码的效率。其命令行为: `ctags -R --exclude=.git --exclude=log`
+
+vim打开文件中的全部折叠 - zR
 
 ## Rails开发环境
 
