@@ -14,7 +14,35 @@ description: "tmux，linux"
 
 tmux的快捷键是以Ctrl-b开头的引导键序列。 使用的通用的c/s架构。
 
-配置文件: ~/.tmux.conf
+配置文件: `~/.tmux.conf`
+
+```
+unbind C-b
+set -g prefix C-a     # 引导符
+setw -g mode-keys vi  # 在选择模式下，启用vi模式
+
+# split window like vim
+# vim's defination of a horizontal/vertical split is revised from tumx's
+bind s split-window -h
+bind v split-window -v
+# move arount panes wiht hjkl, as one would in vim after C-w
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# resize panes like vim
+# feel free to change the "1" to however many lines you want to resize by,
+# only one at a time can be slow
+bind < resize-pane -L 10
+bind > resize-pane -R 10
+bind - resize-pane -D 10
+bind + resize-pane -U 10
+
+# bind : to command-prompt like vim
+# this is the default in tmux already
+bind : command-prompt
+```
 
 常用按键: 
 
@@ -35,7 +63,7 @@ C-b x 关闭当前光标处的pane
 C-b t 很酷的一个时钟
 ```
 
-更多快捷键(以下按键为先导键之后的按键): 
+更多快捷键(以下按键为先导键之后的按键)，tmux的快捷键大多为单个键:
 
 ```
 系统操作   
@@ -79,7 +107,7 @@ C-b t 很酷的一个时钟
 
 此外，发现一个不太方便的地方，那就是在终端中，滚轮的作用被覆盖了。也就是无法上下翻滚，查看长的命令输入。能保持session，确实是个优点。
 
-备注，不能翻屏，各种难用，shell的执行也不那么明朗。不如我原生的termial。 不过，我的终端gui总是容易崩溃，让人觉得稍微有些不爽。
+备注，不能翻屏，各种难用，shell的执行也不那么明朗。不如我原生的termial。 不过，我的终端gui总是容易崩溃，让人觉得稍微有些不爽，这也是我稍微羡慕 Apple 机器的一点。
 
 ## 参考文献
 
