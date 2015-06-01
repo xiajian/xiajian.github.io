@@ -214,28 +214,28 @@ runtime! macros/matchit.vim
 Rails开发必备插件: NERDtree, CtrlP, Rails.vim, snipMate, ctags, ack.vim，以及其他一些辅助的插件。
 
 ```
-▸ ack/  -  ack-grep 程序的VIM插件，可以在整个目录中查找特定的内容
-▸ ctrlp/ - 在项目中快速寻找特定名字的文件
-▸ delimitMate/ - 成对出现的符号工具
-▸ emmet-vim/ - html的相关的辅助插件
-▸ nerdtree/ - 目录树
-▸ tcomment_vim/ - 注释插件，gcc命令
-▸ tlib_vim/
-▸ vim-addon-mw-utils/
-▸ vim-angular/
-▸ vim-coffee-script/ - coffee的vim插件
-▸ vim-haml/ - haml的vim插件
-▸ vim-markdown/ - 
-▸ vim-javascript/ - 
-▸ vim-fugitive/ - vim和git的集成
-▸ vim-indent-guides/ - 处理缩进
-▸ vim-powerline/ - 强大的状态信息栏，色彩太多了，不太喜欢太多的颜色，没用多色配置
-▸ vim-rails/ - rails.vim插件
-▸ vim-ruby/ - ruby.vim插件
-▸ vim-bundler/ - vim和bundle的集成
-▸ vim-snipmate/ - textmate 中强大的语法片段补全功能
-▸ vim-snippets/ - 语法片段，可以查看和编辑，非常好用，时常查看有好处
-▸ vim-surround/ - 在选中区域添加首尾字符
+* [ack](https://github.com/mileszs/ack.vim)  -  ack-grep 程序的VIM插件，可以在整个目录中查找特定的内容
+* [ctrlp](https://github.com/kien/ctrlp.vim) - 在项目中快速寻找特定名字的文件
+* [delimitMate]://github.com/Raimondi/delimitMate() - 成对出现的符号工具
+* [emmet-vim](https://github.com/mattn/emmet-vim) - html的相关的辅助插件
+* [nerdtree](https://github.com/scrooloose/nerdtree) - 目录树
+* [tcomment_vim](https://github.com/tomtom/tcomment_vim) - 注释插件，gcc命令
+* [[tlib_vim](https://github.com/tomtom/tlib_vim)
+* [vim-addon-mw-utils]()
+* [vim-angular]()
+* [vim-coffee-script]() - coffee的vim插件
+* [vim-haml](https://github.com/tpope/vim-haml) - haml的vim插件
+* [vim-markdown](https://github.com/plasticboy/vim-markdown) - 
+* [vim-javascript](https://github.com/pangloss/vim-javascript) - 
+* [vim-fugitive](https://github.com/tpope/vim-fugitive) - vim和git的集成
+* [vim-indent-guides]() - 处理缩进
+* [vim-powerline](https://github.com/Lokaltog/vim-powerline) - 强大的状态信息栏，色彩太多了，不太喜欢太多的颜色，没用多色配置
+* [vim-rails](https://github.com/tpope/vim-rails) - rails.vim插件
+* [vim-ruby]() - ruby.vim插件
+* [vim-bundler]() - vim和bundle的集成
+* [vim-snipmate]() - textmate 中强大的语法片段补全功能
+* [vim-snippets]() - 语法片段，可以查看和编辑，非常好用，时常查看有好处
+* [vim-surround]() - 在选中区域添加首尾字符
 ```
 
 > 我最近，也在看sublminetext，看看subl提供了怎样独一无二的功能，想着，如果是VIM，怎样实现相同的功能。他山之石，可以攻玉。
