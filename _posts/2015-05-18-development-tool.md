@@ -216,7 +216,7 @@ Rails开发必备插件: NERDtree, CtrlP, Rails.vim, snipMate, ctags, ack.vim，
 ```
 * [ack](https://github.com/mileszs/ack.vim)  -  ack-grep 程序的VIM插件，可以在整个目录中查找特定的内容
 * [ctrlp](https://github.com/kien/ctrlp.vim) - 在项目中快速寻找特定名字的文件
-* [delimitMate]://github.com/Raimondi/delimitMate() - 成对出现的符号工具
+* [delimitMate](https://github.com/Raimondi/delimitMate) - 成对出现的符号工具
 * [emmet-vim](https://github.com/mattn/emmet-vim) - html的相关的辅助插件
 * [nerdtree](https://github.com/scrooloose/nerdtree) - 目录树
 * [tcomment_vim](https://github.com/tomtom/tcomment_vim) - 注释插件，gcc命令

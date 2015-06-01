@@ -29,4 +29,8 @@ git clone https://github.com/Lokaltog/vim-powerline
 git clone https://github.com/plasticboy/vim-markdown
 git clone https://github.com/pangloss/vim-javascript
 git clone https://github.com/tpope/vim-haml
+git clone https://github.com/Raimondi/delimitMate
+git clone https://github.com/tpope/vim-surround
+git cl https://github.com/honza/vim-snippets
+git cl https://github.com/garbas/vim-snipmate
 ```
