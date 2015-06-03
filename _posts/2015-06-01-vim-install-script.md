@@ -33,4 +33,9 @@ git clone https://github.com/Raimondi/delimitMate
 git clone https://github.com/tpope/vim-surround
 git cl https://github.com/honza/vim-snippets
 git cl https://github.com/garbas/vim-snipmate
+git clone https://github.com/kchmck/vim-coffee-script.git
 ```
+
+## 后记
+
+切换到Mac OSX中，没了当前选择区的选择即复制，感觉相当的不顺畅。不要带有成见的区看问题，mac自有mac的好处。
