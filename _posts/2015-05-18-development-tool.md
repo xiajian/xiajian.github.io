@@ -253,8 +253,8 @@ Rails开发必备的gem包:
 * annotate -  注释 AR 的模型 
 * `better_errors` - 和 `binding_of_caller` 提供web界面的错误调试
 * meta_request - 与 chrome 插件 RailsPanel 相结合，可以在chrome想看相关的日志信息
-* pry-rails - 强大的Rails Console环境
-* pry-debugger  - 用来调试代码
+* pry-rails - 强大的Rails Console环境 , 仅限 Rails 3的环境
+* pry-debugger  - 用来调试代码， 同上
 * ruby-prof - rails代码执行时间度量工具
 * rails_best_practices - Rails最佳实践工具
 * rack-mini-profiler - 很好用的页面代码执行时间工具
