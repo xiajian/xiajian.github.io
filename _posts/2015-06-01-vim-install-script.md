@@ -2,7 +2,7 @@
 layout: post
 title: vim安装相关的配置
 description: "自动化安装自己所需要的vim相关的插件"
-category: life
+category: note
 ---
 
 ## 前言
@@ -35,6 +35,8 @@ git cl https://github.com/honza/vim-snippets
 git cl https://github.com/garbas/vim-snipmate
 git clone https://github.com/kchmck/vim-coffee-script.git
 ```
+
+> 备注: 一个一个下载，烦死了，早知道就直接将插件文件拷贝过来。版本库里不能包含版本库，这是经验。
 
 ## 后记
 
