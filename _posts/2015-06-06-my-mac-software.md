@@ -27,6 +27,8 @@ dmg 包相关的站点: [macupdate.com](http://www.macupdate.com)
 
 尝试的软件: 键盘映射软件 - Karabiner , Finder增强插件 - XtraFinder 。
 
+> Mac 下连接服务器，使用 sshfs + macfusion 。sshfs 通过 **brew cask install sshfs**， macfusion 的地址 http://macfusionapp.org/ 。
+
 ## 快捷键
 
 想要熟练使用某操作系统，关键还是要记各种快捷键，并时常联系，从而做到，让手指记住按键。

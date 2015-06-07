@@ -213,7 +213,6 @@ runtime! macros/matchit.vim
 
 Rails开发必备插件: NERDtree, CtrlP, Rails.vim, snipMate, ctags, ack.vim，以及其他一些辅助的插件。
 
-```
 * [ack](https://github.com/mileszs/ack.vim)  -  ack-grep 程序的VIM插件，可以在整个目录中查找特定的内容
 * [ctrlp](https://github.com/kien/ctrlp.vim) - 在项目中快速寻找特定名字的文件
 * [delimitMate](https://github.com/Raimondi/delimitMate) - 成对出现的符号工具
@@ -236,7 +235,7 @@ Rails开发必备插件: NERDtree, CtrlP, Rails.vim, snipMate, ctags, ack.vim，
 * [vim-snipmate]() - textmate 中强大的语法片段补全功能
 * [vim-snippets]() - 语法片段，可以查看和编辑，非常好用，时常查看有好处
 * [vim-surround]() - 在选中区域添加首尾字符
-```
+* YCM - 强大的自动补全功能的软件。
 
 > 我最近，也在看sublminetext，看看subl提供了怎样独一无二的功能，想着，如果是VIM，怎样实现相同的功能。他山之石，可以攻玉。
 > 提高效率，必须要重自己日用的工具开始，不知为何，最近，才想起来练习自己的vim相关的技能。 之前都太过急躁了。
