@@ -32,7 +32,18 @@ firefox http://localhost:5000/ 和 http://localhost:5000/admin/
 
 默认生成的管理员用户名和密码是: Email [spree@example.com],和 Password [spree123]。
 
-感觉上，spree 做的还不错，界面干净整洁，还利用 bootstrap 做了自适应，也利用了各种型高级的 ui 工具库。
+感觉上，spree 做的还不错，界面干净整洁，还利用 bootstrap 做了自适应，也利用了各种型高级的 ui 工具库。 上图: 
+
+<div class="pic">
+  <img src="/assets/images/spree.png" alt="spree 主界面"/>
+</div>
+
+后台界面: 
+
+<div class="pic">
+  <img src="/assets/images/spree1.png" alt="spree 后台界面"/>
+</div>
+
 
 ## 参考文献
 
