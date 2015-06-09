@@ -31,6 +31,15 @@ category: note
 
 `form_tag`类型的表单，提交参数的各个控件中，需要使用 `name` 属性。
 
+## session
+
+之前，一直使用 redis 或者 memcached 加上一些 gem 包处理session。最近发现，如果自己处理 session并将其存放到 mysql 数据库中，需要如下的这些 gem 包: 
+
+* [activerecord-session_store](https://rubygems.org/gems/activerecord-session_store) - 存储对象的支持，不然 session 存储都是对象的 `object_id`，将对象存放到数据库中，是没有尝试过的方法。
+* [protected_attributes](https://github.com/rails/protected_attributes) - `ActiveRecord::SessionStore::Session.attr_accessible` 方法的支持
+
+利用数据库来存储 session，正是少有的行为，这样的考虑是为什么呢。是为了架构的简单性吗？
+
 ## 错误
 
 今天遇到一个错误，不小心在路由中加中一些重复，本地开发环境没有问题，部署到远程服务器上，直接就挂掉了。幸而使用capistrano的回滚操作，然后在本地staging环境下部署测试，
