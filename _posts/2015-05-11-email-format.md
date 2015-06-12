@@ -73,6 +73,7 @@ class InvalidEmail
   field :email
 
   validates :email , :presence => true, :uniqueness => true
+  index({email: 1}, {unique: true, background: true})
 
   # 验证邮箱是否为无效邮箱
   # 如果邮箱无效，返回为false。由于这是用来发送邮件的验证，严格点没问题。
@@ -81,7 +82,8 @@ class InvalidEmail
     return false if email =~ /@example.com/i                                           # 去掉各种第三方授权链接
     return false if email =~ /^www\./i                                                 # 去掉以www.开头的邮箱
     return false unless email =~ /\.(com|net|uk|cn|sg|my|hk|ca|tw|top|jp|edu|cc|es|ru|de|info|org|au|om|cm|gr|be)$/
-    return false if email =~ Regexp.new(get_invalid_email)                             # 去掉其他已知的无效邮箱
+    # return false if email =~ Regexp.new(get_invalid_email)                             # 正则匹配速度有些慢
+    return false if InvalidEmail.where(email: email).exists?                           # 建索引，从而加速查询的速率
     return true
   end
 
