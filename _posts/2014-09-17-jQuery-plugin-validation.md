@@ -28,6 +28,9 @@ Right, there are a lot of non-jQuery-based solutions (which you'd avoid since yo
 确实存在很多jQuery的以及非jQuery的解决方案。特别是其中最老的一个jQuery插件。
 
 Not convinced? Have a look at this example:
+
+不信? 这里举个例子。
+
 ```html
 <form class="cmxform" id="commentForm" method="get" action="">
   <fieldset>
@@ -58,7 +61,9 @@ $("#commentForm").validate();
 </script>
 ```
 
-Isn't that nice and easy?
+> 插件其实就将 required  转换成了 input 输入的 class 类。
+
+是不是即容易，又简单?
 
 A single line of jQuery to select the form and apply the validation plugin, plus a few annotations on each element to specify the validation rules.
 
