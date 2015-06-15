@@ -38,7 +38,14 @@ category: note
 * [activerecord-session_store](https://rubygems.org/gems/activerecord-session_store) - 存储对象的支持，不然 session 存储都是对象的 `object_id`，将对象存放到数据库中，是没有尝试过的方法。
 * [protected_attributes](https://github.com/rails/protected_attributes) - `ActiveRecord::SessionStore::Session.attr_accessible` 方法的支持
 
-利用数据库来存储 session，正是少有的行为，这样的考虑是为什么呢。是为了架构的简单性吗？
+利用数据库来存储 session，正是少有的行为，这样的考虑是为什么呢。是为了架构的简单性吗？ 然后
+
+引入 `activerecord-session_store` 之后，需要执行如下的这些命令：
+
+```
+rails generate active_record:session_migration
+RAILS_ENV=development rake db:migrate
+```
 
 ## 错误
 
