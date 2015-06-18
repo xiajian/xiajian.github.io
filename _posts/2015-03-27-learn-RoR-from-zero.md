@@ -56,6 +56,10 @@ Rails 4 中，不支持 assets 分组了。 感觉，自己追踪Rails也不是�
 
 > 可以使用类变量，在 config/initiliers 中覆盖原有的设置，从而给 Gem 包设置常量。
 
+> Migration is pending, plase solving this issues use rake db:migrate RAILS_ENV=development.
+
+问题: 这是因为在 `database.yml` 中，开发和测试包含的环境相同，从而导致这个原因。
+
 ## 后记
 
 近来，自己所做的事，貌似有条理，实际上还是乱七八糟的。这可能也算是成长中的烦恼吧。索性，承认自己总是不会一次将事情做好，凡事都要反复个3-5遍。
