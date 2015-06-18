@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "部署相关的 gemfile 分组"
-description: "部署相关的 gemfile 的搜集和整理“
+description: "部署相关的 gemfile 的搜集和整理"
 category: note
 ---
 

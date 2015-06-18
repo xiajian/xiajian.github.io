@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "assets-rails 相关的gemfile 分组"
-description: "assets-rails中相关的资源的Gemfile资源的收集“
+description: "assets-rails中相关的资源的Gemfile资源的收集"
 category: note
 ---
 
