@@ -30,6 +30,7 @@ gem 'capistrano-db-tasks', require: false
 gem 'capistrano-deploytags'
 
 # 本地编译资源，然后上传到服务器上: http://www.rubydoc.info/gems/capistrano-precompile-on-local/0.0.2
+# 使用本地编译资源的原因是，开发环境的机器使用的 ssh，要比服务器的速度快很多
 gem 'capistrano-precompile-on-local'
 
 # 在部署代码时，检测 git 的迁移: https://github.com/mydrive/capistrano-detect-migrations
