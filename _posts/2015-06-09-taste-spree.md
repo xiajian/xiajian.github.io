@@ -45,6 +45,10 @@ firefox http://localhost:5000/ 和 http://localhost:5000/admin/
 </div>
 
 
+## 后记
+
+原本，以为自己可能不会在电商公司待了，结果，还是留下了，看来，还是要花时间研究 spree 的。
+
 ## 参考文献
 
 1. [Spree 源码导读](https://ruby-china.org/topics/24472)
