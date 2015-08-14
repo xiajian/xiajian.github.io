@@ -23,7 +23,6 @@ title: 邪王真眼的夏
   <li><img src="assets/images/face.jpg"></li>
   <li><img src="assets/images/xiajian.png"></li>
 </ul>
-<br/>
 
 > 备注：若见此咒，如见其人，如临其境，所谓人图一体。
 
