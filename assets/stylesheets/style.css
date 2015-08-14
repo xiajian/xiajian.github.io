@@ -101,6 +101,19 @@ h1, h2, h3, h4 {
     margin: 0 20px;
 }
 
+#list li{
+  float:left;
+  list-style:none;
+  height: 160px;
+  width: 160px;
+  margin: 0 20px;
+}
+
+#list li img{
+    max-width: 100%;
+    border-radius: 10px;
+}
+
 /* 控制图像的宽度 */
 img {
     max-width: 100%;

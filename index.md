@@ -19,9 +19,10 @@ title: 邪王真眼的夏
 
 暗焰魔图谐阵：三次天元破幻之星空立体魔法咒符
 
-<div class="site-avatar">
-  <img src="assets/images/face.jpg">
-</div> 
+<ul id="list" class="clearfix">
+  <li><img src="assets/images/face.jpg"></li>
+  <li><img src="assets/images/xiajian.png"></li>
+</ul>
 <br/>
 
 > 备注：若见此咒，如见其人，如临其境，所谓人图一体。
