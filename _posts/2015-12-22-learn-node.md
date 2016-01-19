@@ -14,6 +14,12 @@ category: note
 * exports - 模块的公共接口
 * require - 从外部获取接口
 
+## Java 的 web世界
+
+Java， Nginx，Velocity: 前后端的处理。
+
+NodeJS， Nginx, Java: 前后端分离。
+
 
 ## 后记
 
