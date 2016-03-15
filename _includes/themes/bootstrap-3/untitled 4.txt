@@ -1,0 +1,1 @@
+Expense.find_by_sql "SELECT date_format(occurrence_date, '%y%m%d') as d, id FROM `expenses` GROUP BY d, `expenses`.`id`  ORDER BY d DESC"

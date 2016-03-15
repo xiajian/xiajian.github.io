@@ -3,9 +3,9 @@ layout: post
 title: Rails 4学习笔记
 ---
 
-rails new 创建一个rails项目 rails new blog --skip-test-unit
-rails server|s 启动服务器
-rails console 开启控制台
+* rails new 创建一个rails项目 rails new blog --skip-test-unit
+* rails server|s 启动服务器 rs
+* rails console 开启控制台 rc
 
 rails generate controller StaticPages home help --no-test-framework 使用 --no-test-framework 选项禁用rspec框架生成测试代码。另外Rails会调用underscore方法把驼峰式的命名修改为蛇底式。例如上面的StatiPages的控制器对应的文件名为：static_pages_controller.rb，这只是一个约定，在命令行中也可以使用蛇底式。
 
@@ -53,7 +53,7 @@ rake 用来编译构建项目的一个工具，类似于unix下的make命令，�
     rake tmp:clear # Clear session, cache, and socket files from t...
         rake tmp:create # Creates tmp directories for sessions, cache, ...
 
-    rails generate|g 生成器，可以以不同的指令生成不同形式的模板。
+    rails generate|g   生成器，可以以不同的指令生成不同形式的模板。
 
     Rails:
         assets
@@ -61,7 +61,7 @@ rake 用来编译构建项目的一个工具，类似于unix下的make命令，�
         generator
         helper
         integration_test
-        jbuilder
+        jbuilder - json builder 
         mailer
         migration
         model
@@ -82,20 +82,22 @@ rake 用来编译构建项目的一个工具，类似于unix下的make命令，�
     TestUnit:
         test_unit:plugin
 
-    bundle install：我们使用 -without production 禁止安装生产环境所需的 gem。这个选项会被记住，所以后续调用 Bundler 就不用再指定这个选项，直接运行 bundle install 就可以自动不安装生产环境所需的 gem
+    bundle install：我们使用 -without production 禁止安装生产环境所需的 gem。这个选项会被记住，所以后续调用 Bundler 就不用再指定这个选项，直接运行 bundle install 就可以自动不安装生产环境所需的 gem.
+
+    bundle 
 
 安装ckedit步骤：
 
     加入gem
 
     gem 'ckeditor'
-    gem 'paperclip'
+    gem 'paperclip' - 上传文件的处理
 
     生成文件
     rails generate ckeditor:install --orm=active_record --backend=paperclip
 
     配置 model 环境，打开 application.rb 加入下面
-    config.autoload_paths += %W(#{config.root}/app/models/ckeditor)
+    config.autoload_paths += %W(#{config.root}/app/models/ckeditor)   # 加载路径
 
     在 routes 里面增加 路由
     mount Ckeditor::Engine => "/ckeditor"
@@ -104,10 +106,11 @@ rake 用来编译构建项目的一个工具，类似于unix下的make命令，�
     //= require ckeditor/init
 
 更多内容请查看：https://github.com/galetahub/ckeditor
+
 开发环境配置
 
     默认情况下Rails erb输出会转义html标签，如何在rails中不让html标签转义？
-    答：使用raw 或者 html_safe
+    答：使用raw 或者 html_safe  -  转义 html 
 
     如何过滤掉html、css、js标签？
     答案：可以是用SanitizeHelper，有如下方法：sanitize、strip_css、strip_links、strip_tags
@@ -116,9 +119,9 @@ rake 用来编译构建项目的一个工具，类似于unix下的make命令，�
     rake assets:precompile 编译静态资源文件
     rake routes 列出所有的restful route
     rake stats 查看当前工程情况
-    rake secret 生成session 加密指纹
+    rake secret 生成session 加密指纹 - 用在 devise 的 key
 
-    Rails debug
+    Rails debug 
     增加下面的代码
     gem debugger
     rails s --debugger
@@ -137,7 +140,7 @@ Helper 标签
 Gem命令
 
     清除老版本的gem
-    gem cleanup
+    gem cleanup  - rvm empty xx
 
     删除所有的已安装的gem
     for i in ‘gem list --no-versions’; do gem uninstall -aIx $i; done
@@ -145,7 +148,7 @@ Gem命令
 软件安装
 Mac 安装libxml2
 
-brew install libxml2 libxslt 
+brew install libxml2 libxslt # 解析库文件
 brew link libxml2 libxslt 
 
 MySQL安装：

@@ -57,6 +57,7 @@ Step 2: 造 Resource Server (API)
 用 Grape 是因为不想要让 API 经过太多 Rails 的 stack。
 
 这个不难，而且不是本文的重点，所以直接看官方文件就好了。成品可以看 step-2 tag 。
+
 Step 3: 造 Authorization Server (Provider)
 
 既然底是 Rails ，那么就直接上 Doorkeeper 就好了。可以看 step-3 tag 。
