@@ -5,7 +5,8 @@ permalink: /:categories/:year/:month/:day/:title
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 
 ## 高亮的语法处理配置
-highlighter: pygments
+highlighter: rouge
+
 markdown: kramdown
 
 redcarpet:
@@ -15,6 +16,7 @@ kramdown:
   input:         GFM
   auto_ids:      true
   auto_id_prefix: 'id-'
+  syntax_highlighter: rouge
 
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.

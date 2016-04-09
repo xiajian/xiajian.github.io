@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 学习和使用 LiveReload
-description: '网络，断网，ICMP'
+description: 'ruby, autoload js/css/html，rails, firefox plugin'
 category: note
 ---
 
@@ -23,14 +23,14 @@ category: note
 
 首先： 在项目中 `Gemfile` 添加： 
 
-```
+~~~ 
 group :development do
   # https://github.com/guard/guard
   gem 'guard'
   # https://github.com/guard/guard-livereload
   gem 'guard-livereload', '~> 2.5', require: false
 end
-```
+~~~ 
 
 bundle 过后，然后，在项目根目录运行： `guard init livereload`
 
@@ -50,14 +50,14 @@ bundle 过后，然后，在项目根目录运行： `guard init livereload`
 
 Guard 的输出： 
 
-```
+~~~ 
 16:41:59 - INFO - LiveReload is waiting for a browser to connect.
 16:41:59 - INFO - Guard is now watching at '/Users/xiajian/works/test-weui'
 [1] guard(main)> 16:42:20 - INFO - Browser connected.
 16:42:37 - INFO - Reloading browser: app/views/sockets/index.html.slim
 16:42:49 - INFO - Reloading browser: app/views/sockets/index.html.slim
 17:31:19 - INFO - Reloading browser: app/views/sockets/index.html.slim
-```
+~~~ 
 
 意料之外，情理之中的 websocket 的使用。由于都是开发者，其浏览器不可能是 IE 之流的
 
