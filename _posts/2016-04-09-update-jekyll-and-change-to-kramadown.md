@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 切换 Markdown 处理器兵器
-description: 'payments rouge，jekyll, github pages'
+title: 切换 Markdown 处理器为 kramdown
+description: 'payments rouge，jekyll, github-pages, kramdown'
 category: note
 ---
 
@@ -96,13 +96,13 @@ Using listen 3.0.6  # 监听文件系统变化
 Using jekyll-watch 1.3.1
 Using kramdown 1.10.0
 Using liquid 3.0.6
-Using mercenary 0.3.6
+Using mercenary 0.3.6 # An easier way to build your command-line scripts in Ruby.
 Using rouge 1.10.1
 Using safe_yaml 1.0.4
 Using jekyll 3.0.3
 Using jekyll-coffeescript 1.0.1
 Using jekyll-feed 0.4.0
-Using jekyll-gist 1.4.0
+Using jekyll-gist 1.4.0 # 配合 Github 的 Gist
 Using jekyll-github-metadata 1.10.0
 Using mini_portile2 2.0.0
 Using nokogiri 1.6.7.2
@@ -149,7 +149,7 @@ function js() {
 
 ## 后记
 
-正是不知道未来会发生什么， 世界才会如此的吸引人。 比如，我今天把激荡三十年下卷看完了。 比如，我整了3个小时博客markdown 解析的迁移。
+正是不知道未来会发生什么， 世界才会如此的吸引人。 比如，我今天把激荡三十年下卷看完了。 比如，我整了3个小时博客markdown 解析器的迁移，以及写这篇什么玩意。
 
 ## 参考
 
