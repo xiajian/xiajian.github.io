@@ -11,7 +11,7 @@ category: note
 
 > 时间就是金钱，效率就是生命。
 
-> web 性能的关键点： Cache， 缓存一切。 计算机的世界中，缓存无处不在。
+
 
 没有人喜欢慢的应用, 没有人喜欢等待。
 
@@ -173,6 +173,18 @@ Percentage of the requests served within a certain time (ms)
 1. 使用负载均衡： 硬件负载均衡- F5，软件负载均衡（LVS 和 Nginx， Haproxy），web 服务器集群
 1. 分布式计算 - 异步计算， 并行计算（并发模型）
 
+## 缓存(Cache)
+
+> web 性能的关键点： Cache， 缓存一切。 计算机的世界中，缓存无处不在。
+
+缓存的种类： 
+
+* 文件cache， 比如，静态资源 js/css, html片断的cache
+* nginx的proxy_cache
+* 浏览器的cache
+* 代理服务器的 cache - 主要cache http 请求 以及相应的处理
+* CDN的cache - cache 静态文件
+* 数据库级的查询cache
 ## 最后
 
 非常感谢大家的参与。 个人拙见，仅是抛砖，希望大家投玉。 
