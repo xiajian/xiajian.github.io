@@ -185,6 +185,7 @@ Percentage of the requests served within a certain time (ms)
 * 代理服务器的 cache - 主要cache http 请求 以及相应的处理
 * CDN的cache - cache 静态文件
 * 数据库级的查询cache
+
 ## 最后
 
 非常感谢大家的参与。 个人拙见，仅是抛砖，希望大家投玉。 

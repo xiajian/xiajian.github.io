@@ -1,12 +1,13 @@
 ---
 layout: post
 title: 薄荷 Android 的分享
-description: ''
+description: 'android, DNS, qq, 运营商， Gradle 构建系统'
 category: note
 ---
 
 ## 前言
 
+之前，机缘巧合得知了薄荷有分享，然后就去了听了一下。 到了展想广场后，发现这个商业区还是相当的繁华的。 个人也是第一次站到了 21 楼上徘徊，相当的得意的说。
 
 ##  Strom Zhang
 
@@ -24,7 +25,7 @@ category: note
 劫持的手段:
 
 1. 插入广告
-2. 解析错的 IP
+2. 解析成错误的 IP 地址
 
 劫持发生的地方： 四川 和 重庆
 
@@ -38,10 +39,9 @@ category: note
 
 > PS: 鹅厂的域名是 10 万级别的。
 
-> PS: Storm 张 维护了
+> PS: Storm 张 维护了中国最好的安卓公众号。
 
 ## 贾吉鑫
-
 
 Android 组件化的思想， 按业务逻辑进行分库的实践 ：
 
@@ -70,9 +70,16 @@ AR 是啥？？Android Repo？？
 
 Nvma相关的文档下载： http://7fviov.com1.z0.glb.clouddn.com/Nuwa.pdf
 
+作者介绍： 前 58 工程师， 现在自己创业。 个人博客： <http://jiajixin.cn/>
+
 ## 后记
 
 下午， 我想去听青云的吹牛。
+
+听别人说，下午分享的关于 Android 内容有：  
+
+1. 如何处理内存泄露相关的
+2. Reative Native 构建应用
 
 ## 参考
 
