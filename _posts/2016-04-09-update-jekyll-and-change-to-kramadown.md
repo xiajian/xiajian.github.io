@@ -46,7 +46,7 @@ gem 'github-pages'    # 配合和同步githu-pages 的配置
 2. _config.yml
 
 ``` yml
-## 高亮的语法处理配置
+# 高亮的语法处理配置
 highlighter: rouge
 markdown: kramdown
 
@@ -62,7 +62,7 @@ kramdown:
 
 修改过程中，最痛苦的就是。原本使用 `Redcarpet`, 本地和远程的环境是同步的，现在，不同步了。 为此，添加 `gem 'github-pages'` 同步两者的环境。
 
-使用了 github-pages, 项目的总 gem， 从 46 到 54 个, 有机会看一研究看看。
+使用了 github-pages, blog 项目的使用的总 gem， 从 46 到 54 个, 有机会看一研究看看。
 
 ```
 Using RedCloth 4.2.9
@@ -121,7 +121,7 @@ Using github-pages 68
 Using bundler 1.10.6
 ``` 
 
-还有一点，其实我，不太清楚高亮代码格式，到底是个啥玩意，什么构成原理。
+还有一点，其实我，不太清楚高亮代码格式，到底是个啥玩意，什么构成原理，怎么整出来的。
 
 ## Jekyll 3.0 
 
