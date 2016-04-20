@@ -1,11 +1,13 @@
 ---
 layout: post
-title: 学习如何编写 Homebrew formulae 脚本
-description: '云计算， 人民公园，青云的分享'
+title: 随便看了点 Hadoop 相关的东西
+description: 'hadoop，'
 category: note
 ---
 
 ## 前言
+
+听了听云计算 和 大数据相关的东西，感觉这些好高大上的东西，必须要去好好学些一下才好。
 
 
 ## 正文
