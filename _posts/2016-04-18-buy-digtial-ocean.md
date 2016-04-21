@@ -21,6 +21,10 @@ sudo apt-get install nginx mysql-server tmux
 sudo apt-get install 
 ```
 
+Digital Ocean 现在已经成为世界第四大云主机提供方, 其使用的 KVM 进行虚拟化的处理。
+
+DO API 的地址：<https://developers.digitalocean.com/documentation/v2/>
+
 ## 经验
 
 优惠码地址: <http://digitalocean.youhuima.cc/>
