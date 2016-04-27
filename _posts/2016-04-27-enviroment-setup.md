@@ -105,28 +105,33 @@ cd config && ./lnfs_files.sh {各种环境} && cd ../
 
 gem install bundler && bundle
 
-
 ## pngout 的问题
 
 brew cask install imageoptim
 
 操作步骤：
 
-首先，locate imageoptim,  到相应的目录：
+1. 第一种方式
 
-```
-# 或者其他的目录
-cd /opt/homebrew-cask/Caskroom/imageoptim/1.6.0/ImageOptim.app/Contents/Frameworks/ImageOptimGPL.framework/Versions/A/Resources/
+  将自己本地的 `pngout` 拷贝给别人，通过 qq？ 还是通过 Qiniu。
+  
+2. 第二种方式
 
-for file in $(ls); do
-    if [[ -e /usr/local/bin/$file ]]; then
-        echo $file" is exist"
-    else
-        echo 'I will link '$file
-        ln -sf $(pwd)/$file /usr/local/bin/$file
-    fi
-done
-```
+  首先，locate imageoptim,  到相应的目录：
+
+  ```
+  # 或者其他的目录
+  cd /opt/homebrew-cask/Caskroom/imageoptim/1.6.0/ImageOptim.app/Contents/Frameworks/ImageOptimGPL.framework/Versions/A/Resources/
+
+  for file in $(ls); do
+      if [[ -e /usr/local/bin/$file ]]; then
+          echo $file" is exist"
+      else
+          echo 'I will link '$file
+          ln -sf $(pwd)/$file /usr/local/bin/$file
+      fi
+  done
+  ```
 
 ## 部署脚本
 
