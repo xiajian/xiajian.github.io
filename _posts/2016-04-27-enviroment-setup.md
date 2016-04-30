@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 环境配置
-description: '项目的环境配置'
+description: '项目的环境配置, homebrew, mysql, redis'
 category: note
 ---
 
@@ -57,11 +57,15 @@ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/i
 
 资产编译相关工具的安装：
 
+```
 brew install advancecomp gifsicle jhead jpegoptim jpeg optipng pngcrush pngquant
 
 brew install node  # 安装 Node 环境
 
 npm install svgo -g 
+```
+
+PS: advancecomp 的官方地址 - <http://www.advancemame.it/>
 
 imageoptim 安装: 
 
@@ -113,25 +117,25 @@ brew cask install imageoptim
 
 1. 第一种方式
 
-  将自己本地的 `pngout` 拷贝给别人，通过 qq？ 还是通过 Qiniu。
+将自己本地的 `pngout` 拷贝给别人，通过 qq？ 还是通过 Qiniu 的SDK。
   
 2. 第二种方式
 
-  首先，locate imageoptim,  到相应的目录：
+首先，locate imageoptim,  到相应的目录：
 
-  ```
-  # 或者其他的目录
-  cd /opt/homebrew-cask/Caskroom/imageoptim/1.6.0/ImageOptim.app/Contents/Frameworks/ImageOptimGPL.framework/Versions/A/Resources/
+```
+# 或者其他的目录
+cd /opt/homebrew-cask/Caskroom/imageoptim/1.6.0/ImageOptim.app/Contents/Frameworks/ImageOptimGPL.framework/Versions/A/Resources/
 
-  for file in $(ls); do
-      if [[ -e /usr/local/bin/$file ]]; then
-          echo $file" is exist"
-      else
-          echo 'I will link '$file
-          ln -sf $(pwd)/$file /usr/local/bin/$file
-      fi
-  done
-  ```
+for file in $(ls); do
+    if [[ -e /usr/local/bin/$file ]]; then
+        echo $file" is exist"
+    else
+        echo 'I will link '$file
+        ln -sf $(pwd)/$file /usr/local/bin/$file
+    fi
+done
+```
 
 ## 部署脚本
 
@@ -193,5 +197,5 @@ function deploy() {
 
 ## 后记
 
-将这些知识封装成一个 docker 镜像。
+将这些知识封装成一个 docker 镜像, 搭建自己公司的云计算编排方式。 摆脱那如水的事物的人生。
 

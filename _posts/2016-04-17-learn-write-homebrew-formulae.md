@@ -65,9 +65,6 @@ end
 
 编辑完上面的代码后， 运行 `brew install luarocks`，结果，各种报错：
 
-```
-
-```
 
 正想着怎么编写的，切换到 `/usr/local/Library/Taps/homebrew/homebrew-core/Formula/` 目录， 想参考参考其他人怎么写的，结果发现了 `lua.rb` 中代码有如下的一段代码： 
 
