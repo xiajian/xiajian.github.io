@@ -59,9 +59,7 @@ sudo mvn spring-boot:run # 运行比较耗时
 
 ```
 sudo service mysql stop
-
-mysqld_safe --skip-grant-tables &
-
+mysqld_safe --skip-grant-tables &  # 启动安全模式下的 mysql
 mysql -uroot -p # 无需密码
 use mysql;
 update user set password=PASSWORD('12345678') where user="root";
@@ -73,11 +71,15 @@ service mysqld start
 mysql -uroot -p 
 ```
 
-使用复杂的管道命令行，进行处理： `ps axu | grep mysqld | awk  '{print $2}' | xargs echo`;
+尝试使用复杂的管道命令行，进行处理： `ps axu | grep mysqld | awk  '{print $2}' | xargs echo`;
+
+## 尝试打包 Dockerfile
+
+待处理！！
 
 ## 后记
 
-> 吃的越差，女人越丑，国家的人民就越奋斗。 - 晓说
+> 吃的越差，女人越丑，国家的人民就越奋斗，经济越发达。 - 晓说
 
 ## 参考文献
 
