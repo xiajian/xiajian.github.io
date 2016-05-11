@@ -12,7 +12,7 @@ category: note
 
 ## 安装
 
-CacheCloud环境需求
+CacheCloud 环境需求
 
 导入数据: 
 
@@ -56,7 +56,6 @@ sudo mvn spring-boot:run # 运行比较耗时
 
 ## 忘记 mysqld 密码
 
-
 ```
 sudo service mysql stop
 mysqld_safe --skip-grant-tables &  # 启动安全模式下的 mysql
@@ -77,9 +76,66 @@ mysql -uroot -p
 
 待处理！！
 
+## 学习
+
+1. 快速启动
+
+  - 初始化数据库，包括 相关的 配置
+  - 初始化工程 - 使用 maven 构建
+  - 本地启动 - `mvn spring-boot:run`
+  - 测试 
+  
+2. 机器管理
+
+  - 机器处理化 Redis 环境， 使用默认的 
+  - 添加机器 
+
+3. 开通应用
+
+  - redis 集群
+  - redis 哨兵
+  - redis standalone
+
+4. 客户端连接
+  
+  如何使用，是个关键。
+
+遇到的问题： 
+
+```
+- Active log file name: /opt/cachecloud-web/logs/stdout.2016-05-11.log
+- File property is set to [null]
+- Failed to create parent directories for [/opt/cachecloud-web/logs/stdout.2016-05-11.log]
+- openFile(null,true) call failed. java.io.FileNotFoundException: /opt/cachecloud-web/logs/stdout.2016-05-11.log (No such file or directory)
+```
+
+解决： 没有创建文件的权限。 `mkdir /opt/cachecloud-web`。
+
+```
+// 配置文件 local 是本地启动的配置，online 是在线的配置
+cachecloud/cachecloud-open-web/src/main/swap/local.properties
+cachecloud/cachecloud-open-web/src/main/swap/online.properties
+```
+
+想法： 利用 CacheCloud 搭建云深网络的 redis cache 管理。
+
+配注： 
+
+如下的配置，意味着，所有的机器上都要相同的配置才行， 这个会有很大的问题。
+
+```
+cachecloud.machine.username = cachecloud
+cachecloud.machine.password = cachecloud
+cachecloud.machine.ssh.port = 22
+```
+
 ## 后记
 
 > 吃的越差，女人越丑，国家的人民就越奋斗，经济越发达。 - 晓说
+
+java 部署，就是生成一个 war 包。
+
+尝试并安装了 IntelliJ IDEA,  感觉相当的不错。
 
 ## 参考文献
 
