@@ -129,13 +129,15 @@ cachecloud.machine.password = cachecloud
 cachecloud.machine.ssh.port = 22
 ```
 
+CacheCloud 使用了一种 quartz 的库， 进行任务管理。
+
 ## 后记
 
 > 吃的越差，女人越丑，国家的人民就越奋斗，经济越发达。 - 晓说
 
 java 部署，就是生成一个 war 包。
 
-尝试并安装了 IntelliJ IDEA,  感觉相当的不错。
+尝试并安装了 IntelliJ IDEA,  感觉相当的不错。 也用了一年的 RubyMine，感觉 JetBraints 的 IDE 功能大多类似。 
 
 ## 参考文献
 
