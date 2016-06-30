@@ -69,7 +69,7 @@ end
 
 批量插入数据，使用了 postgresql 支持的批量将数据插入内置方法，非常的方便。
 
-同时插入，一万条数据以上的，在网络状况不好的情况下，会引发 Network Timeout 时间：
+同时插入，一万条数据以上的，在网络状况不好的情况下，会引发 Network Timeout 时间。 后来，发现还是自己的本地的网络的状况不太好。
 
 ```
 from /Users/xiajian/.rvm/gems/ruby-2.3.0@camp/gems/activerecord-4.2.5/lib/active_record/connection_adapters/postgresql_adapter.rb:592:in `async_exec'
