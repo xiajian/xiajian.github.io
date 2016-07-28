@@ -1,127 +1,181 @@
 ---
 layout: post
-title: Aliexpress gem的编写
-description: '速卖通， ruby， gem'
+title: 使用 Nokogiri 解析巨大的 XML 文件
+description: 'xml 解析, rails, ruby, Nokogiri'
 category: note
 ---
 
 ## 前言
 
-第一次编写 gem 包。
+有一个大概 500MB 的 xml 文件需要解析， 其内容结构。 使用 `File.open('xx.xml')` 然后，拼接字符串，然后再使用 `Hash#from_xml` 
+方法，耗时太多，内存不足。 此时，只能使用流式解析的方式。
+
 
 ##  正文
 
-文件的目录结构： 
+虽然有很多选择，比如， SAX 解析，最后，还是选择了 ` Nokogiri::XML::Reader`, 因为，看起来能直接工作。
+
+xml 的文件结构： 
 
 ```
-├── bin
-│   ├── console
-│   └── setup
-└── lib
-    ├── aliexpress
-    │   ├── authorization.rb - 授权相关
-    │   ├── base.rb - 基本类
-    │   ├── category.rb - 类目
-    │   ├── common.rb - 公共
-    │   ├── configure.rb - 配置信息
-    │   ├── data.rb - 数据
-    │   ├── evaluation.rb - 评价接口
-    │   ├── freight.rb - 运费
-    │   ├── logistics.rb - 物流信息
-    │   ├── marketing.rb - 营销
-    │   ├── message.rb - 站内信
-    │   ├── order.rb - 较易
-    │   ├── product.rb - 产品
-    │   ├── image.rb - 图片相关的接口, 图片银行 和 上传图片
-    │   └── version.rb
-    └── aliexpress.rb
+<?xml version="1.0" encoding="utf-8"?>
+<GetCategorySpecificsResponse xmlns="urn:ebay:apis:eBLBaseComponents">
+   <Timestamp>2016-06-28T23:19:20.500Z</Timestamp>
+   <Ack>Success</Ack>
+   <Version>971</Version>
+   <Build>E971_CORE_API6_18007281_R1</Build>
+   <Recommendations>
+    <CategoryID>22422</CategoryID>
+    .....中间省略
+    <NameRecommendation>
+     <Name>Author</Name>
+     <ValidationRules>
+      <MaxValues>1</MaxValues>
+      <SelectionMode>FreeText</SelectionMode>
+     </ValidationRules>
+    </NameRecommendation>
+   </Recommendations>
+   
 ```
 
-配置参数： 
+具体结构，可以参考： <http://developer.ebay.com/DevZone/XML/docs/Reference/eBay/GetCategorySpecifics.html#GetCategorySpecifics> 中的响应结构：
 
-```
-Aliexpress.app_key = 'Your app key'
-Aliexpress.app_secret = 'Your app secret' 
+具体的代码： 
 
-# redis 要不要引入 namespace？？？
-Aliexpress.redis = Redis.new 
-```
+```ruby
 
-**TODO**: 配置获取 code 的授权还没有完成， 这个参考 redis-bowser 中设置，将路由挂载到 rails 中。
+# 方法1：将文件中所有的行拼成的字符串
+def file_string(file = 'tmp/5856756037_report.xml')
+  value = ''
 
-找了一些资料，看到有这样的集中挂载路由的方法: 
+  File.foreach(file) { |line| value << line.strip }
 
-* 如 rucaptcha 中，直接将 rails 引入依赖的。
-* 引入 sinatra， 参考 RedisBrowser
+  value
+end
 
-就一个路由，还是不带页面的，只要获取返回的参数就行了。想想改怎么整！！！
+# 解析 xml 文件
+# @note 数据量太大，根本不可行，
+#
+# @param {String} file - xml 文件
+def parse_xml(file = 'tmp/ebay_report.xml')
+  Ebayr::Response.from_xml file_string(file)
+end
 
-使用 sinatra，感觉还挺简单的。
+# 方法2：流式的解析 xml 文件
+# @note 使用了 Ebayr::Response 中解析 xml 文件, 使用的是 Reader，而不是 Parser 处理
+#
+# @param {String} file - xml 文件
+# @param {Proc} block - 代码块对象
+#
+# @return
+def parse_xml_with_stream(file = 'tmp/ebay_report.xml', &block)
+  ActiveSupport::XmlMini.backend = 'Nokogiri'
+  reader = Nokogiri::XML::Reader(File.open(file))
 
-遇到一个问题： 授权结束后，跳转地址如何处理，跳转后的 flash 如何处理，这样才能，处理成功或者异常的有效性并没有做处理。
+  reader.each do |node|
+    if node.name == "Recommendations"
 
-## 开发
+      # puts "outer xml: #{node.outer_xml}"
+      # puts "node class: #{node.class}"
+      # puts "node methods: #{node.public_methods}"
+      response = Ebayr::Record.new Ebayr::Response.from_xml(node.outer_xml)
 
-签出代码库之后， 运行 `bin/setup`安装依赖， 运行 `bin/console` 进入交互式探索环境。 
+      category = Hashie::Mash.new response
 
-运行 `bundle exec rake install`， 将 gem 包安装到本地。 生成新的版本的步骤：
+      # 在这里头添加导入数据的处理逻辑
 
-*  更新 `version.rb` 中的版本号
-*  运行 `bundle exec rake release`， 创建 git tag, 提交请求和 tag，将生成新的 gem 推送到 [rubygems.org](https://rubygems.org)
+      puts "category: #{category.to_h}"
 
-速卖通的 API 地址: <http://gw.api.alibaba.com/dev/doc/intl/sys_description.htm?spm=5261.6744729.972263401.3.B9M4i7&ns=aliexpress.open>
-
-备注：
-
-方法的命名： 取自 API 文档中的 apiName，将其中的 `api.` 前缀去掉。（骆驼命名法，一种浓浓的 java 风） 
-
-### 关于各个接口数据结构的设置
-
-参考: https://ruby-china.org/topics/14459。 
-
-考虑使用 Struct 和 OpenStruct，想到最后上传和接口的使用。最后，使用了属性比较严格 Struct。
-
-实现上， 获取 access_token 的方式，可以参考了 https://github.com/lanrion/weixin_authorize。 
-
-**注意**：自己实现其实是平台式的，也就是 每个用户授权的 access_token 可能不一样。这会改变目前存取 access_token 的方式，从数据库中存取。
-
-参考 https://github.com/lanrion/weixin_authorize， 其实现平台级的关键在于，存放 access_token 的 redis_key（组合了app_id）。根据这个，
-实现多用户的关键， 在 redis key 的命名上做文章。 
-                                                               
-速卖通 获取 code 的过程中，可以传递一个参数，速卖通会原样返回这个参数值。此时，把这个值与用户名 或 其他什么名 生成一个 redis key。 此时，需要再
-暴露两个配置参数: access_token_key, 以及 refresh_token_key。
-
-### Rspec 测试
-
-第一次写测试，好兴奋。
-
-Rspec 的执行： `spec spec/**.rb`，相当厉害，比我之前总是 repl 环境中执行效率高多了，以后，都用这种方法。
-
-还看到 用 minitest 作为 测试库的，有机会的话下次测试用这个方式。
-
-批量生成文件的代码： 
-
-```
-Dir.foreach('lib/aliexpress') do |item|
-  unless Dir.exist?(item)
-    next unless  item =~ /\.rb/
-    file_name = item.match(/(.*)\.rb/)[1]
-    spec_file = "spec/#{file_name}_spec.rb"
-    next if File.exist? spec_file
-    File.open(spec_file, 'wb') do |f|
-      content = <<-DOC
-require 'aliexpress'
-
-describe Aliexpress::#{file_name.capitalize} do
-  describe '' do
-    it '' do
-
+      block.call category
     end
   end
-end      
-DOC
-```
+end
 
+def count_recommendations(file = 'tmp/ebay_report.xml')
+  ActiveSupport::XmlMini.backend = 'Nokogiri'
+  reader = Nokogiri::XML::Reader(File.open(file))
+  count = 1
+
+  reader.each do |node|
+    if node.name == "Recommendations"
+      count += 1
+    end
+  end
+
+  count
+end
+
+def limit_parse_count(limit_count = 3)
+  count = 1
+
+  parse_xml_with_stream do |category|
+    count += 1
+    puts "count: #{count}"
+
+    break if count > limit_count
+  end
+
+  count
+end
+
+# 获取并存储 ebay 的属性
+#
+# @return {Array} categories - 所有的品类的数组
+def get_categories
+  categories = []
+
+  parse_xml_with_stream do |category|
+    categories << category
+  end
+
+  categories
+end
+
+# 从 xml 文件中，将属性以及属性值的信息导入到数据库中
+#
+# @param {String} xml_file - 需要解析的文件
+def import_ebay_specifics_from_xml(xml_file = 'tmp/ebay_report.xml')
+  platform = B2cPlatform.ebay
+
+  Profile.parse_xml_with_stream xml_file do |category|
+    b2c_category_id = category.recommendations.try(:category_id)
+
+    if b2c_category_id.blank?
+      puts "category #{b2c_category_id} is not exists!!!"
+      next
+    end
+
+    category_id = ProductCategory.get_id_from_cache b2c_category_id, ProductCategory::PlatformType::EBAY
+
+    next if category_id.blank?
+
+    name_recommendations = category.recommendations.try(:name_recommendation)
+
+    next if name_recommendations.blank?
+
+    name_recommendations.each do |item|
+      next if item.is_a?(Array)
+
+      product_attribute = ProductAttribute.get_ebay_product_attribute item, platform, category_id
+
+      if product_attribute.product_attribute_values.present?
+        next
+      elsif item[:value_recommendation].present?
+        ProductAttributeValue.import_by_platform_and_product_attribute item[:value_recommendation], platform, product_attribute
+      end
+    end
+  end
+end
+
+```
 
 ## 后记
 
+表示，这件事还是相当的有点挑战的。 我这段代码，写的还是相当的得意的。要不，干脆，放到 Ebayr 的 gem 中。 今天，发现 TextMate 的彩蛋，复制文件时发现的，好开心。
+
+## 参考资料
+
+- http://stackoverflow.com/questions/6675128/how-do-i-use-nokogirixmlreader-to-parse-large-xml-files
+- https://snippets.aktagon.com/snippets/569-how-to-parse-huge-xml-files-with-ruby-and-nokogiri-without-using-too-much-ram-
+- http://blog.gregweber.info/posts/2011-06-03-high-performance-rb-part1
+- http://www.rubydoc.info/github/sparklemotion/nokogiri/master/Nokogiri/XML/SAX/Parser#parse_file-instance_method
